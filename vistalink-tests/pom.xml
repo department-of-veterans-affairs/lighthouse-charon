@@ -10,6 +10,9 @@
   <artifactId>vistalink-tests</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
+  <properties>
+    <docker.imageName>lighthouse-${project.artifactId}</docker.imageName>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>gov.va.api.health</groupId>

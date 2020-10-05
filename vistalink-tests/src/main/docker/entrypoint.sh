@@ -112,7 +112,7 @@ doListTests() {
 
 doSmokeTest() {
   setupForAutomation
-  doTest ".*ReadIT$"
+  doTest
 }
 
 doRegressionTest() {
