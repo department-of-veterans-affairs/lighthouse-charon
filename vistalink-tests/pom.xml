@@ -7,6 +7,7 @@
     <version>7.0.12</version>
     <relativePath/>
   </parent>
+  <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>vistalink-tests</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
