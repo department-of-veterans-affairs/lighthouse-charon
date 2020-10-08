@@ -19,12 +19,12 @@ Usage:
 
   Docker Run Examples:
     docker run --rm --init --network=host \
-      --env-file qa.testvars --env K8S_LOAD_BALANCER=example.com --env K8S_ENVIRONMENT=qa \
-      vasdvp/${MODULE_PREFIX}-${TEST_MODULE_NAME}:latest smoke-test
+--env-file qa.testvars --env K8S_LOAD_BALANCER=example.com --env K8S_ENVIRONMENT=qa \
+vasdvp/${MODULE_PREFIX}-${TEST_MODULE_NAME}:latest smoke-test
 
     docker run --rm --init --network=host \
-      --env-file lab.testvars --env K8S_LOAD_BALANCER=example.com --env K8S_ENVIRONMENT=lab \
-      vasdvp/${MODULE_PREFIX}-${TEST_MODULE_NAME}:1.0.210 regression-test
+--env-file lab.testvars --env K8S_LOAD_BALANCER=example.com --env K8S_ENVIRONMENT=lab \
+vasdvp/${MODULE_PREFIX}-${TEST_MODULE_NAME}:1.0.210 regression-test
 
 $1
 EOF
