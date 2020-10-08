@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RpcController {
 
-  ParallelRpcExecutor parallelRpcExecutor;
+  RpcExecutor rpcExecutor;
 
-  RpcController(@Autowired ParallelRpcExecutor parallelRpcExecutor) {
-    this.parallelRpcExecutor = parallelRpcExecutor;
+  RpcController(@Autowired RpcExecutor rpcExecutor) {
+    this.rpcExecutor = rpcExecutor;
   }
 }
