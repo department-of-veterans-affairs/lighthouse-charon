@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class RpcPrincipal {
-  String apiKey;
-  String verificationKey;
+  private String apiKey;
+  private String verificationKey;
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ConnectionDetails {
-  String host;
-  int port;
-  String divisionIen;
+  private String host;
+  private int port;
+  private String divisionIen;
 }

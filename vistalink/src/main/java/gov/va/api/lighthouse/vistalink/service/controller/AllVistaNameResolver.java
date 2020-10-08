@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VistaAllNameResolver implements VistaNameResolver {
+public class AllVistaNameResolver implements VistaNameResolver {
   // TODO
   @Override
   public List<String> resolve(RpcVistaTargets rpcVistaTargets) {

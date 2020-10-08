@@ -1,16 +1,20 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 // TODO: Request Mappings
 
+@Slf4j
 @RestController
+@AllArgsConstructor(onConstructor_ = @Autowired)
 public class RpcController {
 
-  RpcExecutor rpcExecutor;
+  private final RpcExecutor rpcExecutor;
 
-  RpcController(@Autowired RpcExecutor rpcExecutor) {
-    this.rpcExecutor = rpcExecutor;
+  public void placeholderLogging() {
+    log.info("{}", rpcExecutor);
   }
 }

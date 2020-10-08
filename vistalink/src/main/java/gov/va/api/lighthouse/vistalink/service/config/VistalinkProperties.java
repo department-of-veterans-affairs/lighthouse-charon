@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class VistalinkProperties {
-  List<ConnectionDetails> vistas;
+  private List<ConnectionDetails> vistas;
 }

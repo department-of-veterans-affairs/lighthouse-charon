@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RpcRequest {
-  RpcDetails rpc;
-  RpcPrincipal principal;
-  RpcVistaTargets target;
+  private RpcDetails rpc;
+  private RpcPrincipal principal;
+  private RpcVistaTargets target;
 }

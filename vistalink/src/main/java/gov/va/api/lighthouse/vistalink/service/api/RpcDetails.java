@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RpcDetails {
-  String name;
-  String context;
-  List<String> parameters;
+  private String name;
+  private String context;
+  private List<String> parameters;
 }
