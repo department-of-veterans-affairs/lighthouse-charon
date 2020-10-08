@@ -2,7 +2,6 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
-import org.springframework.stereotype.Component;
 
 public class VistalinkRpcInvoker implements RpcInvoker {
 
