@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+
+
 usage() {
 cat<<EOF
 $0 <build|run> [run-args]
@@ -12,7 +14,8 @@ EOF
 build() {
   mvn clean deploy \
     -DskipTests \
-    -Dexec.skip=true -Dsentinel.skipLaunch=true\
+    -Dexec.skip=true \
+    -Dsentinel.skipLaunch=true \
     -P'!standard' \
     -Prelease \
     -Ddocker.skip.push=true \
@@ -20,6 +23,7 @@ build() {
     -Ddocker.username=$DOCKER_USERNAME \
     -Ddocker.password="$DOCKER_PASSWORD"
 }
+
 
 run() {
   case $(uname) in
@@ -29,11 +33,11 @@ run() {
   esac
   docker run \
     --rm \
-    -e CLIENT_KEY=not-needed \
-    -e VISTALINK_URL=http://$THIS_MACHINE:8050 \
-    -e K8S_ENVIRONMENT=${ENV:-local} \
+    --network="host" \
     -e K8S_LOAD_BALANCER=$THIS_MACHINE \
+    -e K8S_ENVIRONMENT=${ENV:-local} \
     -e SENTINEL_ENV=${ENV:-local} \
+    -e CLIENT_KEY="${CLIENT_KEY:-hello}" \
      vasdvp/lighthouse-vistalink-tests:latest $@
 }
 
@@ -47,5 +51,6 @@ main() {
     *) usage "Unknown command $cmd"
   esac
 }
+
 
 main $@
