@@ -9,9 +9,4 @@ public class RpcRequest {
   RpcDetails rpc;
   RpcPrincipal principal;
   RpcVistaTargets target;
-
-  void test() {
-    RpcRequest.builder().build();
-  }
 }
-
