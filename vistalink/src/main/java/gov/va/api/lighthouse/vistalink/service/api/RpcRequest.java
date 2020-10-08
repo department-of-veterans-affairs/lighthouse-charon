@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class RpcRequest {
-
   RpcDetails rpc;
   RpcPrincipal principal;
   RpcVistaTargets target;

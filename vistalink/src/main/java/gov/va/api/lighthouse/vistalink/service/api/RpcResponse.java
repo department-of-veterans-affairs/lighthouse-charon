@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class RpcResponse {
-
   List<RpcInvocationResult> results;
 }

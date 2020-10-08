@@ -1,3 +1,10 @@
 package gov.va.api.lighthouse.vistalink.service.api;
 
-public class RpcVistaTargets {}
+import lombok.Data;
+
+@Data
+public class RpcVistaTargets {
+  String forPatient;
+  String include;
+  String exclude;
+}
