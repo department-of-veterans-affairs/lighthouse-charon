@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class RpcInvocationResult {
-  String message;
-
+  String response;
 }
