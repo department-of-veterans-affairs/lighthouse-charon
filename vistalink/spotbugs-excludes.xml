@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <!-- Exclusions can be defined here and should include a comment on why the finding can be ignored -->
+    <!-- TODO: REMOVE temporary ignore for skeleton commit -->
+    <Match>
+        <Or>
+            <Class name="gov.va.api.lighthouse.vistalink.service.controller.ParallelRpcExecutor"/>
+            <Class name="gov.va.api.lighthouse.vistalink.service.controller.RpcController"/>
+            <Class name="gov.va.api.lighthouse.vistalink.service.controller.VistalinkRpcInvokerFactory"/>
+        </Or>
+        <Bug pattern="URF_UNREAD_FIELD"/>
+    </Match>
 </FindBugsFilter>
