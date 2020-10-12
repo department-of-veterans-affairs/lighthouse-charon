@@ -1,7 +1,6 @@
 package gov.va.api.lighthouse.vistalink.service.config;
 
 import com.google.common.base.Splitter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -17,10 +16,11 @@ import org.springframework.context.annotation.Configuration;
 public class VistalinkPropertiesConfig {
 
   @Bean
-  VistalinkProperties load(@Value("vistalink.properties") String vistalinkProperties) {
+  VistalinkProperties load(
+      @Value("${vistalink.properties:vistalink.properties}") String vistalinkProperties) {
     Properties p = new Properties();
-    try {
-      p.load(new FileInputStream(new File(vistalinkProperties)));
+    try (var is = new FileInputStream(vistalinkProperties)) {
+      p.load(is);
     } catch (IOException e) {
       throw new IllegalArgumentException(
           "The vistalink.properties file cannot be found and is required.");
