@@ -1,6 +1,5 @@
 package gov.va.api.lighthouse.vistalink.service.config;
 
-import com.google.common.base.Splitter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Builder
+@SuppressWarnings("StringSplitter")
 public class VistalinkPropertiesConfig {
 
   @Bean
@@ -29,14 +29,14 @@ public class VistalinkPropertiesConfig {
         p.entrySet().stream()
             .map(
                 e -> {
-                  var parts = Splitter.on(':').splitToList(e.getValue().toString());
-                  if (parts.size() != 3) {
+                  var parts = e.getValue().toString().split(":");
+                  if (parts.length != 3) {
                     throw new IllegalArgumentException("Cannot parse vistalink.properties.");
                   }
                   return ConnectionDetails.builder()
-                      .host(parts.get(0))
-                      .port(Integer.parseInt(parts.get(1)))
-                      .divisionIen(parts.get(2))
+                      .host(parts[0])
+                      .port(Integer.parseInt(parts[1]))
+                      .divisionIen(parts[2])
                       .build();
                 })
             .collect(Collectors.toList());
