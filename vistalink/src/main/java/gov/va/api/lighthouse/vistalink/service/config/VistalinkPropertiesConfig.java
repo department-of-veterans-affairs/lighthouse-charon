@@ -24,6 +24,7 @@ public class VistalinkPropertiesConfig {
       throw new IllegalArgumentException(
           "The vistalink.properties file cannot be found and is required.");
     }
+    // TODO: is this better as a map? ien -> (deets)
     List<ConnectionDetails> vistalinkDetails =
         p.entrySet().stream()
             .map(
