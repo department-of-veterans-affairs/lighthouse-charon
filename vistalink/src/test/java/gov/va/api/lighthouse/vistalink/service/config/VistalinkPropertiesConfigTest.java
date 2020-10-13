@@ -9,7 +9,7 @@ public class VistalinkPropertiesConfigTest {
   @Test
   void loadParsesVistalinkPropertiesFromFile() {
     VistalinkProperties vp =
-        VistalinkPropertiesConfig.builder().build().load("src/test/resources/vistalink.properties");
+        VistalinkPropertiesConfig.builder().build().load("vistalink.properties");
     assertThat(vp.getVistas())
         .containsExactlyInAnyOrder(
             ConnectionDetails.builder()
