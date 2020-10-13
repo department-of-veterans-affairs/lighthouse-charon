@@ -10,4 +10,9 @@
         </Or>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
+    <!-- To support local testing, we allow the vistalink.properties file to be overwritten by user input -->
+    <Match>
+        <Class name="gov.va.api.lighthouse.vistalink.service.config.VistalinkPropertiesConfig" />
+        <Bug pattern="PATH_TRAVERSAL_IN" />
+    </Match>
 </FindBugsFilter>
