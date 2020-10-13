@@ -12,12 +12,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Builder
-@SuppressWarnings("StringSplitter")
 public class VistalinkPropertiesConfig {
 
   @Bean
   VistalinkProperties load(
-      @Value("${vistalink.properties:vistalink.properties}") String vistalinkProperties) {
+      @Value("${vistalink.properties.file:vistalink.properties}") String vistalinkProperties) {
     Properties p = new Properties();
     try (var is = new FileInputStream(vistalinkProperties)) {
       p.load(is);
@@ -29,7 +28,7 @@ public class VistalinkPropertiesConfig {
         p.entrySet().stream()
             .map(
                 e -> {
-                  var parts = e.getValue().toString().split(":");
+                  var parts = e.getValue().toString().split(":", -1);
                   if (parts.length != 3) {
                     throw new IllegalArgumentException("Cannot parse vistalink.properties.");
                   }
