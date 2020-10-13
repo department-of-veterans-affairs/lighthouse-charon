@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Builder
+@Slf4j
 public class VistalinkPropertiesConfig {
 
   @Bean
@@ -39,6 +41,7 @@ public class VistalinkPropertiesConfig {
                       .build();
                 })
             .collect(Collectors.toList());
+    log.info("Loaded {} vista sites from {}", vistalinkDetails.size(), vistalinkProperties);
     return VistalinkProperties.builder().vistas(vistalinkDetails).build();
   }
 }
