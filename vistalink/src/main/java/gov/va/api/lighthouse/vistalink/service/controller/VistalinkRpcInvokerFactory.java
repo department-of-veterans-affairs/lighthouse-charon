@@ -17,7 +17,14 @@ public class VistalinkRpcInvokerFactory implements RpcInvokerFactory {
   // TODO
   @Override
   public RpcInvoker create(RpcPrincipal rpcPrincipal, String name) {
+
     log.info("{}", vistalinkProperties);
-    return null;
+
+
+
+    return VistalinkRpcInvoker.builder()
+        .rpcPrincipal(rpcPrincipal)
+        .connectionDetails(vistalinkProperties.getVistas().get(0))
+        .build();
   }
 }
