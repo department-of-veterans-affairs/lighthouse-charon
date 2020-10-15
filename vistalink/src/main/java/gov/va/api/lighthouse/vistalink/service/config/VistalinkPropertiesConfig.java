@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.vistalink.service.config;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -19,11 +20,13 @@ public class VistalinkPropertiesConfig {
   VistalinkProperties load(
       @Value("${vistalink.properties.file:vistalink.properties}") String vistalinkProperties) {
     Properties p = new Properties();
-    try (var is = getClass().getClassLoader().getResourceAsStream(vistalinkProperties)) {
+    try (var is = new FileInputStream(vistalinkProperties)) {
       p.load(is);
     } catch (IOException e) {
       throw new IllegalArgumentException(
-          "The vistalink.properties file cannot be found and is required.");
+          "The vistalink.properties file cannot be found at "
+              + vistalinkProperties
+              + " and is required.");
     }
     List<ConnectionDetails> vistalinkDetails =
         p.entrySet().stream()
