@@ -32,5 +32,3 @@ target/
 
 secrets.conf
 *.pem
-
-vistalink.properties
