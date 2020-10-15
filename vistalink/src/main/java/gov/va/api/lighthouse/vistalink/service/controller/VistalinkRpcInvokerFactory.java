@@ -9,21 +9,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor(onConstructor_ = @Autowired)
-@Slf4j
 public class VistalinkRpcInvokerFactory implements RpcInvokerFactory {
 
   private final VistalinkProperties vistalinkProperties;
 
-  // TODO
   @Override
   public RpcInvoker create(RpcPrincipal rpcPrincipal, String name) {
 
-    log.info("{}", vistalinkProperties);
-
-
-
     return VistalinkRpcInvoker.builder()
         .rpcPrincipal(rpcPrincipal)
+        //TODO: which connection details to i take? is it name == host?
         .connectionDetails(vistalinkProperties.getVistas().get(0))
         .build();
   }

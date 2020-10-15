@@ -5,17 +5,21 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
+import gov.va.med.vistalink.rpc.RpcRequest;
+import gov.va.med.vistalink.rpc.RpcRequestFactory;
+import gov.va.med.vistalink.rpc.RpcResponse;
 import gov.va.med.vistalink.security.CallbackHandlerUnitTest;
 import gov.va.med.vistalink.security.VistaKernelPrincipalImpl;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Map;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.AppConfigurationEntry;
+import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,26 +35,13 @@ public class VistalinkRpcInvoker implements RpcInvoker {
     this.connectionDetails = connectionDetails;
   }
 
-
-
-// -----------------------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------
-
-
-  @Getter(lazy = true, value = AccessLevel.PRIVATE)
   private final CallbackHandler handler = createLoginCallbackHandler();
 
-  @Getter(lazy = true, value = AccessLevel.PRIVATE)
   private final LoginContext loginContext = createLoginContext();
 
-  @Getter(lazy = true, value = AccessLevel.PRIVATE)
   private final VistaKernelPrincipalImpl principal = createVistaKernelPrincipal();
 
-  @Getter(lazy = true, value = AccessLevel.PRIVATE)
   private final VistaLinkConnection connection = createConnection();
-
 
   private VistaLinkConnection createConnection() {
     return principal.getAuthenticatedConnection();
@@ -66,8 +57,11 @@ public class VistalinkRpcInvoker implements RpcInvoker {
      * It would have been better named "UnattendedCallbackHandler".
      */
     return new CallbackHandlerUnitTest(
-        rpcPrincipal, config.verifyCode(), config.divisionIen());
+        rpcPrincipal.getAccessCode(),
+        rpcPrincipal.getVerifyCode(),
+        connectionDetails.getDivisionIen());
   }
+
   @SneakyThrows
   private LoginContext createLoginContext() {
     Configuration jaasConfiguration =
@@ -75,30 +69,26 @@ public class VistalinkRpcInvoker implements RpcInvoker {
           @Override
           public AppConfigurationEntry[] getAppConfigurationEntry(String name) {
             return new AppConfigurationEntry[] {
-                new AppConfigurationEntry(
-                    "gov.va.med.vistalink.security.ServerAddressKey",
-                    config.host(),
-                    "gov.va.med.vistalink.security.ServerPortKey",
-                    config.port())
+              new AppConfigurationEntry(
+                  "gov.va.med.vistalink.security.VistaLoginModule",
+                  LoginModuleControlFlag.REQUISITE,
+                  Map.of(
+                      "gov.va.med.vistalink.security.ServerAddressKey",
+                      connectionDetails.getHost(),
+                      "gov.va.med.vistalink.security.ServerPortKey",
+                      connectionDetails.getPort()))
             };
           }
         };
-    return new LoginContext(name, null, handler(), jaasConfiguration);
+    return new LoginContext("vlx:" + connectionDetails.getHost(), null, handler, jaasConfiguration);
   }
 
   @SneakyThrows
   private VistaKernelPrincipalImpl createVistaKernelPrincipal() {
-    loginContext().login();
-    return VistaKernelPrincipalImpl.getKernelPrincipal(loginContext().getSubject());
+    loginContext.login();
+    return VistaKernelPrincipalImpl.getKernelPrincipal(loginContext.getSubject());
   }
 
-// -----------------------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------------------------
-
-
-  // TODO
   @Override
   public void close() {
     try {
@@ -108,11 +98,47 @@ public class VistalinkRpcInvoker implements RpcInvoker {
     }
   }
 
+  /** Invoke an RPC with raw types. */
+  @SneakyThrows
+  public RpcResponse invoke(RpcRequest request) {
+    return connection.executeRPC(request);
+  }
+
   // TODO
   @Override
+  @SneakyThrows
   public RpcInvocationResult invoke(RpcDetails rpcDetails) {
+    var start = Instant.now();
+    try {
 
+      var request = RpcRequestFactory.getRpcRequest();
+      request.setRpcContext(rpcDetails.getContext());
+      request.setUseProprietaryMessageFormat(true);
 
-    return null;
+      request.setRpcName(rpcDetails.getName());
+
+      // TODO: Do we need version?
+      /*
+        if (version != null) {
+        request.setRpcVersion(version);
+      }
+      */
+
+      for (int i = 0; i < rpcDetails.getParameters().size(); i++) {
+        var parameter = rpcDetails.getParameters().get(i);
+        request.getParams().setParam(i + 1, parameter.type(), parameter.value());
+      }
+
+      RpcResponse response = invoke(request);
+
+      // TODO: Do something with this response? getRawResponse(), getResponse()? Parse xml?
+      response.getRawResponse();
+      // TODO: Turn XML into RpcInvocationResults
+      return RpcInvocationResult.builder().build();
+
+    } finally {
+      log.info(
+          "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.getName());
+    }
   }
 }

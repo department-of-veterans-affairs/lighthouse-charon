@@ -1,12 +1,12 @@
 package gov.va.api.lighthouse.vistalink.service.config;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 public class ConnectionDetails {
-  private String host;
-  private int port;
-  private String divisionIen;
+  String host;
+  int port;
+  String divisionIen;
 }

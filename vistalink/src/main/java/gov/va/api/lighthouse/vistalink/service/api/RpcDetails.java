@@ -72,7 +72,7 @@ public class RpcDetails {
     }
 
     /** Determine RPC parameter value based on the fields that are set. */
-    private Object value() {
+    public Object value() {
       if (ref != null) {
         return ref;
       }
