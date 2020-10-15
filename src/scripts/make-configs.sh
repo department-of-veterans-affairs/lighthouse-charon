@@ -105,12 +105,6 @@ whoDis() {
   echo $me
 }
 
-sendMoarSpams() {
-  local spam=$(git config --global --get user.email)
-  [ -z "$spam" ] && spam=$USER@aol.com
-  echo $spam
-}
-
 makeConfig vistalink $PROFILE
 addValue vistalink $PROFILE vistalink.configuration "src/main/resources/vistalink.properties"
 checkForUnsetValues vistalink $PROFILE
