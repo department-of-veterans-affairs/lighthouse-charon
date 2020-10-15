@@ -112,7 +112,7 @@ sendMoarSpams() {
 }
 
 makeConfig vistalink $PROFILE
-addValue vistalink $PROFILE vistalink.properties.file "src/main/resources/vistalink.properties"
+addValue vistalink $PROFILE vistalink.configuration "src/main/resources/vistalink.properties"
 checkForUnsetValues vistalink $PROFILE
 
 comment vistalink $PROFILE <<EOF
