@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class RpcDetails {
   private String name;
   private String context;
+  private Optional<Double> version;
   @Builder.Default private List<Parameter> parameters = new ArrayList<>();
 
   @Data

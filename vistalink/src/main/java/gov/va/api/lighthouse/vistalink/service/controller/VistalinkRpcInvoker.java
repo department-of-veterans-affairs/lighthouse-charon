@@ -25,15 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class VistalinkRpcInvoker implements RpcInvoker {
-
   private final RpcPrincipal rpcPrincipal;
-  private final ConnectionDetails connectionDetails;
 
-  @Builder
-  VistalinkRpcInvoker(RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
-    this.rpcPrincipal = rpcPrincipal;
-    this.connectionDetails = connectionDetails;
-  }
+  private final ConnectionDetails connectionDetails;
 
   private final CallbackHandler handler = createLoginCallbackHandler();
 
@@ -42,6 +36,21 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   private final VistaKernelPrincipalImpl principal = createVistaKernelPrincipal();
 
   private final VistaLinkConnection connection = createConnection();
+
+  @Builder
+  VistalinkRpcInvoker(RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
+    this.rpcPrincipal = rpcPrincipal;
+    this.connectionDetails = connectionDetails;
+  }
+
+  @Override
+  public void close() {
+    try {
+      loginContext.logout();
+    } catch (LoginException e) {
+      log.warn("Failed to logout", e);
+    }
+  }
 
   private VistaLinkConnection createConnection() {
     return principal.getAuthenticatedConnection();
@@ -80,6 +89,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
             };
           }
         };
+    // TODO: make LoginContext name unique?
     return new LoginContext("vlx:" + connectionDetails.getHost(), null, handler, jaasConfiguration);
   }
 
@@ -87,15 +97,6 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   private VistaKernelPrincipalImpl createVistaKernelPrincipal() {
     loginContext.login();
     return VistaKernelPrincipalImpl.getKernelPrincipal(loginContext.getSubject());
-  }
-
-  @Override
-  public void close() {
-    try {
-      loginContext.logout();
-    } catch (LoginException e) {
-      log.warn("Failed to logout", e);
-    }
   }
 
   /** Invoke an RPC with raw types. */
@@ -110,32 +111,21 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   public RpcInvocationResult invoke(RpcDetails rpcDetails) {
     var start = Instant.now();
     try {
-
-      var request = RpcRequestFactory.getRpcRequest();
-      request.setRpcContext(rpcDetails.getContext());
-      request.setUseProprietaryMessageFormat(true);
-
-      request.setRpcName(rpcDetails.getName());
-
-      // TODO: Do we need version?
-      /*
-        if (version != null) {
-        request.setRpcVersion(version);
+      var vistalinkRequest = RpcRequestFactory.getRpcRequest();
+      vistalinkRequest.setRpcContext(rpcDetails.getContext());
+      vistalinkRequest.setUseProprietaryMessageFormat(true);
+      vistalinkRequest.setRpcName(rpcDetails.getName());
+      if (rpcDetails.getVersion().isPresent()) {
+        vistalinkRequest.setRpcVersion(rpcDetails.getVersion().get());
       }
-      */
-
       for (int i = 0; i < rpcDetails.getParameters().size(); i++) {
         var parameter = rpcDetails.getParameters().get(i);
-        request.getParams().setParam(i + 1, parameter.type(), parameter.value());
+        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), parameter.value());
       }
-
-      RpcResponse response = invoke(request);
-
-      // TODO: Do something with this response? getRawResponse(), getResponse()? Parse xml?
-      response.getRawResponse();
-      // TODO: Turn XML into RpcInvocationResults
+      RpcResponse vistalinkResponse = invoke(vistalinkRequest);
+      log.info("Response: " + vistalinkResponse.getRawResponse());
+      // TODO: Turn XML into RpcInvocationResults for now, return nothing.
       return RpcInvocationResult.builder().build();
-
     } finally {
       log.info(
           "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.getName());
