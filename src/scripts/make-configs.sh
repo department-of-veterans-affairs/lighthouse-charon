@@ -99,12 +99,6 @@ comment() {
   cat >> $target
 }
 
-whoDis() {
-  local me=$(git config --global --get user.name)
-  [ -z "$me" ] && me=$USER
-  echo $me
-}
-
 makeConfig vistalink $PROFILE
 addValue vistalink $PROFILE vistalink.configuration "src/main/resources/vistalink.properties"
 checkForUnsetValues vistalink $PROFILE
