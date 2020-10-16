@@ -100,9 +100,10 @@ comment() {
 }
 
 makeConfig vistalink $PROFILE
-addValue vistalink $PROFILE vistalink.configuration "src/main/resources/vistalink.properties"
+addValue vistalink $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
 checkForUnsetValues vistalink $PROFILE
 
-comment vistalink $PROFILE <<EOF
 
+cat > $REPO/vistalink/config/vistalink-$PROFILE.properties <<EOF
+vm=localhost:8000:605
 EOF
