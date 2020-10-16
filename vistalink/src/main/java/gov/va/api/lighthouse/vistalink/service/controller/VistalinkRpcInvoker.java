@@ -25,22 +25,27 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class VistalinkRpcInvoker implements RpcInvoker {
+
   private final RpcPrincipal rpcPrincipal;
 
   private final ConnectionDetails connectionDetails;
 
-  private final CallbackHandler handler = createLoginCallbackHandler();
+  private final CallbackHandler handler;
 
-  private final LoginContext loginContext = createLoginContext();
+  private final LoginContext loginContext;
 
-  private final VistaKernelPrincipalImpl principal = createVistaKernelPrincipal();
+  private final VistaKernelPrincipalImpl kernelPrincipal;
 
-  private final VistaLinkConnection connection = createConnection();
+  private final VistaLinkConnection connection;
 
   @Builder
   VistalinkRpcInvoker(RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
     this.rpcPrincipal = rpcPrincipal;
     this.connectionDetails = connectionDetails;
+    this.handler = createLoginCallbackHandler();
+    this.loginContext = createLoginContext();
+    this.kernelPrincipal = createVistaKernelPrincipal();
+    this.connection = createConnection();
   }
 
   @Override
@@ -53,7 +58,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   }
 
   private VistaLinkConnection createConnection() {
-    return principal.getAuthenticatedConnection();
+    return kernelPrincipal.getAuthenticatedConnection();
   }
 
   private CallbackHandler createLoginCallbackHandler() {

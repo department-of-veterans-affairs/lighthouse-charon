@@ -15,7 +15,16 @@ public class RpcDetails {
   private String name;
   private String context;
   private Optional<Double> version;
+
   @Builder.Default private List<Parameter> parameters = new ArrayList<>();
+
+  /** shutup. */
+  public Optional<Double> version() {
+    if (version == null) {
+      version = Optional.empty();
+    }
+    return version;
+  }
 
   @Data
   @NoArgsConstructor
