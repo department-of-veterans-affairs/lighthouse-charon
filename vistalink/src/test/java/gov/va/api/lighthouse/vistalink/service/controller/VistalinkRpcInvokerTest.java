@@ -1,10 +1,8 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
-import java.io.File;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.Value;
@@ -33,7 +31,8 @@ public class VistalinkRpcInvokerTest {
             .name(config.name)
             .build();
     var vistalinkRpcInvoker = vistalinkRpcInvokerFactory.create(rpcPrincipal, connectionDetails);
-    vistalinkRpcInvoker.invoke(config.rpcDetails);
+    vistalinkRpcInvoker.invoke(
+        RpcDetails.builder().name("XOBV TEST PING").context("XOBV VISTALINK TESTER").build());
   }
 
   @Value
@@ -45,12 +44,10 @@ public class VistalinkRpcInvokerTest {
     String host;
     String port;
     String name;
-    RpcDetails rpcDetails;
 
     @SneakyThrows
     static VistalinkTestConfig fromSystemProperties() {
       String host = propertyOrDie("host");
-      java.io.File requestFile = new File(propertyOrDie("rpc-file"));
 
       return VistalinkTestConfig.builder()
           .accessCode(propertyOrDie("access-code"))
@@ -59,7 +56,6 @@ public class VistalinkRpcInvokerTest {
           .host(host)
           .port(propertyOrDie("port"))
           .name(System.getProperty("vlx.name", "vlx:" + host))
-          .rpcDetails(new ObjectMapper().readValue(requestFile, RpcDetails.class))
           .build();
     }
 
