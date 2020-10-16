@@ -129,4 +129,9 @@ public class VistalinkRpcInvoker implements RpcInvoker {
           "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.name());
     }
   }
+
+  @Override
+  public String vista() {
+    return connectionDetails.name();
+  }
 }
