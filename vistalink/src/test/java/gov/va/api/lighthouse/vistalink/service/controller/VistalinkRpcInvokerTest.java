@@ -33,9 +33,6 @@ public class VistalinkRpcInvokerTest {
             .name(config.name)
             .build();
     var vistalinkRpcInvoker = vistalinkRpcInvokerFactory.create(rpcPrincipal, connectionDetails);
-    /*  vistalinkRpcInvoker.invoke(
-          RpcDetails.builder().name("XOBV TEST PING").context(config.rpcDetails.rpcContext).build());
-    */
     vistalinkRpcInvoker.invoke(config.rpcDetails);
   }
 
@@ -48,7 +45,6 @@ public class VistalinkRpcInvokerTest {
     String host;
     String port;
     String name;
-    // String rpcContext;
     RpcDetails rpcDetails;
 
     @SneakyThrows
@@ -60,7 +56,6 @@ public class VistalinkRpcInvokerTest {
           .accessCode(propertyOrDie("access-code"))
           .verifyCode(propertyOrDie("verify-code"))
           .divisionIen(propertyOrDie("division-ien"))
-          // .rpcContext(propertyOrDie("rpc-context"))
           .host(host)
           .port(propertyOrDie("port"))
           .name(System.getProperty("vlx.name", "vlx:" + host))
