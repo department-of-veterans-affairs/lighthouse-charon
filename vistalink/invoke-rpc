@@ -4,6 +4,8 @@ set -euo pipefail
 TEMPLATE=${1:-}
 PORT=8050
 
+test -n "$VISTA_ACCESS_CODE"
+test -n "$VISTA_VERIFY_CODE"
 
 usage() {
 cat<<EOF
@@ -26,6 +28,7 @@ trap onExit EXIT
 cat $TEMPLATE | envsubst > $POST_ME
 
 curl \
+  -s \
   -XPOST \
   -H"Content-Type:application/json" \
   --data @$POST_ME \
