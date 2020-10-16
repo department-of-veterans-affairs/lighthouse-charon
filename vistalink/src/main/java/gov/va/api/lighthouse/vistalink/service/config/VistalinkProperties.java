@@ -2,10 +2,11 @@ package gov.va.api.lighthouse.vistalink.service.config;
 
 import java.util.List;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Singular;
+import lombok.Value;
 
 @Builder
-@Data
+@Value
 public class VistalinkProperties {
-  private List<ConnectionDetails> vistas;
+  @Singular List<ConnectionDetails> vistas;
 }

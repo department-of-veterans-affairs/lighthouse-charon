@@ -10,4 +10,12 @@ public class RpcInvocationResult {
   private String vista;
   private String response;
   private Optional<String> error;
+
+  /** Lazy getter. */
+  public Optional<String> error() {
+    if (error == null) {
+      error = Optional.empty();
+    }
+    return error;
+  }
 }

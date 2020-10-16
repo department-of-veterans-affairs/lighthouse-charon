@@ -4,16 +4,31 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class RpcDetails {
   private String name;
   private String context;
+  private Optional<Double> version;
+
   @Builder.Default private List<Parameter> parameters = new ArrayList<>();
+
+  /** Lazy getter. */
+  public Optional<Double> version() {
+    if (version == null) {
+      version = Optional.empty();
+    }
+    return version;
+  }
 
   @Data
   @NoArgsConstructor
@@ -72,7 +87,7 @@ public class RpcDetails {
     }
 
     /** Determine RPC parameter value based on the fields that are set. */
-    private Object value() {
+    public Object value() {
       if (ref != null) {
         return ref;
       }

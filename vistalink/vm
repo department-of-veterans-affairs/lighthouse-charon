@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VM=VistA
+MODE=headless
+SSH_NAME=vvm
+
+usage() {
+cat<<EOF
+Usage: $0 command
+Manages a local Vista VirtualBox VM.
+
+Commands
+start - start the VM
+stop - stop the VM
+status - print if the VM is up or down
+
+${1:-}
+EOF
+exit 1
+}
+
+
+main() {
+  COMMAND="${1:-}"
+  case $COMMAND in
+    s|start) start;;
+    st|status) status;;
+    k|kill|stop) stop;;
+    *) usage "unknown command: $COMMAND";;
+  esac
+}
+
+start() {
+  echo "Starting $VM in $MODE mode"
+  VBoxManage startvm --type $MODE $VM
+}
+
+status() {
+  if VBoxManage list runningvms | grep -q -E "^\"$VM\""
+  then
+    echo up
+  else
+    echo down
+  fi
+}
+
+stop() {
+  ssh $SSH_NAME poweroff
+}
+
+main $@

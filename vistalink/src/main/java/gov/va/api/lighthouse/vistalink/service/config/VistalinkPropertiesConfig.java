@@ -1,10 +1,12 @@
 package gov.va.api.lighthouse.vistalink.service.config;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
-import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,37 +14,53 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Builder
+@NoArgsConstructor
 @Slf4j
 public class VistalinkPropertiesConfig {
+
+  ConnectionDetails asConnectionDetails(String name, String value) {
+    if (isBlank(value)) {
+      throw badValue(name, value, "value is blank");
+    }
+    var parts = value.split(":", -1);
+    if (parts.length != 3) {
+      throw badValue(name, value, "incorrect number of parts");
+    }
+    try {
+      return ConnectionDetails.builder()
+          .name(name)
+          .host(parts[0])
+          .port(Integer.parseInt(parts[1]))
+          .divisionIen(parts[2])
+          .build();
+    } catch (NumberFormatException e) {
+      throw badValue(name, value, "port is not an integer");
+    }
+  }
+
+  private IllegalArgumentException badValue(String name, String value, String message) {
+    return new IllegalArgumentException(
+        String.format(
+            "Cannot parse value %s=\"%s\", expected \"hostname:port:divisionIen\" (%s)",
+            name, value, message));
+  }
 
   @Bean
   @SneakyThrows
   VistalinkProperties load(
       @Value("${vistalink.configuration:vistalink.properties}") String vistalinkProperties) {
-    Properties p = new Properties();
-    try (var is = new FileInputStream(vistalinkProperties)) {
-      p.load(is);
+    Properties properties = new Properties();
+    try (var in = new FileInputStream(vistalinkProperties)) {
+      properties.load(in);
     }
-    List<ConnectionDetails> vistalinkDetails = parseProperties(p);
+    List<ConnectionDetails> vistalinkDetails = parseProperties(properties);
     log.info("Loaded {} vista sites from {}", vistalinkDetails.size(), vistalinkProperties);
     return VistalinkProperties.builder().vistas(vistalinkDetails).build();
   }
 
-  private List<ConnectionDetails> parseProperties(Properties p) {
-    return p.entrySet().stream()
-        .map(
-            e -> {
-              var parts = e.getValue().toString().split(":", -1);
-              if (parts.length != 3) {
-                throw new IllegalArgumentException("Cannot parse vistalink.properties.");
-              }
-              return ConnectionDetails.builder()
-                  .host(parts[0])
-                  .port(Integer.parseInt(parts[1]))
-                  .divisionIen(parts[2])
-                  .build();
-            })
+  List<ConnectionDetails> parseProperties(Properties p) {
+    return p.stringPropertyNames().stream()
+        .map(name -> asConnectionDetails(name, p.getProperty(name)))
         .collect(Collectors.toList());
   }
 }
