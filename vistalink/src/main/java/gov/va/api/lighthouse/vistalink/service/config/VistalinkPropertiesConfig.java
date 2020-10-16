@@ -30,7 +30,7 @@ public class VistalinkPropertiesConfig {
       return ConnectionDetails.builder()
           .name(name)
           .host(parts[0])
-          .port(parts[1])
+          .port(Integer.parseInt(parts[1]))
           .divisionIen(parts[2])
           .build();
     } catch (NumberFormatException e) {

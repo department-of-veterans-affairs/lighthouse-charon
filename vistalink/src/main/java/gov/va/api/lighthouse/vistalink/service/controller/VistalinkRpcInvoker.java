@@ -88,7 +88,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
                       "gov.va.med.vistalink.security.ServerAddressKey",
                       connectionDetails.host(),
                       "gov.va.med.vistalink.security.ServerPortKey",
-                      connectionDetails.port()))
+                      String.valueOf(connectionDetails.port())))
             };
           }
         };

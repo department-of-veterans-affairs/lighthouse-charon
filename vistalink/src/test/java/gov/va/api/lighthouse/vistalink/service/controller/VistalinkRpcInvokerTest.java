@@ -23,7 +23,7 @@ public class VistalinkRpcInvokerTest {
     var connectionDetails =
         ConnectionDetails.builder()
             .divisionIen(config.divisionIen)
-            .port(config.port)
+            .port(Integer.parseInt(config.port))
             .host(config.host)
             .name(config.name)
             .build();

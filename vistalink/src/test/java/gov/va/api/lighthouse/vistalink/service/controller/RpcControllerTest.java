@@ -23,7 +23,7 @@ class RpcControllerTest {
     return ConnectionDetails.builder()
         .name("v" + n)
         .host("v" + n + ".com")
-        .port("8000" + n)
+        .port(8000 + n)
         .divisionIen("" + n)
         .build();
   }

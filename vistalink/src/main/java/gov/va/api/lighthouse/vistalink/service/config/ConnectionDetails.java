@@ -8,6 +8,6 @@ import lombok.Value;
 public class ConnectionDetails {
   String name;
   String host;
-  String port;
+  int port;
   String divisionIen;
 }
