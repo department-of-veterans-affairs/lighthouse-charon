@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
-@RestController("/rpc")
+@RestController()
 @RequestMapping(
-    produces = {"application/json"},
-    consumes = {"application/json"})
+    path = "/rpc",
+    produces = {"application/json"})
 @AllArgsConstructor(onConstructor_ = @Autowired)
 public class RpcController {
 
@@ -28,8 +28,13 @@ public class RpcController {
     return vistalinkProperties;
   }
 
-  @PostMapping
+  @PostMapping(consumes = {"application/json"})
   public RpcResponse invoke(@RequestBody RpcRequest request) {
     return rpcExecutor.execute(request);
+  }
+
+  @GetMapping("/x")
+  public String x() {
+    return vistalinkProperties.toString();
   }
 }

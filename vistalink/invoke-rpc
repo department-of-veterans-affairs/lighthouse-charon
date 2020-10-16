@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TEMPLATE=${1:-}
+PORT=8050
+
+
+usage() {
+cat<<EOF
+
+Perform envsubstitution on the given template then post it a locally running
+server that assumes a VistA VM is also running.
+
+${1:-}
+EOF
+exit 1
+}
+
+if [ -z "${TEMPLATE:-}" ]; then usage "template not specified"; fi
+if [ ! -f "$TEMPLATE" ]; then usage "template not found: $TEMPLATE"; fi
+
+POST_ME=$(mktemp)
+onExit() { rm $POST_ME; }
+trap onExit EXIT
+
+cat $TEMPLATE | envsubst > $POST_ME
+
+curl \
+  -XPOST \
+  -H"Content-Type:application/json" \
+  --data @$POST_ME \
+  http://localhost:$PORT/rpc
