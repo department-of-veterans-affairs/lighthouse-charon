@@ -1,13 +1,18 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
+import java.io.File;
 import lombok.Builder;
+import lombok.SneakyThrows;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
+@Slf4j
 public class VistalinkRpcInvokerTest {
 
   VistalinkTestConfig config;
@@ -28,8 +33,10 @@ public class VistalinkRpcInvokerTest {
             .name(config.name)
             .build();
     var vistalinkRpcInvoker = vistalinkRpcInvokerFactory.create(rpcPrincipal, connectionDetails);
-    vistalinkRpcInvoker.invoke(
-        RpcDetails.builder().name("XOBV TEST PING").context(config.rpcContext).build());
+    /*  vistalinkRpcInvoker.invoke(
+          RpcDetails.builder().name("XOBV TEST PING").context(config.rpcDetails.rpcContext).build());
+    */
+    vistalinkRpcInvoker.invoke(config.rpcDetails);
   }
 
   @Value
@@ -41,18 +48,23 @@ public class VistalinkRpcInvokerTest {
     String host;
     String port;
     String name;
-    String rpcContext;
+    // String rpcContext;
+    RpcDetails rpcDetails;
 
+    @SneakyThrows
     static VistalinkTestConfig fromSystemProperties() {
       String host = propertyOrDie("host");
+      java.io.File requestFile = new File(propertyOrDie("rpc-file"));
+
       return VistalinkTestConfig.builder()
           .accessCode(propertyOrDie("access-code"))
           .verifyCode(propertyOrDie("verify-code"))
           .divisionIen(propertyOrDie("division-ien"))
-          .rpcContext(propertyOrDie("rpc-context"))
+          // .rpcContext(propertyOrDie("rpc-context"))
           .host(host)
           .port(propertyOrDie("port"))
           .name(System.getProperty("vlx.name", "vlx:" + host))
+          .rpcDetails(new ObjectMapper().readValue(requestFile, RpcDetails.class))
           .build();
     }
 
