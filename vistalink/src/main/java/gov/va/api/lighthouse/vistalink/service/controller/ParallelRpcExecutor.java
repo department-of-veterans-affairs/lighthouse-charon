@@ -50,6 +50,8 @@ public class ParallelRpcExecutor implements RpcExecutor {
           .vista(invoker.vista())
           .error(Optional.of("exception: " + e.getMessage()))
           .build();
+    } finally {
+      invoker.close();
     }
   }
 }

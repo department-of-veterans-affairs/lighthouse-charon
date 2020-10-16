@@ -7,6 +7,10 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
 @SuppressWarnings("try")
 public interface RpcInvoker extends AutoCloseable {
 
+  // redefined to remove exception from the signature
+  @Override
+  void close();
+
   RpcInvocationResult invoke(RpcDetails rpcDetails);
 
   String vista();
