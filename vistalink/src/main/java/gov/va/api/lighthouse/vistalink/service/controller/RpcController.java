@@ -32,9 +32,4 @@ public class RpcController {
   public RpcResponse invoke(@RequestBody RpcRequest request) {
     return rpcExecutor.execute(request);
   }
-
-  @GetMapping("/x")
-  public String x() {
-    return vistalinkProperties.toString();
-  }
 }
