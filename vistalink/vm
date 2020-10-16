@@ -12,6 +12,8 @@ Manages a local Vista VirtualBox VM.
 
 Commands
 start - start the VM
+stop - stop the VM
+status - print if the VM is up or down
 
 ${1:-}
 EOF
