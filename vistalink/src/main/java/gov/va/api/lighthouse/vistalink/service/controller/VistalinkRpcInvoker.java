@@ -66,9 +66,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
      * It would have been better named "UnattendedCallbackHandler".
      */
     return new CallbackHandlerUnitTest(
-        rpcPrincipal.getAccessCode(),
-        rpcPrincipal.getVerifyCode(),
-        connectionDetails.getDivisionIen());
+        rpcPrincipal.accessCode(), rpcPrincipal.verifyCode(), connectionDetails.divisionIen());
   }
 
   @SneakyThrows
@@ -83,14 +81,14 @@ public class VistalinkRpcInvoker implements RpcInvoker {
                   LoginModuleControlFlag.REQUISITE,
                   Map.of(
                       "gov.va.med.vistalink.security.ServerAddressKey",
-                      connectionDetails.getHost(),
+                      connectionDetails.host(),
                       "gov.va.med.vistalink.security.ServerPortKey",
-                      connectionDetails.getPort()))
+                      connectionDetails.port()))
             };
           }
         };
     // TODO: make LoginContext name unique?
-    return new LoginContext("vlx:" + connectionDetails.getHost(), null, handler, jaasConfiguration);
+    return new LoginContext("vlx:" + connectionDetails.host(), null, handler, jaasConfiguration);
   }
 
   @SneakyThrows
@@ -112,14 +110,14 @@ public class VistalinkRpcInvoker implements RpcInvoker {
     var start = Instant.now();
     try {
       var vistalinkRequest = RpcRequestFactory.getRpcRequest();
-      vistalinkRequest.setRpcContext(rpcDetails.getContext());
+      vistalinkRequest.setRpcContext(rpcDetails.context());
       vistalinkRequest.setUseProprietaryMessageFormat(true);
-      vistalinkRequest.setRpcName(rpcDetails.getName());
-      if (rpcDetails.getVersion().isPresent()) {
-        vistalinkRequest.setRpcVersion(rpcDetails.getVersion().get());
+      vistalinkRequest.setRpcName(rpcDetails.name());
+      if (rpcDetails.version().isPresent()) {
+        vistalinkRequest.setRpcVersion(rpcDetails.version().get());
       }
-      for (int i = 0; i < rpcDetails.getParameters().size(); i++) {
-        var parameter = rpcDetails.getParameters().get(i);
+      for (int i = 0; i < rpcDetails.parameters().size(); i++) {
+        var parameter = rpcDetails.parameters().get(i);
         vistalinkRequest.getParams().setParam(i + 1, parameter.type(), parameter.value());
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
@@ -128,7 +126,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       return RpcInvocationResult.builder().build();
     } finally {
       log.info(
-          "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.getName());
+          "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.name());
     }
   }
 }
