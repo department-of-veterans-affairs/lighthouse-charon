@@ -6,6 +6,7 @@ import lombok.Value;
 @Value
 @Builder
 public class ConnectionDetails {
+  String name;
   String host;
   int port;
   String divisionIen;
