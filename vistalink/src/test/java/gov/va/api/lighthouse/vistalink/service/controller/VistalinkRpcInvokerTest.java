@@ -1,23 +1,23 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-import static org.assertj.core.api.Assumptions.assumeThat;
-
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import lombok.Builder;
 import lombok.Value;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 public class VistalinkRpcInvokerTest {
 
-  VistalinkTestConfig config = VistalinkTestConfig.fromSystemProperties();
-  VistalinkRpcInvokerFactory vistalinkRpcInvokerFactory = new VistalinkRpcInvokerFactory();
+  VistalinkTestConfig config;
+  VistalinkRpcInvokerFactory vistalinkRpcInvokerFactory;
 
   @Test
+  @EnabledIfSystemProperty(named = "test.vistalink", matches = "true")
   void invoke() {
-    assumeThat(System.getProperty("test.vistalink")).isEqualTo("true");
-
+    config = VistalinkTestConfig.fromSystemProperties();
+    vistalinkRpcInvokerFactory = new VistalinkRpcInvokerFactory();
     var rpcPrincipal =
         RpcPrincipal.builder().accessCode(config.accessCode).verifyCode(config.verifyCode).build();
     var connectionDetails =
