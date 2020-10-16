@@ -18,7 +18,7 @@ public class RpcDetails {
 
   @Builder.Default private List<Parameter> parameters = new ArrayList<>();
 
-  /** shutup. */
+  /** Lazy getter. */
   public Optional<Double> version() {
     if (version == null) {
       version = Optional.empty();
