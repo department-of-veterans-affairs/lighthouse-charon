@@ -10,6 +10,7 @@ import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import gov.va.med.vistalink.rpc.RpcResponse;
 import gov.va.med.vistalink.security.CallbackHandlerUnitTest;
 import gov.va.med.vistalink.security.VistaKernelPrincipalImpl;
+import java.io.StringReader;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
@@ -19,12 +20,16 @@ import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class VistalinkRpcInvoker implements RpcInvoker {
+
+  private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
   private final RpcPrincipal rpcPrincipal;
 
@@ -42,10 +47,23 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   VistalinkRpcInvoker(RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
     this.rpcPrincipal = rpcPrincipal;
     this.connectionDetails = connectionDetails;
-    this.handler = createLoginCallbackHandler();
-    this.loginContext = createLoginContext();
-    this.kernelPrincipal = createVistaKernelPrincipal();
-    this.connection = createConnection();
+    handler = createLoginCallbackHandler();
+    loginContext = createLoginContext();
+    kernelPrincipal = createVistaKernelPrincipal();
+    connection = createConnection();
+  }
+
+  @SneakyThrows
+  private static JAXBContext createJaxbContext() {
+    return JAXBContext.newInstance(VistalinkXmlResponse.class);
+  }
+
+  /** Create a response object by parsing the raw data. */
+  @SneakyThrows
+  public static VistalinkXmlResponse parse(RpcResponse rpcResponse) {
+    Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
+    return (VistalinkXmlResponse)
+        unmarshaller.unmarshal(new StringReader(rpcResponse.getRawResponse()));
   }
 
   @Override
@@ -127,8 +145,10 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("Response: " + vistalinkResponse.getRawResponse());
+      VistalinkXmlResponse xmlResponse = parse(vistalinkResponse);
       // TODO: Turn XML into RpcInvocationResults for now, return nothing.
-      return RpcInvocationResult.builder().response(vistalinkResponse.getRawResponse()).build();
+
+      return RpcInvocationResult.builder().response(xmlResponse.getResponse().getValue()).build();
     } finally {
       log.info(
           "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.name());
