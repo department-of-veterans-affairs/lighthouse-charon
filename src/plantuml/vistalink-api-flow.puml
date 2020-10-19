@@ -1,0 +1,13 @@
+@startuml
+start
+:Determine Vista Instances;
+fork
+  :Invoke RPC for Vista 1;
+fork again
+  :Invoke RPC for Vista 2;
+fork again
+  :Invoke RPC for Vista N;
+end fork
+:Accumulate results;
+end
+@enduml
