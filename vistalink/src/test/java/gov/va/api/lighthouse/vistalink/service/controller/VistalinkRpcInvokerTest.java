@@ -35,6 +35,7 @@ public class VistalinkRpcInvokerTest {
     RpcInvocationResult result =
         vistalinkRpcInvoker.invoke(
             RpcDetails.builder().name("XOBV TEST PING").context("XOBV VISTALINK TESTER").build());
+
     log.info("RESULT\n---\n{}\n---", result.response());
   }
 
