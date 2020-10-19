@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import lombok.Builder;
@@ -31,8 +32,10 @@ public class VistalinkRpcInvokerTest {
             .name(config.name)
             .build();
     var vistalinkRpcInvoker = vistalinkRpcInvokerFactory.create(rpcPrincipal, connectionDetails);
-    vistalinkRpcInvoker.invoke(
-        RpcDetails.builder().name("XOBV TEST PING").context("XOBV VISTALINK TESTER").build());
+    RpcInvocationResult result =
+        vistalinkRpcInvoker.invoke(
+            RpcDetails.builder().name("XOBV TEST PING").context("XOBV VISTALINK TESTER").build());
+    log.info("RESULT\n---\n{}\n---", result.response());
   }
 
   @Value
