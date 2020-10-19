@@ -147,7 +147,10 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       log.info("Response: " + vistalinkResponse.getRawResponse());
       VistalinkXmlResponse xmlResponse = parse(vistalinkResponse);
 
-      return RpcInvocationResult.builder().response(xmlResponse.getResponse().getValue()).build();
+      return RpcInvocationResult.builder()
+          .vista(vista())
+          .response(xmlResponse.getResponse().getValue())
+          .build();
     } finally {
       log.info(
           "{} ms for {}", Duration.between(start, Instant.now()).toMillis(), rpcDetails.name());
