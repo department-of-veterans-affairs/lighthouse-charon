@@ -91,10 +91,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
       return invoker.invoke(request.rpc());
     } catch (Exception e) {
       log.error("Error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
-      return RpcInvocationResult.builder()
-          .vista(invoker.vista())
-          .error(Optional.of("exception: " + e.getMessage()))
-          .build();
+      return failed(invoker.vista(), "exception: " + e.getMessage());
     } finally {
       invoker.close();
     }
