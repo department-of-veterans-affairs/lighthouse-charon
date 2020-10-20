@@ -97,7 +97,7 @@ Configuration is managed per environment and deployed with the Vistalink API. Yo
 ```
 {
   vistas: [
-    { name: lomalinda, host: loma-linda.med.va.gov, port: 18105, divisionEin: 605 },
+    { name: lomalinda, host: loma-linda.med.va.gov, port: 18105, divisionIen: 605 },
     ...
   ]
 }
