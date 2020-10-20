@@ -80,7 +80,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
       return futureResult.get(30, TimeUnit.SECONDS);
     } catch (TimeoutException | ExecutionException | InterruptedException e) {
       log.error("Failed to get result from {}", vista, e);
-      return RpcInvocationResult.builder().vista(vista).error(Optional.of(e.getMessage())).build();
+      return failed(vista, "exception: " + e.getMessage());
     }
   }
 
