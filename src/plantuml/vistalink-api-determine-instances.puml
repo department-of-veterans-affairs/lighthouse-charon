@@ -1,0 +1,24 @@
+@startuml
+start
+:Set instances list to empty;
+if (Is forPatient specified?) then (yes)
+  :Collect instances from MPI;
+endif
+if (Is includes specified?) then (yes)
+  :Add included instances to list;
+endif
+if (Is excludes specified?) then (yes)
+  :Remove excluded instances from list;
+endif
+if (Is instance list empty?) then (yes)
+  :Respond error;
+  end
+endif
+:Look up connection information;
+note
+  For each Vista instance, a
+  host, port, and division IEN
+  is needed.
+end note
+end
+@enduml

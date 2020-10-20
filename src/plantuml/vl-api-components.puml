@@ -1,0 +1,27 @@
+@startuml
+
+rectangle "VistA 1" as V1
+rectangle "VistA 2" as V2
+rectangle "VistA 3" as V3
+rectangle "Master Person Index" as MPI
+rectangle "Vistalink API" as VL
+rectangle "Insurance API" as INS
+rectangle "Scheduling API" as SC
+rectangle "Data Query" as DQ
+database CDW
+actor Consumer
+
+VL -(0- MPI
+VL -(0- V1
+VL -(0- V2
+VL -(0- V3
+
+INS -(0- VL
+SC -(0- VL
+DQ -- CDW
+
+Consumer -(0- INS
+Consumer -(0- SC
+Consumer -(0- DQ
+
+@enduml

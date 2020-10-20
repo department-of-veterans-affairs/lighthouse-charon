@@ -1,0 +1,80 @@
+@startuml
+
+skinparam {
+ shadowing false
+ handwritten true
+ ClassBackgroundColor<<data>> #EFF
+ ClassBackgroundColor<<vistalink>> #FEE
+ ClassBackgroundColor<<future>> #DDD
+}
+
+together {
+  class ConnectionDetails <<data>> {
+    String host
+    int port
+    String divisionIen
+  }
+  class VistalinkProperties <<data>>
+  class VistalinkPropertiesConfig <<Configuration>>
+}
+VistalinkProperties *--> "1..*" ConnectionDetails: vistas
+VistalinkPropertiesConfig --> VistalinkProperties: <<Bean>>
+
+together {
+  class RpcRequest <<data>>
+  class RpcDetails <<data>>
+  class RpcPrincipal <<data>>
+  class RpcVistaTargets <<data>>
+}
+RpcRequest *--> RpcDetails: rpc
+RpcRequest *--> RpcPrincipal: principal
+RpcRequest *--> RpcVistaTargets: target
+
+together {
+  class RpcResponse <<data>>
+  class RpcInvocationResult <<data>>
+}
+RpcResponse o-> "1..*" RpcInvocationResult: results
+
+interface RpcInvoker <<AutoCloseable>> {
+  RpcInvocationResult invoke(RpcDetails)
+}
+RpcInvoker --> RpcDetails: <<use>>
+RpcInvoker --> RpcInvocationResult: <<create>>
+
+interface RpcInvokerFactory {
+  RpcInvoker create(RpcPrincipal,Name)
+}
+RpcInvokerFactory --> RpcInvoker: <<create>>
+
+interface RpcExecutor {
+  RpcResponse execute(RpcRequest)
+}
+RpcExecutor --> RpcRequest: <<use>>
+RpcExecutor --> RpcResponse: <<create>>
+
+class ParallelRpcExecutor <<Component>> implements RpcExecutor
+ParallelRpcExecutor --> RpcInvoker: <<use>>
+ParallelRpcExecutor o--> RpcInvokerFactory: <<Autowire>>
+ParallelRpcExecutor o--> VistaNameResolver: <<Autowire>>
+
+interface VistaNameResolver {
+  List<Name> resolve(RpcVistaTargets(
+}
+VistaNameResolver --> RpcVistaTargets: <<use>>
+
+class AllVistaNameResolver  <<Component>> <<temporary>> implements VistaNameResolver
+class MpiVistaNameResolver  <<Component>> <<future>> implements VistaNameResolver
+
+together {
+class VistalinkRpcInvoker  <<Component>> <<vistalink>> implements RpcInvoker
+class VistalinkRpcInvokerFactory  <<Component>> <<vistalink>> implements RpcInvokerFactory
+}
+VistalinkRpcInvokerFactory --> VistalinkRpcInvoker: <<create>>
+VistalinkRpcInvokerFactory o--> VistalinkProperties:<<Autowire>>
+
+class RpcController <<RestController>>
+RpcController o-> RpcExecutor: <<Autowire>>
+RpcController -> RpcRequest: <<consumes>>
+RpcController -> RpcResponse: <<produces>>
+@enduml
