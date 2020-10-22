@@ -13,7 +13,7 @@ public class VistalinkRequestIT {
 
   @Test
   @SneakyThrows
-  void requestRpcNoArguements() {
+  void requestRpcWithStringArguement() {
     assumeEnvironmentNotIn(Environment.LOCAL);
     var body =
         RpcRequest.builder()
