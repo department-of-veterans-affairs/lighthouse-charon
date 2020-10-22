@@ -11,10 +11,10 @@ public final class VistalinkProperties {
   String vistaVerifyCode = vistaVerifyCode();
 
   private String vistaAccessCode() {
-    return System.getProperty("vista-access-code", "not-set");
+    return System.getProperty("vista.access-code", "not-set");
   }
 
   private String vistaVerifyCode() {
-    return System.getProperty("vista-verify-code", "not-set");
+    return System.getProperty("vista.verify-code", "not-set");
   }
 }

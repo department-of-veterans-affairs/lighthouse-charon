@@ -15,8 +15,8 @@ java-tests \
   --regression-test-pattern ".*IT\$" \
   --smoke-test-pattern ".*PingIT\$" \
   -Dsentinel="$SENTINEL_ENV" \
-  -Dvista-access-code="$VISTA_ACCESS_CODE" \
-  -Dvista-verify-code="$VISTA_VERIFY_CODE" \
+  -Dvista.access-code="$VISTA_ACCESS_CODE" \
+  -Dvista.verify-code="$VISTA_VERIFY_CODE" \
   $@
 
 exit $?
