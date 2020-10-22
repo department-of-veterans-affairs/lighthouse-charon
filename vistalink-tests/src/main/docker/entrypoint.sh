@@ -14,9 +14,10 @@ java-tests \
   --module-name "vistalink-tests" \
   --regression-test-pattern ".*IT\$" \
   --smoke-test-pattern ".*Smoke.*IT\$" \
-  -Dclient-key="$CLIENT_KEY" \
   -Dsentinel="$SENTINEL_ENV" \
   -Dvistalink.url="$VISTALINK_URL" \
+  -Dvista-access-key="$VISTA_ACCESS_KEY" \
+  -Dvista-verify-key="$VISTA_VERIFY_KEY" \
   $@
 
 exit $?
