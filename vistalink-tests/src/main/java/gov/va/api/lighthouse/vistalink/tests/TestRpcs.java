@@ -9,4 +9,5 @@ import lombok.Value;
 @Builder
 public class TestRpcs {
   @NotNull RpcDetails pingRpc;
+  @NotNull RpcDetails stringRequestRpc;
 }

@@ -4,6 +4,8 @@ import gov.va.api.health.sentinel.Environment;
 import gov.va.api.health.sentinel.SentinelProperties;
 import gov.va.api.health.sentinel.ServiceDefinition;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.service.api.RpcDetails.Parameter;
+import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 
@@ -21,6 +23,12 @@ public class SystemDefinitions {
     return TestRpcs.builder()
         .pingRpc(
             RpcDetails.builder().context("XOBV VISTALINK TESTER").name("XOBV TEST PING").build())
+        .stringRequestRpc(
+            RpcDetails.builder()
+                .context("XOBV VISTALINK TESTER")
+                .name("XOBV TEST STRING")
+                .parameters(List.of(Parameter.builder().string("SHANKTOPUS GO!").build()))
+                .build())
         .build();
   }
 

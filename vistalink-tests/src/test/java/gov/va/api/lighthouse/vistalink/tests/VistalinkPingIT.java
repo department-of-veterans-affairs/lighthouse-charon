@@ -9,7 +9,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
-public class VistalinkRequestIT {
+public class VistalinkPingIT {
 
   @Test
   @SneakyThrows
@@ -17,7 +17,7 @@ public class VistalinkRequestIT {
     assumeEnvironmentNotIn(Environment.LOCAL);
     var body =
         RpcRequest.builder()
-            .rpc(systemDefinition().testRpcs().stringRequestRpc())
+            .rpc(systemDefinition().testRpcs().pingRpc())
             .principal(
                 RpcPrincipal.builder()
                     .accessCode(VistalinkProperties.vistaAccessCode)

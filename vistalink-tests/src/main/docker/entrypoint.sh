@@ -13,11 +13,10 @@ if [ -z "${VISTALINK_URL:-}" ]; then VISTALINK_URL=https://$K8S_LOAD_BALANCER; f
 java-tests \
   --module-name "vistalink-tests" \
   --regression-test-pattern ".*IT\$" \
-  --smoke-test-pattern ".*Smoke.*IT\$" \
+  --smoke-test-pattern ".*IT\$" \
   -Dsentinel="$SENTINEL_ENV" \
-  -Dvistalink.url="$VISTALINK_URL" \
-  -Dvista-access-key="$VISTA_ACCESS_KEY" \
-  -Dvista-verify-key="$VISTA_VERIFY_KEY" \
+  -Dvista-access-code="$VISTA_ACCESS_CODE" \
+  -Dvista-verify-code="$VISTA_VERIFY_CODE" \
   $@
 
 exit $?
