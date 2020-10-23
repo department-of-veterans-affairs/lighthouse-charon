@@ -6,6 +6,7 @@ import static gov.va.api.lighthouse.vistalink.tests.SystemDefinitions.systemDefi
 import gov.va.api.health.sentinel.Environment;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
+import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,6 @@ public class VistalinkRequestIT {
                     .verifyCode(VistalinkProperties.vistaVerifyCode)
                     .build())
             .build();
-    TestClients.vistalink().post("rpc", body).expect(200);
+    TestClients.vistalink().post("rpc", body).expect(200).expectValid(RpcResponse.class);
   }
 }
