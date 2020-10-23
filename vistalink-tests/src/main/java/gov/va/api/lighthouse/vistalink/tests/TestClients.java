@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TestClients {
-  static TestClient vistalink() {
+  TestClient vistalink() {
     return BasicTestClient.builder()
         .service(SystemDefinitions.systemDefinition().vistalink())
         .mapper(JacksonConfig::createMapper)

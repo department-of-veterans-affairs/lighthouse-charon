@@ -1,30 +1,31 @@
 package gov.va.api.lighthouse.vistalink.tests;
 
-import static gov.va.api.health.sentinel.EnvironmentAssumptions.assumeEnvironmentNotIn;
 import static gov.va.api.lighthouse.vistalink.tests.SystemDefinitions.systemDefinition;
+import static gov.va.api.lighthouse.vistalink.tests.VistalinkRequest.vistalinkRequest;
 
-import gov.va.api.health.sentinel.Environment;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+@Slf4j
 public class VistalinkPingIT {
 
   @Test
   @SneakyThrows
   void requestRpcNoArguements() {
-    assumeEnvironmentNotIn(Environment.LOCAL);
     var body =
         RpcRequest.builder()
             .rpc(systemDefinition().testRpcs().pingRpc())
             .principal(
                 RpcPrincipal.builder()
-                    .accessCode(VistalinkProperties.vistaAccessCode)
-                    .verifyCode(VistalinkProperties.vistaVerifyCode)
+                    .accessCode(VistalinkProperties.vistaAccessCode())
+                    .verifyCode(VistalinkProperties.vistaVerifyCode())
                     .build())
             .build();
-    TestClients.vistalink().post("rpc", body).expect(200).expectValid(RpcResponse.class);
+    var response = vistalinkRequest(body).expect(200).expectValid(RpcResponse.class);
+    log.info(response.toString());
   }
 }

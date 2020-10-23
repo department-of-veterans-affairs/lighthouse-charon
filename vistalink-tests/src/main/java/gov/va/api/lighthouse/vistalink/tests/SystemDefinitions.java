@@ -11,6 +11,14 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class SystemDefinitions {
+  private static SystemDefinition local() {
+    String url = "http://localhost";
+    return SystemDefinition.builder()
+        .vistalink(serviceDefinition("vistalink", url, 8050, ""))
+        .testRpcs(rpcs())
+        .build();
+  }
+
   private static SystemDefinition qa() {
     String url = "http://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
@@ -45,6 +53,8 @@ public class SystemDefinitions {
   /** Return the applicable system definition for the current environment. */
   static SystemDefinition systemDefinition() {
     switch (Environment.get()) {
+      case LOCAL:
+        return local();
       case QA:
         return qa();
       default:

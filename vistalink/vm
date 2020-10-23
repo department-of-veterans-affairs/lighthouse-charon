@@ -15,6 +15,7 @@ start - start the VM
 stop - stop the VM
 status - print if the VM is up or down
 test - run unit tests that require the VM
+it - run integration tests that require the VM
 
 ${1:-}
 EOF
@@ -29,6 +30,7 @@ main() {
     st|status) status;;
     k|kill|stop) stop;;
     t|test) mvnTests;;
+    it) integrationTests;;
     *) usage "unknown command: $COMMAND";;
   esac
 }
@@ -62,5 +64,13 @@ mvnTests() {
     -Dvlx.division-ien=605
 }
 
+integrationTests() {
+    mvn test \
+    -Dtest=VistalinkRequestIT,VistalinkPingIT \
+    -Dtest.vistalink=true \
+    -Dsentinel=LOCAL \
+    -Dvista.access-code=$VISTA_ACCESS_CODE \
+    -Dvista.verify-code=$VISTA_VERIFY_CODE
+}
 
 main $@
