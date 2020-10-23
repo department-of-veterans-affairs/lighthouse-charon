@@ -10,17 +10,17 @@ import org.apache.commons.lang3.StringUtils;
 class VistalinkRequest {
   private final String env = System.getProperty("sentinel");
 
-  private static ExpectedResponse request(Object body) {
-    return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), "rpc", body);
-  }
-
-  static ExpectedResponse vistalinkRequest(Object body) {
+  static Boolean isEnvironmentReady() {
     if (StringUtils.equals(env, "LOCAL")
         && BooleanUtils.toBoolean(System.getProperty("test.vistalink"))) {
-      return request(body);
+      return true;
     } else if (StringUtils.equals(env, "QA")) {
-      return request(body);
+      return true;
     }
-    return null;
+    return false;
+  }
+
+  static ExpectedResponse request(Object body) {
+    return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), "rpc", body);
   }
 }
