@@ -61,8 +61,15 @@ vmNeeded() {
   fi
 }
 
+vistalinkSecretsNeeded() {
+  if [ -n "${VISTA_VERIFY_CODE:-}" -o -n "${VISTA_ACCESS_CODE:-}" ]; then return; fi
+  local vmConf="${SHANKTOSECRETS:-~/va/shanktosecrets}/vistalink/vista-vm.conf"
+  if [ -f "$vmConf" ]; then . $vmConf; fi
+}
+
 mvnTests() {
   vmNeeded
+  vistalinkSecretsNeeded
   mvn test \
     -f 'vistalink/pom.xml' \
     -Dtest=VistalinkRpcInvokerTest \
@@ -76,6 +83,7 @@ mvnTests() {
 
 integrationTests() {
     vmNeeded
+    vistalinkSecretsNeeded
     mvn test \
     -f 'vistalink-tests/pom.xml' \
     -Dtest=".*IT" \

@@ -13,7 +13,7 @@ public class VistalinkRequestIT {
 
   @Test
   @SneakyThrows
-  void requestRpcWithStringArguement() {
+  void requestRpcWithStringArgument() {
     var systemDefinition = SystemDefinitions.get();
     assumeTrue(systemDefinition.isVistalinkAvailable());
     RpcRequest body =

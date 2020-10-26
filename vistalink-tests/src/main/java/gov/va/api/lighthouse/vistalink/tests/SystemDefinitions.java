@@ -59,13 +59,6 @@ public class SystemDefinitions {
         .build();
   }
 
-  private RpcPrincipal rpcPrincipal() {
-    return RpcPrincipal.builder()
-        .accessCode(System.getProperty("vista.access-code", "not-set"))
-        .verifyCode(System.getProperty("vista.verify-code", "not-set"))
-        .build();
-  }
-
   private static ServiceDefinition serviceDefinition(
       String name, String url, int port, String apiPath) {
     return ServiceDefinition.builder()
@@ -73,6 +66,13 @@ public class SystemDefinitions {
         .port(port)
         .apiPath(SentinelProperties.optionApiPath(name, apiPath))
         .accessToken(() -> Optional.empty())
+        .build();
+  }
+
+  private RpcPrincipal rpcPrincipal() {
+    return RpcPrincipal.builder()
+        .accessCode(System.getProperty("vista.access-code", "not-set"))
+        .verifyCode(System.getProperty("vista.verify-code", "not-set"))
         .build();
   }
 }

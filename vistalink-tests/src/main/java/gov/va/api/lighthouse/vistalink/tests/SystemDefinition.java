@@ -11,6 +11,6 @@ import lombok.Value;
 public class SystemDefinition {
   @NotNull ServiceDefinition vistalink;
   @NotNull TestRpcs testRpcs;
-  @NotNull Boolean isVistalinkAvailable;
+  boolean isVistalinkAvailable;
   @NotNull RpcPrincipal testRpcPrincipal;
 }
