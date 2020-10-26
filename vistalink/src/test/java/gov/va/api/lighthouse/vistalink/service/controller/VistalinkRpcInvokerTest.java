@@ -59,12 +59,12 @@ public class VistalinkRpcInvokerTest {
           .divisionIen(propertyOrDie("division-ien"))
           .host(host)
           .port(propertyOrDie("port"))
-          .name(System.getProperty("vlx.name", "vlx:" + host))
+          .name(System.getProperty("vlx.name", "vista:" + host))
           .build();
     }
 
     private static String propertyOrDie(String suffix) {
-      var propertyName = "vlx." + suffix;
+      var propertyName = "vista." + suffix;
       var value = System.getProperty(propertyName);
       if (value == null || value.isBlank()) {
         throw new IllegalStateException("Missing property: " + propertyName);
