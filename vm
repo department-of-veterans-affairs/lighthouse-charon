@@ -53,7 +53,16 @@ stop() {
   ssh $SSH_NAME poweroff
 }
 
+vmNeeded() {
+  if [ "$(status)" == "down" ]
+  then
+    echo "Vistalink VM doesn't appear to be running."
+  exit 1
+  fi
+}
+
 mvnTests() {
+  vmNeeded
   mvn test \
     -f 'vistalink/pom.xml' \
     -Dtest=VistalinkRpcInvokerTest \
@@ -66,6 +75,7 @@ mvnTests() {
 }
 
 integrationTests() {
+    vmNeeded
     mvn test \
     -f 'vistalink-tests/pom.xml' \
     -Dtest=".*IT" \
