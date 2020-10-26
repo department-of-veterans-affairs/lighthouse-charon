@@ -32,7 +32,7 @@ public class SystemDefinitions {
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
-        .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink")))
+        .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink", "false")))
         .build();
   }
 
