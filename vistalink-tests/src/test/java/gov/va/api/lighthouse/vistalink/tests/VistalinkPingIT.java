@@ -1,8 +1,7 @@
 package gov.va.api.lighthouse.vistalink.tests;
 
 import static gov.va.api.lighthouse.vistalink.tests.SystemDefinitions.systemDefinition;
-import static gov.va.api.lighthouse.vistalink.tests.VistalinkRequest.isEnvironmentReady;
-import static gov.va.api.lighthouse.vistalink.tests.VistalinkRequest.request;
+import static org.junit.Assume.assumeTrue;
 
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
@@ -17,18 +16,17 @@ public class VistalinkPingIT {
   @Test
   @SneakyThrows
   void requestRpcNoArguements() {
-    if (isEnvironmentReady()) {
-      var body =
-          RpcRequest.builder()
-              .rpc(systemDefinition().testRpcs().pingRpc())
-              .principal(
-                  RpcPrincipal.builder()
-                      .accessCode(VistalinkProperties.vistaAccessCode())
-                      .verifyCode(VistalinkProperties.vistaVerifyCode())
-                      .build())
-              .build();
-      var response = request(body).expect(200).expectValid(RpcResponse.class);
-      log.info(response.toString());
-    }
+    assumeTrue(SystemDefinitions.isVistalinkAvailable());
+    RpcRequest body =
+        RpcRequest.builder()
+            .rpc(systemDefinition().testRpcs().pingRpc())
+            .principal(
+                RpcPrincipal.builder()
+                    .accessCode(TestClients.vistaAccessCode())
+                    .verifyCode(TestClients.vistaVerifyCode())
+                    .build())
+            .build();
+    var response = TestClients.request(body).expect(200).expectValid(RpcResponse.class);
+    log.info(response.toString());
   }
 }

@@ -8,9 +8,22 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcDetails.Parameter;
 import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @UtilityClass
 public class SystemDefinitions {
+  static Boolean isVistalinkAvailable() {
+    String env = System.getProperty("sentinel");
+    if (StringUtils.equals(env, "LOCAL")
+        && BooleanUtils.toBoolean(System.getProperty("test.vistalink"))) {
+      return true;
+    } else if (StringUtils.equals(env, "QA")) {
+      return true;
+    }
+    return false;
+  }
+
   private static SystemDefinition local() {
     String url = "http://localhost";
     return SystemDefinition.builder()
