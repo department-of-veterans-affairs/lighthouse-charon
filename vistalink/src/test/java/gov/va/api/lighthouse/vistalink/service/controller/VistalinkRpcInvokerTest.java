@@ -59,7 +59,7 @@ public class VistalinkRpcInvokerTest {
           .divisionIen(propertyOrDie("division-ien"))
           .host(host)
           .port(propertyOrDie("port"))
-          .name(System.getProperty("vlx.name", "vista:" + host))
+          .name(System.getProperty("vista.name", "vista:" + host))
           .build();
     }
 
