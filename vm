@@ -68,7 +68,7 @@ mvnTests() {
 integrationTests() {
     mvn test \
     -f 'vistalink-tests/pom.xml' \
-    -Dtest=VistalinkRequestIT,VistalinkPingIT \
+    -Dtest=".*IT" \
     -Dtest.vistalink=true \
     -Dsentinel=LOCAL \
     -Dvista.access-code=$VISTA_ACCESS_CODE \

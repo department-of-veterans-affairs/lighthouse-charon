@@ -10,4 +10,13 @@ import lombok.Value;
 public class SystemDefinition {
   @NotNull ServiceDefinition vistalink;
   @NotNull TestRpcs testRpcs;
+  @NotNull Boolean isVistalinkAvailable;
+
+  public String vistaAccessCode() {
+    return System.getProperty("vista.access-code", "not-set");
+  }
+
+  public String vistaVerifyCode() {
+    return System.getProperty("vista.verify-code", "not-set");
+  }
 }

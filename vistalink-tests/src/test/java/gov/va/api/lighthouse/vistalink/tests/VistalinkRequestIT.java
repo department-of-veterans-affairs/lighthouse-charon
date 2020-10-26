@@ -1,6 +1,5 @@
 package gov.va.api.lighthouse.vistalink.tests;
 
-import static gov.va.api.lighthouse.vistalink.tests.SystemDefinitions.systemDefinition;
 import static org.junit.Assume.assumeTrue;
 
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
@@ -16,17 +15,18 @@ public class VistalinkRequestIT {
   @Test
   @SneakyThrows
   void requestRpcWithStringArguement() {
-    assumeTrue(SystemDefinitions.isVistalinkAvailable());
+    var systemDefinition = SystemDefinitions.get();
+    assumeTrue(systemDefinition.isVistalinkAvailable());
     RpcRequest body =
         RpcRequest.builder()
-            .rpc(systemDefinition().testRpcs().stringRequestRpc())
+            .rpc(systemDefinition.testRpcs().stringRequestRpc())
             .principal(
                 RpcPrincipal.builder()
-                    .accessCode(TestClients.vistaAccessCode())
-                    .verifyCode(TestClients.vistaVerifyCode())
+                    .accessCode(systemDefinition.vistaAccessCode())
+                    .verifyCode(systemDefinition.vistaVerifyCode())
                     .build())
             .build();
-    var response = TestClients.request(body).expect(200).expectValid(RpcResponse.class);
+    var response = TestClients.rpcRequest(body).expect(200).expectValid(RpcResponse.class);
     log.info(response.toString());
   }
 }

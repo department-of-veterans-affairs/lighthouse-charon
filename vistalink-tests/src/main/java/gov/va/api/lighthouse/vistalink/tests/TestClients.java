@@ -10,21 +10,13 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TestClients {
-  ExpectedResponse request(RpcRequest body) {
+  ExpectedResponse rpcRequest(RpcRequest body) {
     return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), "rpc", body);
-  }
-
-  String vistaAccessCode() {
-    return System.getProperty("vista.access-code", "not-set");
-  }
-
-  String vistaVerifyCode() {
-    return System.getProperty("vista.verify-code", "not-set");
   }
 
   TestClient vistalink() {
     return BasicTestClient.builder()
-        .service(SystemDefinitions.systemDefinition().vistalink())
+        .service(SystemDefinitions.get().vistalink())
         .mapper(JacksonConfig::createMapper)
         .build();
   }

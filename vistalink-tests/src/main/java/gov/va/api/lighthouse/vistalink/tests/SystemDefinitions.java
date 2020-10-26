@@ -9,19 +9,20 @@ import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 
 @UtilityClass
 public class SystemDefinitions {
-  static Boolean isVistalinkAvailable() {
-    String env = System.getProperty("sentinel");
-    if (StringUtils.equals(env, "LOCAL")
-        && BooleanUtils.toBoolean(System.getProperty("test.vistalink"))) {
-      return true;
-    } else if (StringUtils.equals(env, "QA")) {
-      return true;
+  /** Return the applicable system definition for the current environment. */
+  static SystemDefinition get() {
+    switch (Environment.get()) {
+      case LOCAL:
+        return local();
+      case QA:
+        return qa();
+      default:
+        throw new IllegalArgumentException(
+            "Unsupported sentinel environment: " + Environment.get());
     }
-    return false;
   }
 
   private static SystemDefinition local() {
@@ -29,6 +30,7 @@ public class SystemDefinitions {
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
         .testRpcs(rpcs())
+        .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink")))
         .build();
   }
 
@@ -37,6 +39,7 @@ public class SystemDefinitions {
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 443, "/vistalink/"))
         .testRpcs(rpcs())
+        .isVistalinkAvailable(true)
         .build();
   }
 
@@ -61,18 +64,5 @@ public class SystemDefinitions {
         .apiPath(SentinelProperties.optionApiPath(name, apiPath))
         .accessToken(() -> Optional.empty())
         .build();
-  }
-
-  /** Return the applicable system definition for the current environment. */
-  static SystemDefinition systemDefinition() {
-    switch (Environment.get()) {
-      case LOCAL:
-        return local();
-      case QA:
-        return qa();
-      default:
-        throw new IllegalArgumentException(
-            "Unsupported sentinel environment: " + Environment.get());
-    }
   }
 }
