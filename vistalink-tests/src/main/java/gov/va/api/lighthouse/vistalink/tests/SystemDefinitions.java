@@ -5,6 +5,7 @@ import gov.va.api.health.sentinel.SentinelProperties;
 import gov.va.api.health.sentinel.ServiceDefinition;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails.Parameter;
+import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
@@ -30,6 +31,7 @@ public class SystemDefinitions {
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
         .testRpcs(rpcs())
+        .testRpcPrincipal(rpcPrincipal())
         .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink")))
         .build();
   }
@@ -39,6 +41,7 @@ public class SystemDefinitions {
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 443, "/vistalink/"))
         .testRpcs(rpcs())
+        .testRpcPrincipal(rpcPrincipal())
         .isVistalinkAvailable(true)
         .build();
   }
@@ -53,6 +56,13 @@ public class SystemDefinitions {
                 .name("XOBV TEST STRING")
                 .parameters(List.of(Parameter.builder().string("SHANKTOPUS GO!").build()))
                 .build())
+        .build();
+  }
+
+  private RpcPrincipal rpcPrincipal() {
+    return RpcPrincipal.builder()
+        .accessCode(System.getProperty("vista.access-code", "not-set"))
+        .verifyCode(System.getProperty("vista.verify-code", "not-set"))
         .build();
   }
 

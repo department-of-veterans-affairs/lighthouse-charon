@@ -2,7 +2,6 @@ package gov.va.api.lighthouse.vistalink.tests;
 
 import static org.junit.Assume.assumeTrue;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import lombok.SneakyThrows;
@@ -20,11 +19,7 @@ public class VistalinkPingIT {
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
-            .principal(
-                RpcPrincipal.builder()
-                    .accessCode(systemDefinition.vistaAccessCode())
-                    .verifyCode(systemDefinition.vistaVerifyCode())
-                    .build())
+            .principal(systemDefinition.testRpcPrincipal())
             .build();
     var response = TestClients.rpcRequest(body).expect(200).expectValid(RpcResponse.class);
     log.info(response.toString());
