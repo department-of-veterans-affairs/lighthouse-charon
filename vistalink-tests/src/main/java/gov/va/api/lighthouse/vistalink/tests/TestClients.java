@@ -5,6 +5,7 @@ import gov.va.api.health.sentinel.BasicTestClient;
 import gov.va.api.health.sentinel.ExpectedResponse;
 import gov.va.api.health.sentinel.TestClient;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 public class TestClients {
   ExpectedResponse rpcRequest(String path, RpcRequest body) {
     log.info("Request path is: {}", path);
-    return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), path, body);
+    Map<String, String> headers = new HashMap<>();
+    headers.put("Content-Type", "application/json");
+    SystemDefinitions.get().clientKey().ifPresent(key -> headers.put("client-key", key));
+    return TestClients.vistalink().post(headers, path, body);
   }
 
   TestClient vistalink() {
