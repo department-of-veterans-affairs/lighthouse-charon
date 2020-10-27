@@ -22,7 +22,7 @@ public class VistalinkRequestIT {
             .principal(systemDefinition.testRpcPrincipal())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "/rpc", body)
+        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
             .expect(200)
             .expectValid(RpcResponse.class);
     log.info(response.toString());
