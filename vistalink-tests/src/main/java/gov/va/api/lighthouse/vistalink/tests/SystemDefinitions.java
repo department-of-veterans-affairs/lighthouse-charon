@@ -37,7 +37,7 @@ public class SystemDefinitions {
   }
 
   private static SystemDefinition qa() {
-    String url = "http://blue.qa.lighthouse.va.gov";
+    String url = "https://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 443, "/vistalink/"))
         .testRpcs(rpcs())
