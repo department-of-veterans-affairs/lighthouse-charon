@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VM=VistA
+MODE=headless
+SSH_NAME=vvm
+
+usage() {
+cat<<EOF
+Usage: $0 command
+Manages a local Vista VirtualBox VM.
+
+Commands
+start - start the VM
+stop - stop the VM
+status - print if the VM is up or down
+test - run unit tests that require the VM
+it - run integration tests that require the VM
+
+${1:-}
+EOF
+exit 1
+}
+
+
+main() {
+  COMMAND="${1:-}"
+  case $COMMAND in
+    s|start) start;;
+    st|status) status;;
+    k|kill|stop) stop;;
+    t|test) mvnTests;;
+    it) integrationTests;;
+    *) usage "unknown command: $COMMAND";;
+  esac
+}
+
+start() {
+  echo "Starting $VM in $MODE mode"
+  VBoxManage startvm --type $MODE $VM
+}
+
+status() {
+  if VBoxManage list runningvms | grep -q -E "^\"$VM\""
+  then
+    echo up
+  else
+    echo down
+  fi
+}
+
+stop() {
+  ssh $SSH_NAME poweroff
+}
+
+vmNeeded() {
+  if [ "$(status)" == "down" ]
+  then
+    echo "Vistalink VM doesn't appear to be running."
+  exit 1
+  fi
+}
+
+vistalinkSecretsNeeded() {
+  if [ -n "${VISTA_VERIFY_CODE:-}" -o -n "${VISTA_ACCESS_CODE:-}" ]; then return; fi
+  local vmConf="${SHANKTOSECRETS:-~/va/shanktosecrets}/vistalink/vista-vm.conf"
+  if [ -f "$vmConf" ]; then . $vmConf; fi
+}
+
+mvnTests() {
+  vmNeeded
+  vistalinkSecretsNeeded
+  mvn test \
+    -f 'vistalink/pom.xml' \
+    -Dtest=VistalinkRpcInvokerTest \
+    -Dtest.vistalink=true \
+    -Dvista.host=localhost \
+    -Dvista.port=8000 \
+    -Dvista.access-code=$VISTA_ACCESS_CODE \
+    -Dvista.verify-code=$VISTA_VERIFY_CODE \
+    -Dvista.division-ien=605
+}
+
+integrationTests() {
+    vmNeeded
+    vistalinkSecretsNeeded
+    mvn test \
+    -f 'vistalink-tests/pom.xml' \
+    -Dtest=".*IT" \
+    -Dtest.vistalink=true \
+    -Dsentinel=LOCAL \
+    -Dvista.access-code=$VISTA_ACCESS_CODE \
+    -Dvista.verify-code=$VISTA_VERIFY_CODE
+}
+
+main $@

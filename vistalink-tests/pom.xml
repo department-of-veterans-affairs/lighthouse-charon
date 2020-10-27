@@ -20,6 +20,12 @@
       <artifactId>sentinel</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
+    <dependency>
+      <groupId>gov.va.api.lighthouse</groupId>
+      <artifactId>vistalink</artifactId>
+      <version>${project.version}</version>
+      <classifier>library</classifier>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
