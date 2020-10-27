@@ -10,8 +10,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TestClients {
-  ExpectedResponse rpcRequest(RpcRequest body) {
-    return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), "rpc", body);
+  ExpectedResponse rpcRequest(String path, RpcRequest body) {
+    return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), path, body);
   }
 
   TestClient vistalink() {

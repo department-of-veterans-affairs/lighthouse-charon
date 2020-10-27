@@ -21,7 +21,10 @@ public class VistalinkPingIT {
             .rpc(systemDefinition.testRpcs().pingRpc())
             .principal(systemDefinition.testRpcPrincipal())
             .build();
-    var response = TestClients.rpcRequest(body).expect(200).expectValid(RpcResponse.class);
+    var response =
+        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "/rpc", body)
+            .expect(200)
+            .expectValid(RpcResponse.class);
     log.info(response.toString());
   }
 }
