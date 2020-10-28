@@ -13,7 +13,7 @@ public class MalformedRequestIT {
   @SneakyThrows
   void requestInvalidBodyResponseWith400() {
     var systemDefinition = SystemDefinitions.get();
-    String body = "Im a malformed request.";
+    String body = "{\"message\": \"Im a malformed request.\"}";
     var response =
         TestClients.vistalink()
             .post(
