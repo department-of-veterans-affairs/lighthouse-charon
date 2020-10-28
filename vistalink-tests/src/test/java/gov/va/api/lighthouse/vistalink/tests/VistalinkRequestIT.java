@@ -32,6 +32,7 @@ public class VistalinkRequestIT {
   @SneakyThrows
   void requestRpcWithValidResponse(RpcDetails rpc) {
     assumeTrue(systemDefinition.isVistalinkAvailable());
+    log.info(rpc.name());
     RpcRequest body =
         RpcRequest.builder().rpc(rpc).principal(systemDefinition.testRpcPrincipal()).build();
     var response =

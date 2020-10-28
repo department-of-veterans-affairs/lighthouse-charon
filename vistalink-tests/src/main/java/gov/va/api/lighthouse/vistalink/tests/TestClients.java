@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TestClients {
   ExpectedResponse rpcRequest(String path, RpcRequest body) {
-    log.info("Request path is: {}", path);
     return TestClients.vistalink().post(Map.of("Content-Type", "application/json"), path, body);
   }
 
