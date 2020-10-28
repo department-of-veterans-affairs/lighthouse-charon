@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.vistalink.tests;
 
+import static org.junit.Assume.assumeTrue;
+
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import java.util.Map;
 import lombok.SneakyThrows;
@@ -13,6 +15,7 @@ public class MalformedRequestIT {
   @SneakyThrows
   void requestInvalidBodyResponseWith400() {
     var systemDefinition = SystemDefinitions.get();
+    assumeTrue(systemDefinition.isVistalinkAvailable());
     String body = "{\"message\": \"Im a malformed request.\"}";
     var response =
         TestClients.vistalink()
