@@ -10,4 +10,6 @@ import lombok.Value;
 public class TestRpcs {
   @NotNull RpcDetails pingRpc;
   @NotNull RpcDetails stringRequestRpc;
+  @NotNull RpcDetails localArrayRequestRpc;
+  @NotNull RpcDetails globalArrayRequestRpc;
 }

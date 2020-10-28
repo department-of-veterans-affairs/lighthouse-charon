@@ -56,6 +56,20 @@ public class SystemDefinitions {
                 .name("XOBV TEST STRING")
                 .parameters(List.of(Parameter.builder().string("SHANKTOPUS GO!").build()))
                 .build())
+        .globalArrayRequestRpc(
+            RpcDetails.builder()
+                .context("XOBV VISTALINK TESTER")
+                .name("XOBV TEST GLOBAL ARRAY")
+                .parameters(
+                    List.of(Parameter.builder().array(List.of("GLOBAL", "SHANKTOPUS")).build()))
+                .build())
+        .localArrayRequestRpc(
+            RpcDetails.builder()
+                .context("XOBV VISTALINK TESTER")
+                .name("XOBV TEST LOCAL ARRAY")
+                .parameters(
+                    List.of(Parameter.builder().array(List.of("LOCAL", "SHANKTOPUS")).build()))
+                .build())
         .build();
   }
 
