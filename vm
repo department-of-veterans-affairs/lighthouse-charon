@@ -87,6 +87,7 @@ integrationTests() {
     mvn -P'!standard' integration-test \
     -pl vistalink-tests \
     -Dtest.vistalink=true \
+    -Dsentinel=LOCAL \
     -Dvista.access-code=$VISTA_ACCESS_CODE \
     -Dvista.verify-code=$VISTA_VERIFY_CODE
 }
