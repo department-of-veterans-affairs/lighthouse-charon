@@ -62,14 +62,15 @@ public class RpcDetails {
       if (array != null) {
         count++;
       }
-      if (count != 1) {
+      // A null value can be valid in a longer sequence, so 0 is also valid
+      if (count > 1) {
         throw new IllegalArgumentException("Exact one of ref, string, or array must be specified");
       }
     }
 
     @Override
     public String toString() {
-      return getClass().getSimpleName() + "(" + type() + "=" + value() + ")";
+      return getClass().getSimpleName() + "(" + type() + "=" + value().orElse("unset") + ")";
     }
 
     /** Determine RPC parameter type based on the fields that are set. */
@@ -83,21 +84,20 @@ public class RpcDetails {
       if (array != null) {
         return "array";
       }
-      throw new IllegalStateException("unknown type");
+      return "unknown";
     }
 
     /** Determine RPC parameter value based on the fields that are set. */
-    public Object value() {
+    public Optional<Object> value() {
+      Object value = null;
       if (ref != null) {
-        return ref;
+        value = ref;
+      } else if (string != null) {
+        value = string;
+      } else if (array != null) {
+        value = array;
       }
-      if (string != null) {
-        return string;
-      }
-      if (array != null) {
-        return array;
-      }
-      throw new IllegalStateException("unknown type");
+      return Optional.ofNullable(value);
     }
   }
 }

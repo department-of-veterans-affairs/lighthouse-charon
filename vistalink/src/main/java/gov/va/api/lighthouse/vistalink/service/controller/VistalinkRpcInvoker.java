@@ -153,7 +153,11 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       }
       for (int i = 0; i < rpcDetails.parameters().size(); i++) {
         var parameter = rpcDetails.parameters().get(i);
-        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), parameter.value());
+        var index = i;
+        parameter
+            .value()
+            .ifPresent(
+                value -> vistalinkRequest.getParams().setParam(index + 1, parameter.type(), value));
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("{} Response {} chars", this, vistalinkResponse.getRawResponse().length());
