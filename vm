@@ -84,11 +84,9 @@ mvnTests() {
 integrationTests() {
     vmNeeded
     vistalinkSecretsNeeded
-    mvn test \
-    -f 'vistalink-tests/pom.xml' \
-    -Dtest=".*IT" \
+    mvn -P'!standard' integration-test \
+    -pl vistalink-tests \
     -Dtest.vistalink=true \
-    -Dsentinel=LOCAL \
     -Dvista.access-code=$VISTA_ACCESS_CODE \
     -Dvista.verify-code=$VISTA_VERIFY_CODE
 }
