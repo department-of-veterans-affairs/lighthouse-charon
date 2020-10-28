@@ -29,7 +29,7 @@ public class WebExceptionHandler {
     return response;
   }
 
-  @ExceptionHandler({HttpMessageConversionException.class})
+  @ExceptionHandler({HttpMessageConversionException.class, InvalidRequest.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RpcResponse handleBadRequestBody(Exception e, HttpServletRequest request) {
     return failedResponseFor("Failed to read request body.");
