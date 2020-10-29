@@ -15,6 +15,7 @@ java-tests \
   --regression-test-pattern ".*IT\$" \
   --smoke-test-pattern ".*PingIT\$" \
   -Dsentinel="$SENTINEL_ENV" \
+  -Dvistalink.url=$VISTALINK_URL \
   -Dvista.access-code="$VISTA_ACCESS_CODE" \
   -Dvista.verify-code="$VISTA_VERIFY_CODE" \
   $@
