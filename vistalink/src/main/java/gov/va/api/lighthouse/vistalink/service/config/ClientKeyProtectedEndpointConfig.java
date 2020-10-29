@@ -31,6 +31,7 @@ public class ClientKeyProtectedEndpointConfig {
       log.warn(
           "RPC Request client-key is disabled. To enable, "
               + "set vistalink.rpc.client-keys to a value other than unset.");
+
       rpcRequestFilter.setEnabled(false);
     }
 
