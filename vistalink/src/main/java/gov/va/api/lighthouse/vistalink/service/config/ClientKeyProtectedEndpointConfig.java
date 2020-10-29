@@ -7,6 +7,7 @@ import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.talos.ClientKeyProtectedEndpointFilter;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -27,15 +28,18 @@ public class ClientKeyProtectedEndpointConfig {
       @Value("${vistalink.rpc.client-keys}") String rpcClientKeysCsv) {
     var rpcRequestFilter = new FilterRegistrationBean<ClientKeyProtectedEndpointFilter>();
 
+    List<String> clientKeys;
+
     if (isBlank(rpcClientKeysCsv) || "unset".equals(rpcClientKeysCsv)) {
       log.warn(
           "RPC Request client-key is disabled. To enable, "
               + "set vistalink.rpc.client-keys to a value other than unset.");
 
       rpcRequestFilter.setEnabled(false);
+      clientKeys = List.of();
+    } else {
+      clientKeys = Arrays.stream(rpcClientKeysCsv.split(",")).collect(Collectors.toList());
     }
-
-    var clientKeys = Arrays.stream(rpcClientKeysCsv.split(",")).collect(Collectors.toList());
 
     rpcRequestFilter.setFilter(
         ClientKeyProtectedEndpointFilter.builder()
