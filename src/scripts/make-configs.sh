@@ -101,7 +101,6 @@ comment() {
 
 makeConfig vistalink $PROFILE
 addValue vistalink $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
-addValue vistalink $PROFILE vistalink.rpc.client-keys.enabled false
 checkForUnsetValues vistalink $PROFILE
 
 
