@@ -20,7 +20,7 @@ public class MalformedRequestIT {
     var response =
         TestClients.vistalink()
             .post(
-                Map.of("Content-Type", "application/json"),
+                TestClients.headers(),
                 systemDefinition.vistalink().apiPath() + "rpc",
                 body)
             .expect(400)

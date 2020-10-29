@@ -30,7 +30,7 @@ public class SystemDefinitions {
     String url = "http://localhost";
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
-        .clientKey(Optional.empty())
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink", "false")))

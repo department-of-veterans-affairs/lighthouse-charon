@@ -12,10 +12,14 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class TestClients {
   ExpectedResponse rpcRequest(String path, RpcRequest body) {
+    return TestClients.vistalink().post(headers(), path, body);
+  }
+
+  Map<String, String> headers() {
     Map<String, String> headers = new HashMap<>();
     headers.put("Content-Type", "application/json");
     SystemDefinitions.get().clientKey().ifPresent(key -> headers.put("client-key", key));
-    return TestClients.vistalink().post(headers, path, body);
+    return headers;
   }
 
   TestClient vistalink() {
