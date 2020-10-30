@@ -16,4 +16,10 @@ public final class VistaLinkExceptions {
       super(s);
     }
   }
+
+  public static final class UnknownVista extends VistaLinkException {
+    public UnknownVista(String s) {
+      super(s);
+    }
+  }
 }

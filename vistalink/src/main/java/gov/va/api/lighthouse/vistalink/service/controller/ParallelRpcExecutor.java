@@ -5,6 +5,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +29,19 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 public class ParallelRpcExecutor implements RpcExecutor {
-
   private final RpcInvokerFactory rpcInvokerFactory;
+
   private final VistaNameResolver vistaNameResolver;
+
   private final ExecutorService executor =
       Executors.newFixedThreadPool(8, new NamedThreadFactory("rpc-exec"));
+
+  private void checkRequestVistasAreKnown(List<ConnectionDetails> targets, RpcRequest request) {
+    if (request.target() == null || request.target().include() == null) {
+      return;
+    }
+    request.target().include().forEach(name -> checkTargetsForName(targets, name));
+  }
 
   @Override
   public RpcResponse execute(RpcRequest request) {
@@ -40,6 +50,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
     if (targets.isEmpty()) {
       return response.status(Status.NO_VISTAS_RESOLVED).build();
     }
+    checkRequestVistasAreKnown(targets, request);
     response.status(Status.OK);
     Map<String, Future<RpcInvocationResult>> futureResults = invokeForEachTarget(request, targets);
     targets.stream()
@@ -100,6 +111,13 @@ public class ParallelRpcExecutor implements RpcExecutor {
       return failed(invoker.vista(), "exception: " + e.getMessage());
     } finally {
       invoker.close();
+    }
+  }
+
+  @SneakyThrows
+  void checkTargetsForName(List<ConnectionDetails> targets, String name) {
+    if (targets.stream().noneMatch(cd -> StringUtils.equals(name, cd.name()))) {
+      throw new UnknownVista("Unknown request Vista:" + name);
     }
   }
 }
