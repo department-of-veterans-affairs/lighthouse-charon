@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,7 +54,11 @@ public class ParallelRpcExecutor implements RpcExecutor {
     return response.build();
   }
 
+  @SneakyThrows
   private RpcInvocationResult failed(String vista, String message) {
+    if (message.contains("VistaLoginModuleTooManyInvalidAttemptsException")) {
+      throw new VistaLoginException("Failed to Login");
+    }
     return RpcInvocationResult.builder()
         .vista(vista)
         .error(Optional.of("Failed to get result: " + message))

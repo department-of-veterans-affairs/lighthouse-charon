@@ -34,4 +34,10 @@ public class WebExceptionHandler {
   public RpcResponse handleBadRequestBody(Exception e, HttpServletRequest request) {
     return failedResponseFor("Failed to read request body.");
   }
+
+  @ExceptionHandler({VistaLoginException.class})
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
+    return failedResponseFor("Failed to login.");
+  }
 }
