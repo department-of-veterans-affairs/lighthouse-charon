@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
