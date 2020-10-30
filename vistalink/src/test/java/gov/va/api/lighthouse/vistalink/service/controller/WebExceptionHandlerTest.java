@@ -38,7 +38,8 @@ public class WebExceptionHandlerTest {
 
   public static Stream<Arguments> expectStatus() {
     return Stream.of(
-        Arguments.of(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("Ew David!")));
+        Arguments.of(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("Ew David!")),
+        Arguments.of(HttpStatus.UNAUTHORIZED, new HttpMessageConversionException("Unacceptable!")));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
