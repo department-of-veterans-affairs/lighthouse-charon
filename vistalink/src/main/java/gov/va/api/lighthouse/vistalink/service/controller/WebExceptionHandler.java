@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginFailed;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -40,5 +41,11 @@ public class WebExceptionHandler {
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
     return failedResponseFor("Failed to login.");
+  }
+
+  @ExceptionHandler({UnknownVista.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public RpcResponse handleUnknownVistaIncludes(Exception e, HttpServletRequest request) {
+    return failedResponseFor("Unknown vista site specified in request includes[].");
   }
 }

@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
@@ -38,7 +39,8 @@ public class WebExceptionHandlerTest {
 
   public static Stream<Arguments> expectStatus() {
     return Stream.of(
-        Arguments.of(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("Ew David!")));
+        Arguments.of(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("Ew David!")),
+        Arguments.of(HttpStatus.BAD_REQUEST, new UnknownVista("who dis")));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
