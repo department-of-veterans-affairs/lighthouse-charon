@@ -5,7 +5,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
-import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginException;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginFailed;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +58,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
   @SneakyThrows
   private RpcInvocationResult failed(String vista, String message) {
     if (message.contains("VistaLoginModuleTooManyInvalidAttemptsException")) {
-      throw new VistaLoginException("Failed to Login");
+      throw new VistaLoginFailed("Failed to Login");
     }
     return RpcInvocationResult.builder()
         .vista(vista)
