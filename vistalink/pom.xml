@@ -9,7 +9,7 @@
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>vistalink</artifactId>
-  <version>1.0.17-SNAPSHOT</version>
+  <version>1.0.19-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
     <!-- TODO: RESET COVERAGE TO .95 -->
@@ -28,6 +28,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>gov.va.api.lighthouse</groupId>
+      <artifactId>talos</artifactId>
+      <version>0.0.1</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>

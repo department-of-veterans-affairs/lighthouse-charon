@@ -30,6 +30,7 @@ public class SystemDefinitions {
     String url = "http://localhost";
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink", "false")))
@@ -40,6 +41,7 @@ public class SystemDefinitions {
     String url = "https://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 443, "/vistalink/"))
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .isVistalinkAvailable(true)
