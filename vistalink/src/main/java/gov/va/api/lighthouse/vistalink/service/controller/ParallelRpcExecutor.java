@@ -86,6 +86,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
     return futures;
   }
 
+  @SneakyThrows
   private RpcInvocationResult resultOf(String vista, Future<RpcInvocationResult> futureResult) {
     if (futureResult == null) {
       return failed(vista, "No result found.");
@@ -93,8 +94,17 @@ public class ParallelRpcExecutor implements RpcExecutor {
     try {
       return futureResult.get(30, TimeUnit.SECONDS);
     } catch (ExecutionException e) {
+      /* Conditionally rethrow the ExecutionException cause. */
       return handleExecutionException(vista, e);
-    } catch (TimeoutException | InterruptedException e) {
+    } catch (TimeoutException e) {
+      /*
+       * Rethrow critical errors and let application exception handling produce the appropriate
+       * response.
+       */
+      log.error("Request failed: ", e);
+      throw e;
+    } catch (InterruptedException e) {
+      /* Suppress exception and return a failed response. */
       log.error("Failed to get result from {}", vista, e);
       return failed(vista, "exception: " + e.getMessage());
     }
@@ -107,7 +117,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
       return invoker.invoke(request.rpc());
     } catch (Exception e) {
       log.error("Error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
-      return failed(invoker.vista(), "exception: " + e.getMessage());
+      return failed(invoker.vista(), e.getClass().getSimpleName() + ": " + e.getMessage());
     } finally {
       invoker.close();
     }
