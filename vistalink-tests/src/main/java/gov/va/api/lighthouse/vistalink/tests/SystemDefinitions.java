@@ -39,10 +39,6 @@ public class SystemDefinitions {
         .build();
   }
 
-  private static RpcVistaTargets rpcTargets() {
-    return RpcVistaTargets.builder().forPatient("ignored-for-now").build();
-  }
-
   private static SystemDefinition qa() {
     String url = "https://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
@@ -53,6 +49,10 @@ public class SystemDefinitions {
         .testTargets(rpcTargets())
         .isVistalinkAvailable(true)
         .build();
+  }
+
+  private static RpcVistaTargets rpcTargets() {
+    return RpcVistaTargets.builder().forPatient("ignored-for-now").build();
   }
 
   private static TestRpcs rpcs() {
