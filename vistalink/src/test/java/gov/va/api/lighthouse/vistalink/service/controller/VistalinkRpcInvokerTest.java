@@ -18,7 +18,7 @@ public class VistalinkRpcInvokerTest {
   VistalinkRpcInvokerFactory vistalinkRpcInvokerFactory;
 
   @Test
-  @EnabledIfSystemProperty(named = "test.vistalink", matches = "true")
+  @EnabledIfSystemProperty(named = "test.rpcinvoker", matches = "true")
   void invoke() {
     config = VistalinkTestConfig.fromSystemProperties();
     vistalinkRpcInvokerFactory = new VistalinkRpcInvokerFactory();

@@ -34,6 +34,7 @@ public class WebExceptionHandler {
   @ExceptionHandler({HttpMessageConversionException.class, InvalidRequest.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RpcResponse handleBadRequestBody(Exception e, HttpServletRequest request) {
+    log.error("Bad request", e);
     return failedResponseFor("Failed to read request body.");
   }
 
