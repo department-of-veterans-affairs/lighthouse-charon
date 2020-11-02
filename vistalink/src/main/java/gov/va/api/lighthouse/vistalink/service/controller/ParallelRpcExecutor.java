@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import javax.security.auth.login.LoginException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -84,6 +85,16 @@ public class ParallelRpcExecutor implements RpcExecutor {
         .build();
   }
 
+  @SneakyThrows
+  private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
+    var cause = exception.getCause();
+    log.error("Call failed.", exception);
+    if (cause instanceof LoginException) {
+      throw cause;
+    }
+    return failed(vista, "exception: " + exception.getMessage());
+  }
+
   private Map<String, Future<RpcInvocationResult>> invokeForEachTarget(
       RpcRequest request, List<ConnectionDetails> targets) {
     Map<String, Future<RpcInvocationResult>> futures = new HashMap<>(targets.size());
@@ -102,7 +113,9 @@ public class ParallelRpcExecutor implements RpcExecutor {
     }
     try {
       return futureResult.get(30, TimeUnit.SECONDS);
-    } catch (TimeoutException | ExecutionException | InterruptedException e) {
+    } catch (ExecutionException e) {
+      return handleExecutionException(vista, e);
+    } catch (TimeoutException | InterruptedException e) {
       log.error("Failed to get result from {}", vista, e);
       return failed(vista, "exception: " + e.getMessage());
     }

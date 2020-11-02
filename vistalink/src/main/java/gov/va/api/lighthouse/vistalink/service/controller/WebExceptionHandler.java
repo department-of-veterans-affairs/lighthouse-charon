@@ -5,6 +5,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginFailed;
 import java.util.Optional;
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -37,15 +38,16 @@ public class WebExceptionHandler {
     return failedResponseFor("Failed to read request body.");
   }
 
-  @ExceptionHandler({VistaLoginFailed.class})
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
-    return failedResponseFor("Failed to login.");
-  }
-
   @ExceptionHandler({UnknownVista.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RpcResponse handleUnknownVistaIncludes(Exception e, HttpServletRequest request) {
     return failedResponseFor("Unknown vista site specified in request includes[].");
+  }
+  
+  @ExceptionHandler({LoginException.class})
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
+    log.error("Login failed", e);
+    return failedResponseFor("Failed to login.");
   }
 }
