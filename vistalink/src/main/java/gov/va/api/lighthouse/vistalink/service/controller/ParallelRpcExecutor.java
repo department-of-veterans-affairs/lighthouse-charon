@@ -27,9 +27,10 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 public class ParallelRpcExecutor implements RpcExecutor {
-
   private final RpcInvokerFactory rpcInvokerFactory;
+
   private final VistaNameResolver vistaNameResolver;
+
   private final ExecutorService executor =
       Executors.newFixedThreadPool(8, new NamedThreadFactory("rpc-exec"));
 

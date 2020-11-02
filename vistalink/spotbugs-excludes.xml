@@ -22,6 +22,7 @@
   <Match>
     <Or>
       <Class name="gov.va.api.lighthouse.vistalink.service.api.RpcResponse"/>
+      <Class name="gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets"/>
     </Or>
     <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
   </Match>

@@ -21,11 +21,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ParallelRpcExecutorTest {
-
   @Mock RpcInvokerFactory factory;
+
   @Mock RpcInvoker invoker1;
+
   @Mock RpcInvoker invoker2;
+
   @Mock RpcInvoker invoker3;
+
   @Mock VistaNameResolver resolver;
 
   ParallelRpcExecutor executor;

@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.Optional;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequestMapping(produces = {"application/json"})
 public class WebExceptionHandler {
-
   @SneakyThrows
   private RpcResponse failedResponseFor(String message) {
     RpcResponse response =
@@ -41,5 +41,11 @@ public class WebExceptionHandler {
   public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
     log.error("Login failed", e);
     return failedResponseFor("Failed to login.");
+  }
+
+  @ExceptionHandler({UnknownVista.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public RpcResponse handleUnknownVistaIncludes(Exception e, HttpServletRequest request) {
+    return failedResponseFor("Unknown vista site specified: " + e.getMessage());
   }
 }

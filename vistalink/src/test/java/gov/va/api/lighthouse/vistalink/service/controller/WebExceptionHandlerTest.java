@@ -17,6 +17,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -46,7 +47,8 @@ public class WebExceptionHandlerTest {
     return Stream.of(
         arguments(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("FUGAZI")),
         arguments(HttpStatus.BAD_REQUEST, new InvalidRequest("FUGAZI")),
-        arguments(HttpStatus.UNAUTHORIZED, new LoginException("FUGAZI")));
+        arguments(HttpStatus.UNAUTHORIZED, new LoginException("FUGAZI")),
+        arguments(HttpStatus.BAD_REQUEST, new UnknownVista("FUGAZI")));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
