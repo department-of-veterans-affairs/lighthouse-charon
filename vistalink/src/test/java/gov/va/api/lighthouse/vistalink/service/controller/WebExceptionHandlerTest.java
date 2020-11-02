@@ -17,9 +17,9 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
-import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginFailed;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
+import javax.security.auth.login.LoginException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -46,7 +46,7 @@ public class WebExceptionHandlerTest {
     return Stream.of(
         arguments(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("FUGAZI")),
         arguments(HttpStatus.BAD_REQUEST, new InvalidRequest("FUGAZI")),
-        arguments(HttpStatus.UNAUTHORIZED, new VistaLoginFailed("FUGAZI")));
+        arguments(HttpStatus.UNAUTHORIZED, new LoginException("FUGAZI")));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
@@ -71,7 +71,11 @@ public class WebExceptionHandlerTest {
   @ParameterizedTest
   @MethodSource
   void expectStatus(HttpStatus status, Exception e) {
-    when(executor.execute(any())).thenThrow(e);
+    when(executor.execute(any()))
+        .thenAnswer(
+            i -> {
+              throw e;
+            });
     MockMvc mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setHandlerExceptionResolvers(createExceptionResolver())

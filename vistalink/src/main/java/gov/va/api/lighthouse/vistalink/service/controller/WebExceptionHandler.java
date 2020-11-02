@@ -2,8 +2,8 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
-import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginFailed;
 import java.util.Optional;
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,10 @@ public class WebExceptionHandler {
     return failedResponseFor("Failed to read request body.");
   }
 
-  @ExceptionHandler({VistaLoginFailed.class})
+  @ExceptionHandler({LoginException.class})
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
+    log.error("Login failed", e);
     return failedResponseFor("Failed to login.");
   }
 }
