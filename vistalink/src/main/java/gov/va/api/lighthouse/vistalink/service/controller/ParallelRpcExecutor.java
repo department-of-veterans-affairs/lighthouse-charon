@@ -76,9 +76,8 @@ public class ParallelRpcExecutor implements RpcExecutor {
 
   @SneakyThrows
   private RpcInvocationResult handleTimeoutException(TimeoutException exception) {
-    var cause = exception.getCause();
     log.error("Request timed out.", exception);
-    throw cause;
+    throw exception;
   }
 
   private Map<String, Future<RpcInvocationResult>> invokeForEachTarget(
