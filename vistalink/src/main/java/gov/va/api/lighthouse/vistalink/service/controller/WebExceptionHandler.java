@@ -4,6 +4,7 @@ import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
@@ -41,6 +42,12 @@ public class WebExceptionHandler {
   public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
     log.error("Login failed", e);
     return failedResponseFor("Failed to login.");
+  }
+
+  @ExceptionHandler({TimeoutException.class})
+  @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
+  public RpcResponse handleRequestTimeout(Exception e, HttpServletRequest request) {
+    return failedResponseFor("Request timed out.");
   }
 
   @ExceptionHandler({UnknownVista.class})
