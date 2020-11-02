@@ -35,9 +35,35 @@ main() {
   esac
 }
 
+
+launchProcessesMessage() {
+cat<<EOF
+1. SSH into the VM to restart processes: ssh -p 2222 root@localhost 
+   Password: manager
+2. Use the command 'm', you should now see 'VISTA>' on your terminal
+3. Use the command 'D RESTART^ZTMB' (then y) to restart TaskMan and start the RPC Broker on port 9008
+4. Use the command 'D START^XOBVTCP(8000)' to start Vistalink on port 8000 (if this is your first time using the VM, you _may_ need to run 'D UNLOCK^XOBVTCP(8000)' first)
+5. Use the command 'D ^%SS' to verify there are processes in the VISTA namespace running on TCP ports 9008 and 8000
+
+The above steps can be pasted into 'm' as:
+---
+D RESTART^ZTMB
+Y
+D START^XOBVTCP(8000)
+D ^%SS
+a
+q
+HALT
+
+---
+EOF
+}
+
 start() {
+  launchProcessesMessage
   echo "Starting $VM in $MODE mode"
   VBoxManage startvm --type $MODE $VM
+  launchProcessesMessage
 }
 
 status() {
