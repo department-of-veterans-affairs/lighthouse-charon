@@ -46,6 +46,6 @@ public class WebExceptionHandler {
   @ExceptionHandler({UnknownVista.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RpcResponse handleUnknownVistaIncludes(Exception e, HttpServletRequest request) {
-    return failedResponseFor("Unknown vista site specified in request includes value.");
+    return failedResponseFor("Unknown vista site specified: " + e.getMessage());
   }
 }
