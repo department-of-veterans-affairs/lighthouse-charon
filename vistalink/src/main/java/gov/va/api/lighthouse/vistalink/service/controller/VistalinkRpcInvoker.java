@@ -5,9 +5,11 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
+import gov.va.med.vistalink.adapter.record.VistaLinkFaultException;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import gov.va.med.vistalink.rpc.RpcResponse;
+import gov.va.med.vistalink.rpc.RpcTimeOutFaultException;
 import gov.va.med.vistalink.security.CallbackHandlerUnitTest;
 import gov.va.med.vistalink.security.VistaKernelPrincipalImpl;
 import java.io.StringReader;
@@ -133,6 +135,9 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   /** Invoke an RPC with raw types. */
   @SneakyThrows
   public RpcResponse invoke(RpcRequest request) {
+    if (true) {
+      throw new RpcTimeOutFaultException(new VistaLinkFaultException());
+    }
     synchronized (VistalinkRpcInvoker.class) {
       log.info("{} Executing RPC {}", this, request.getRpcName());
       return connection.executeRPC(request);

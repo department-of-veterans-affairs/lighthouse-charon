@@ -5,7 +5,6 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
-import gov.va.med.vistalink.rpc.RpcFaultException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +68,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
   private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
     var cause = exception.getCause();
     log.error("Call failed.", exception);
-    if (cause instanceof LoginException || cause instanceof RpcFaultException) {
+    if (cause instanceof LoginException) {
       throw cause;
     }
     return failed(vista, "exception: " + exception.getMessage());
@@ -118,7 +117,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
       return invoker.invoke(request.rpc());
     } catch (Exception e) {
       log.error("Error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
-      return failed(invoker.vista(), "exception: " + e.getMessage());
+      return failed(invoker.vista(), e.getClass().getSimpleName() + ": " + e.getMessage());
     } finally {
       invoker.close();
     }

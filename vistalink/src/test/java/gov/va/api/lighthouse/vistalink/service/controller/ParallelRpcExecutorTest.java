@@ -82,7 +82,7 @@ class ParallelRpcExecutorTest {
     when(factory.create(_request().principal(), c2)).thenReturn(invoker2);
     when(factory.create(_request().principal(), c3)).thenReturn(invoker3);
     RpcInvocationResult r1 = _result(1);
-    RpcInvocationResult r2 = _result(2, "Failed to get result: exception: FUGAZI");
+    RpcInvocationResult r2 = _result(2, "Failed to get result: RuntimeException: FUGAZI");
     RpcInvocationResult r3 = _result(3);
     r2.response(null);
     when(invoker2.vista()).thenReturn("v2");
