@@ -6,6 +6,7 @@ import gov.va.api.health.sentinel.ServiceDefinition;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails.Parameter;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import java.util.List;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
@@ -33,8 +34,13 @@ public class SystemDefinitions {
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
+        .testTargets(rpcTargets())
         .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink", "false")))
         .build();
+  }
+
+  private static RpcVistaTargets rpcTargets() {
+    return RpcVistaTargets.builder().forPatient("ignored-for-now").build();
   }
 
   private static SystemDefinition qa() {
@@ -44,6 +50,7 @@ public class SystemDefinitions {
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
+        .testTargets(rpcTargets())
         .isVistalinkAvailable(true)
         .build();
   }

@@ -1,7 +1,10 @@
 package gov.va.api.lighthouse.vistalink.service.api;
 
+import static io.micrometer.core.instrument.util.StringUtils.isNotBlank;
+
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
 import lombok.Data;
 
@@ -26,5 +29,10 @@ public class RpcVistaTargets {
       include = new ArrayList<>();
     }
     return include;
+  }
+
+  @AssertTrue
+  boolean isAtLeastOneTargetSpecified() {
+    return isNotBlank(forPatient) || !include().isEmpty();
   }
 }

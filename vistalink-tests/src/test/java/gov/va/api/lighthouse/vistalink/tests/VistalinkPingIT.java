@@ -13,13 +13,14 @@ public class VistalinkPingIT {
 
   @Test
   @SneakyThrows
-  void requestRpcNoArguements() {
+  void requestRpcNoArguments() {
     var systemDefinition = SystemDefinitions.get();
     assumeTrue(systemDefinition.isVistalinkAvailable());
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
             .principal(systemDefinition.testRpcPrincipal())
+            .target(systemDefinition.testTargets())
             .build();
     var response =
         TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
