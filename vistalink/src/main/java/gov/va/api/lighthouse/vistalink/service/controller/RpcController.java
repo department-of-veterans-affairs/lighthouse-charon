@@ -3,6 +3,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +30,7 @@ public class RpcController {
   }
 
   @PostMapping(consumes = {"application/json"})
-  public RpcResponse invoke(@RequestBody RpcRequest request) {
+  public RpcResponse invoke(@RequestBody @Valid RpcRequest request) {
     return rpcExecutor.execute(request);
   }
 }

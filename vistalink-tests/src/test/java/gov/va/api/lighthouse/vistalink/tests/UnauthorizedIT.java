@@ -25,6 +25,7 @@ public class UnauthorizedIT {
                     .accessCode("I'm sorry Dave")
                     .verifyCode("I'm afraid I can't do that")
                     .build())
+            .target(systemDefinition.testTargets())
             .build();
     var response =
         TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
