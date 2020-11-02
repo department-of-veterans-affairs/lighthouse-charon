@@ -4,6 +4,12 @@ set -euo pipefail
 TEMPLATE=${1:-}
 PORT=8050
 
+SECRETS_CONF="${SHANKTOSECRETS:-~/va/shanktosecrets}/vistalink/vista-vm.conf"
+if [ -z "${VISTA_ACCESS_CODE:-}" -a -f "$SECRETS_CONF" ]
+then
+  . "$SECRETS_CONF"
+fi
+
 test -n "$VISTA_ACCESS_CODE"
 test -n "$VISTA_VERIFY_CODE"
 
