@@ -75,13 +75,10 @@ public class ParallelRpcExecutor implements RpcExecutor {
   }
 
   @SneakyThrows
-  private RpcInvocationResult handleTimeoutException(String vista, TimeoutException exception) {
+  private RpcInvocationResult handleTimeoutException(TimeoutException exception) {
     var cause = exception.getCause();
     log.error("Request timed out.", exception);
-    if (cause instanceof TimeoutException) {
-      throw cause;
-    }
-    return failed(vista, "exception: " + exception.getMessage());
+    throw cause;
   }
 
   private Map<String, Future<RpcInvocationResult>> invokeForEachTarget(
@@ -105,7 +102,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
     } catch (ExecutionException e) {
       return handleExecutionException(vista, e);
     } catch (TimeoutException e) {
-      return handleTimeoutException(vista, e);
+      return handleTimeoutException(e);
     } catch (InterruptedException e) {
       log.error("Failed to get result from {}", vista, e);
       return failed(vista, "exception: " + e.getMessage());
