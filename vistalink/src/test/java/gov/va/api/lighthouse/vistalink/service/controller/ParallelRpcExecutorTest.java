@@ -11,10 +11,8 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
-import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -135,24 +133,5 @@ class ParallelRpcExecutorTest {
     when(invoker3.invoke(r.rpc())).thenReturn(r3);
     assertThat(executor.execute(r))
         .isEqualTo(RpcResponse.builder().status(Status.OK).results(List.of(r1, r2, r3)).build());
-  }
-
-  @Test
-  void throwUnknownVistaWhenRequestVistaIsUnknown() {
-    var r =
-        RpcRequest.builder()
-            .principal(RpcPrincipal.builder().accessCode("a").verifyCode("b").build())
-            .target(RpcVistaTargets.builder().forPatient("123").include(List.of("v4")).build())
-            .rpc(RpcDetails.builder().name("WHATEVER").build())
-            .build();
-    ConnectionDetails c1 = _connectionDetail(1);
-    ConnectionDetails c2 = _connectionDetail(2);
-    ConnectionDetails c3 = _connectionDetail(3);
-    when(resolver.resolve(r.target())).thenReturn(List.of(c1, c2, c3));
-    Assertions.assertThrows(
-        UnknownVista.class,
-        () -> {
-          executor.execute(r);
-        });
   }
 }

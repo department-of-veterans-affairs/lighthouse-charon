@@ -1,10 +1,12 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,5 +43,36 @@ class AllVistaNameResolverTest {
   void allAreReturnedWhenNoTargetsAreSpecified() {
     assertThat(resolver.resolve(RpcVistaTargets.builder().build()))
         .containsExactlyInAnyOrder(details);
+  }
+
+  @Test
+  void unknownVistaExceptionIsThrownForIncludedUnknownVista() {
+    assertThatExceptionOfType(UnknownVista.class)
+        .isThrownBy(
+            () ->
+                resolver.resolve(
+                    RpcVistaTargets.builder()
+                        .forPatient("123V456")
+                        .include(List.of("nope"))
+                        .exclude(List.of("v1"))
+                        .build()));
+    assertThatExceptionOfType(UnknownVista.class)
+        .isThrownBy(
+            () ->
+                resolver.resolve(
+                    RpcVistaTargets.builder()
+                        .forPatient("123V456")
+                        .include(List.of("v1"))
+                        .exclude(List.of("nope"))
+                        .build()));
+    assertThatExceptionOfType(UnknownVista.class)
+        .isThrownBy(
+            () ->
+                resolver.resolve(
+                    RpcVistaTargets.builder()
+                        .forPatient("123V456")
+                        .include(List.of("nope"))
+                        .exclude(List.of("alsonope"))
+                        .build()));
   }
 }
