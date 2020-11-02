@@ -2,6 +2,7 @@
 set -euo pipefail
 
 TEMPLATE=${1:-}
+shift
 PORT=8050
 
 SECRETS_CONF="${SHANKTOSECRETS:-~/va/shanktosecrets}/vistalink/vista-vm.conf"
@@ -38,4 +39,5 @@ curl \
   -XPOST \
   -H"Content-Type:application/json" \
   --data @$POST_ME \
-  http://localhost:$PORT/rpc
+  http://localhost:$PORT/rpc \
+  $@

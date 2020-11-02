@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -10,8 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
+import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLoginFailed;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
@@ -38,8 +44,9 @@ public class WebExceptionHandlerTest {
 
   public static Stream<Arguments> expectStatus() {
     return Stream.of(
-        Arguments.of(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("Ew David!")),
-        Arguments.of(HttpStatus.UNAUTHORIZED, new HttpMessageConversionException("Unacceptable!")));
+        arguments(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("FUGAZI")),
+        arguments(HttpStatus.BAD_REQUEST, new InvalidRequest("FUGAZI")),
+        arguments(HttpStatus.UNAUTHORIZED, new VistaLoginFailed("FUGAZI")));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
@@ -57,7 +64,6 @@ public class WebExceptionHandlerTest {
     exceptionResolver
         .getMessageConverters()
         .add(new MappingJackson2HttpMessageConverter(JacksonConfig.createMapper()));
-    exceptionResolver.afterPropertiesSet();
     return exceptionResolver;
   }
 
@@ -69,10 +75,26 @@ public class WebExceptionHandlerTest {
     MockMvc mockMvc =
         MockMvcBuilders.standaloneSetup(controller)
             .setHandlerExceptionResolvers(createExceptionResolver())
-            .setMessageConverters()
+            .setMessageConverters(
+                new MappingJackson2HttpMessageConverter(JacksonConfig.createMapper()))
             .build();
+
+    var body =
+        RpcRequest.builder()
+            .principal(RpcPrincipal.builder().accessCode("whatever").verifyCode("whatever").build())
+            .target(RpcVistaTargets.builder().forPatient("1234v5678").build())
+            .rpc(
+                RpcDetails.builder()
+                    .name("XOBV TEST PING")
+                    .context("XOBV VISTALINK TESTER")
+                    .build())
+            .build();
+
     mockMvc
-        .perform(post("/rpc").contentType("application/json"))
+        .perform(
+            post("/rpc")
+                .contentType("application/json")
+                .content(JacksonConfig.createMapper().writeValueAsString(body)))
         .andExpect(status().is(status.value()))
         .andExpect(jsonPath("status", equalTo(RpcResponse.Status.FAILED.toString())));
   }
