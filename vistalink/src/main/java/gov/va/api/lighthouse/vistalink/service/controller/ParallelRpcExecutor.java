@@ -57,9 +57,6 @@ public class ParallelRpcExecutor implements RpcExecutor {
 
   @SneakyThrows
   private RpcInvocationResult failed(String vista, String message) {
-    if (message.contains("VistaLoginModuleTooManyInvalidAttemptsException")) {
-      // throw new VistaLoginFailed("Failed to Login");
-    }
     return RpcInvocationResult.builder()
         .vista(vista)
         .error(Optional.of("Failed to get result: " + message))
