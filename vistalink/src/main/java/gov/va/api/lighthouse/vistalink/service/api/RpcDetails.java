@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class RpcDetails {
-  private String name;
-  private String context;
+  @NotBlank private String name;
+  @NotBlank private String context;
   private Optional<Double> version;
 
   @Builder.Default private List<Parameter> parameters = new ArrayList<>();

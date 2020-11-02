@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,6 +36,7 @@ import org.springframework.web.method.annotation.ExceptionHandlerMethodResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod;
 
+@Slf4j
 public class WebExceptionHandlerTest {
   RpcExecutor executor = mock(RpcExecutor.class);
 
@@ -96,12 +98,17 @@ public class WebExceptionHandlerTest {
                     .build())
             .build();
 
-    mockMvc
-        .perform(
-            post("/rpc")
-                .contentType("application/json")
-                .content(JacksonConfig.createMapper().writeValueAsString(body)))
-        .andExpect(status().is(status.value()))
-        .andExpect(jsonPath("status", equalTo(RpcResponse.Status.FAILED.toString())));
+    var response =
+        mockMvc
+            .perform(
+                post("/rpc")
+                    .contentType("application/json")
+                    .content(JacksonConfig.createMapper().writeValueAsString(body)))
+            .andExpect(status().is(status.value()))
+            .andExpect(jsonPath("status", equalTo(RpcResponse.Status.FAILED.toString())))
+            .andReturn()
+            .getResponse();
+    log.error("response: {}", response.getContentAsString());
+    ;
   }
 }

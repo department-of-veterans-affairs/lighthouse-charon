@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.tests;
 
 import gov.va.api.health.sentinel.ServiceDefinition;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -15,4 +16,5 @@ public class SystemDefinition {
   Optional<String> clientKey;
   boolean isVistalinkAvailable;
   @NotNull RpcPrincipal testRpcPrincipal;
+  @NotNull RpcVistaTargets testTargets;
 }

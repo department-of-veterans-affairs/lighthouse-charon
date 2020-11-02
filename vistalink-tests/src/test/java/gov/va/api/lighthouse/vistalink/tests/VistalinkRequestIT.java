@@ -34,7 +34,11 @@ public class VistalinkRequestIT {
     assumeTrue(systemDefinition.isVistalinkAvailable());
     log.info(rpc.name());
     RpcRequest body =
-        RpcRequest.builder().rpc(rpc).principal(systemDefinition.testRpcPrincipal()).build();
+        RpcRequest.builder()
+            .rpc(rpc)
+            .principal(systemDefinition.testRpcPrincipal())
+            .target(systemDefinition.testTargets())
+            .build();
     var response =
         TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
             .expect(200)
