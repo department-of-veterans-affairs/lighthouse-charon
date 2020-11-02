@@ -5,6 +5,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
+import gov.va.med.vistalink.rpc.RpcFaultException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -68,17 +69,10 @@ public class ParallelRpcExecutor implements RpcExecutor {
   private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
     var cause = exception.getCause();
     log.error("Call failed.", exception);
-    if (cause instanceof LoginException) {
+    if (cause instanceof LoginException || cause instanceof RpcFaultException) {
       throw cause;
     }
     return failed(vista, "exception: " + exception.getMessage());
-  }
-
-  @SneakyThrows
-  private RpcInvocationResult handleTimeoutException(TimeoutException exception) {
-    var cause = exception.getCause();
-    log.error("Request timed out.", exception);
-    throw cause;
   }
 
   private Map<String, Future<RpcInvocationResult>> invokeForEachTarget(
@@ -93,6 +87,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
     return futures;
   }
 
+  @SneakyThrows
   private RpcInvocationResult resultOf(String vista, Future<RpcInvocationResult> futureResult) {
     if (futureResult == null) {
       return failed(vista, "No result found.");
@@ -100,10 +95,17 @@ public class ParallelRpcExecutor implements RpcExecutor {
     try {
       return futureResult.get(30, TimeUnit.SECONDS);
     } catch (ExecutionException e) {
+      /* Conditionally rethrow the ExecutionException cause. */
       return handleExecutionException(vista, e);
     } catch (TimeoutException e) {
-      return handleTimeoutException(e);
+      /*
+       * Rethrow critical errors and let application exception handling produce the appropriate
+       * response.
+       */
+      log.error("Request failed: ", e);
+      throw e;
     } catch (InterruptedException e) {
+      /* Suppress exception and return a failed response. */
       log.error("Failed to get result from {}", vista, e);
       return failed(vista, "exception: " + e.getMessage());
     }
