@@ -69,7 +69,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
   @SneakyThrows
   private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
     var cause = exception.getCause();
-    log.error("Call failed. Cause: {}", cause, exception);
+    log.error("Call failed.", exception);
     if (cause instanceof LoginException || cause instanceof BadRpcContext) {
       throw cause;
     }

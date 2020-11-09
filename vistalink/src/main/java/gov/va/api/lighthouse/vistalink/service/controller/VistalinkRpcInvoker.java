@@ -160,13 +160,10 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("{} Response {} chars", this, vistalinkResponse.getRawResponse().length());
       VistalinkXmlResponse xmlResponse = parse(vistalinkResponse);
-      var result =
-          RpcInvocationResult.builder()
-              .vista(vista())
-              .response(xmlResponse.getResponse().getValue())
-              .build();
-
-      return result;
+      return RpcInvocationResult.builder()
+          .vista(vista())
+          .response(xmlResponse.getResponse().getValue())
+          .build();
     } catch (NoRpcContextFaultException e) {
       throw new BadRpcContext(e.toString());
     } finally {
