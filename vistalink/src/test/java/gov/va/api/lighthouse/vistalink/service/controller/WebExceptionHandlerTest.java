@@ -17,6 +17,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeoutException;
@@ -52,7 +53,8 @@ public class WebExceptionHandlerTest {
         arguments(HttpStatus.BAD_REQUEST, new InvalidRequest("FUGAZI")),
         arguments(HttpStatus.UNAUTHORIZED, new LoginException("FUGAZI")),
         arguments(HttpStatus.REQUEST_TIMEOUT, new TimeoutException("FUGAZI")),
-        arguments(HttpStatus.BAD_REQUEST, new UnknownVista("FUGAZI")));
+        arguments(HttpStatus.BAD_REQUEST, new UnknownVista("FUGAZI")),
+        arguments(HttpStatus.FORBIDDEN, new BadRpcContext("FUGAZI")));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
@@ -75,7 +77,7 @@ public class WebExceptionHandlerTest {
 
   @SneakyThrows
   @ParameterizedTest
-  @MethodSource
+  @MethodSource("expectStatus")
   void expectStatus(HttpStatus status, Exception e) {
     when(executor.execute(any()))
         .thenAnswer(
@@ -111,6 +113,5 @@ public class WebExceptionHandlerTest {
             .andReturn()
             .getResponse();
     log.error("response: {}", response.getContentAsString());
-    ;
   }
 }
