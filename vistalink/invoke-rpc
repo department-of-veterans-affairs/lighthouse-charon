@@ -39,5 +39,6 @@ curl \
   -XPOST \
   -H"Content-Type:application/json" \
   --data @$POST_ME \
+  -w "%{http_code}" \
   http://localhost:$PORT/rpc \
   $@

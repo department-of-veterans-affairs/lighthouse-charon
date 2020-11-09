@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
@@ -36,6 +37,13 @@ public class WebExceptionHandler {
   public RpcResponse handleBadRequestBody(Exception e, HttpServletRequest request) {
     log.error("Bad request", e);
     return failedResponseFor("Failed to read request body.");
+  }
+
+  @ExceptionHandler({BadRpcContext.class})
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public RpcResponse handleBadRpcContext(Exception e, HttpServletRequest request) {
+    log.error("Bad Rpc Context", e);
+    return failedResponseFor("Rpc is not registered to the chosen Rpc context.");
   }
 
   @ExceptionHandler({LoginException.class})
