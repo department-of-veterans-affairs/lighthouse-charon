@@ -43,7 +43,7 @@ public class WebExceptionHandler {
   @ResponseStatus(HttpStatus.FORBIDDEN)
   public RpcResponse handleBadRpcContext(Exception e, HttpServletRequest request) {
     log.error("Bad RPC Context", e);
-    return failedResponseFor("RPC is not registered to the chosen Rpc context.");
+    return failedResponseFor("RPC is not registered to the chosen RPC context.");
   }
 
   @ExceptionHandler({LoginException.class})
