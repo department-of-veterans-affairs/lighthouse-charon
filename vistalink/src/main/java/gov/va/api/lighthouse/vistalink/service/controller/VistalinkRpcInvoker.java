@@ -165,7 +165,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
           .response(xmlResponse.getResponse().getValue())
           .build();
     } catch (NoRpcContextFaultException e) {
-      throw new BadRpcContext(e.toString());
+      throw new BadRpcContext(rpcDetails.context(), e.getCause());
     } finally {
       log.info(
           "{} {} ms for {}",

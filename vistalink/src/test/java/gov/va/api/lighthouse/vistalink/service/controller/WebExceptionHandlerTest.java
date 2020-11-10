@@ -54,7 +54,7 @@ public class WebExceptionHandlerTest {
         arguments(HttpStatus.UNAUTHORIZED, new LoginException("FUGAZI")),
         arguments(HttpStatus.REQUEST_TIMEOUT, new TimeoutException("FUGAZI")),
         arguments(HttpStatus.BAD_REQUEST, new UnknownVista("FUGAZI")),
-        arguments(HttpStatus.FORBIDDEN, new BadRpcContext("FUGAZI")));
+        arguments(HttpStatus.FORBIDDEN, new BadRpcContext("FUGAZI", new Throwable("FUGAZI"))));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
@@ -77,7 +77,7 @@ public class WebExceptionHandlerTest {
 
   @SneakyThrows
   @ParameterizedTest
-  @MethodSource("expectStatus")
+  @MethodSource
   void expectStatus(HttpStatus status, Exception e) {
     when(executor.execute(any()))
         .thenAnswer(

@@ -6,14 +6,14 @@ import lombok.experimental.UtilityClass;
 final class UnrecoverableVistalinkExceptions {
 
   static class UnrecoverableVistalinkException extends RuntimeException {
-    UnrecoverableVistalinkException(String s) {
-      super(s);
+    UnrecoverableVistalinkException(String message, Throwable cause) {
+      super(message, cause);
     }
   }
 
   static class BadRpcContext extends UnrecoverableVistalinkException {
-    BadRpcContext(String s) {
-      super(s);
+    BadRpcContext(String rpcContext, Throwable cause) {
+      super(rpcContext, cause);
     }
   }
 }
