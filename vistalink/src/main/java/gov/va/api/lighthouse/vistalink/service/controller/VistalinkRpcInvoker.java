@@ -4,7 +4,9 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
+import gov.va.med.vistalink.rpc.NoRpcContextFaultException;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import gov.va.med.vistalink.rpc.RpcResponse;
@@ -162,6 +164,8 @@ public class VistalinkRpcInvoker implements RpcInvoker {
           .vista(vista())
           .response(xmlResponse.getResponse().getValue())
           .build();
+    } catch (NoRpcContextFaultException e) {
+      throw new BadRpcContext(rpcDetails.context(), e);
     } finally {
       log.info(
           "{} {} ms for {}",

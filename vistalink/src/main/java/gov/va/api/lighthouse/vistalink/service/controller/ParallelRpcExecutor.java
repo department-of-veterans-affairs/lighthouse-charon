@@ -5,6 +5,7 @@ import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
   private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
     var cause = exception.getCause();
     log.error("Call failed.", exception);
-    if (cause instanceof LoginException) {
+    if (cause instanceof LoginException || cause instanceof UnrecoverableVistalinkException) {
       throw cause;
     }
     return failed(vista, "exception: " + exception.getMessage());
@@ -110,11 +111,16 @@ public class ParallelRpcExecutor implements RpcExecutor {
     }
   }
 
-  private RpcInvocationResult safelyInvoke(RpcRequest request, RpcInvoker invoker) {
+  private RpcInvocationResult safelyInvoke(RpcRequest request, RpcInvoker invoker)
+      throws UnrecoverableVistalinkException {
     log.info(
         "Invoking {} / {} for {}", request.rpc().name(), request.rpc().context(), invoker.vista());
     try {
       return invoker.invoke(request.rpc());
+    } catch (UnrecoverableVistalinkException e) {
+      log.error(
+          "Unrecoverable error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
+      throw e;
     } catch (Exception e) {
       log.error("Error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
       return failed(invoker.vista(), e.getClass().getSimpleName() + ": " + e.getMessage());
