@@ -1,0 +1,18 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name": "VAFCTFU CONVERT DFN TO ICN",
+    "context" : "VAFCTF RPC CALLS",
+    "parameters": [
+      {
+        "string": "100848"
+      }
+    ]
+  }
+}
