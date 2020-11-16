@@ -31,18 +31,18 @@ Clients will invoke the Vistalink API by posting a request. Requests contain thr
     apiKey: ABC123,
     verificationKey: XYZ987,
   }
-  target: {
-    forPatient: 1234567890V123456,  ???????????? one of
-    include: [ name, name, ... ],  ????????????
-    exclude: [ name, name, ... ]  ?????????????????? optional if forPatient is specified
+  target: { ........................... One of forPatient or include must be specified. You may specify both.
+    forPatient: 1234567890V123456,  ... Determine appropriate VistA instances for the patient
+    include: [ name, name, ... ],  .... Include this VistA.
+    exclude: [ name, name, ... ]  ..... (Optional) Excude this VistA.
   }
   rpc: {
     name: SOME RPC NAME
     context: SOME CONTEXT
-    parameters: [   ???????????????????????????????????????????????????????????? optional list of string, reference,
-      { string: value },                   or array type parameters. 
+    parameters: [   ................... Optional list of string, reference, or array type parameters
+      { string: value },
       { ref: reference },
-      { array: [ value, value, ... ] } 
+      { array: [ value, value, ... ] }
     ]
   }
 }
@@ -50,15 +50,15 @@ Clients will invoke the Vistalink API by posting a request. Requests contain thr
 #### Response structure
 ```
 {
-   status: OK|FAILED ????????????????????????????????????????????????????????? Result will be FAILED if any part of the request failed
+   status: OK|FAILED .................. Result will be FAILED if any part of the request failed
    message: optional message
-   results: [  ??????????????????????????????????????????????????????????????????????????? Potentially empty if no RPCs were actually invoked  
+   results: [  ........................ Potentially empty if no RPCs were actually invoked
      {
        vista: name,
-       response: <payload>,  ????????????????????????????????? whatever the RPC payload is 
-       error: message  ??????????????????????????????????????????????????? specified if call failed
+       response: <payload>,  .......... Whatever the RPC payload is
+       error: message  ................ Specified if call failed
      },
-     ... 
+     ...
    ]
 }
 ```
@@ -108,3 +108,37 @@ Configuration is managed per environment and deployed with the Vistalink API. Yo
 VistaLink EJB technology is very difficult to mock when compared to REST or SOAP or other HTTP-based communication. Mock integration testing will be skipped. Unit tests and live integration tests will be required to validate functionality.
 
 To support synthetic environments, a Mock Vistalink API will be created, similar to Mock EE. This mock implementation will have canned responses based on RPC requests. 
+
+
+## Manually testing RPCs.
+The Vistalink API provides a test image that can be used for ad-hoc testing of RPCs.
+```
+docker run --rm --env-file vista.env vasdvp/lighthouse-vistalink-tests:latest run --module-name vistalink-tests --test-pattern '.*VistalinkRpcInvokerTest'
+```
+You must specify a series of environment variables, which can be provided as a Docker envfile
+
+`vista.env`
+```
+K8S_LOAD_BALANCER=host.docker.internal
+K8S_ENVIRONMENT=local
+SENTINEL_ENV=local
+CLIENT_KEY=hello
+TEST_RPCINVOKER=true
+VISTA_ACCESS_CODE=SOME$CODE
+VISTA_VERIFY_CODE=1234$5678
+VISTA_HOST=host.docker.internal
+VISTA_PORT=8000
+VISTA_DIVISION_IEN=605
+
+#VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST PING"}
+#VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST STRING","parameters":[{"string":"shanktopus"}]}
+#VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST GLOBAL ARRAY","parameters":[{"array":["go","shanktopus"]}]}
+#VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST LOCAL ARRAY","parameters":[{"array":["go","shanktopus"]}]}
+VISTA_RPC={"name":"VAFCTFU CONVERT DFN TO ICN","context":"VAFCTF RPC CALLS","parameters":[{"string":"100848"}]}
+```
+
+`VISTA_RPC` matches the `rpc` structure of the Vistalink API request.
+
+> `K8S_LOAD_BALANCER` and `VISTA_HOST` use `host.docker.internal` on Windows and Mac.
+> Use `localhost` on Linux.
+> See https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds
