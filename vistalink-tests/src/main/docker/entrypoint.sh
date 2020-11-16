@@ -19,6 +19,7 @@ java-tests \
   -Dvista.access-code="$VISTA_ACCESS_CODE" \
   -Dvista.verify-code="$VISTA_VERIFY_CODE" \
   -Dclient-key="${CLIENT_KEY}" \
-  $@
+  $@ \
+  2>&1 | grep -v "WARNING: "
 
 exit $?

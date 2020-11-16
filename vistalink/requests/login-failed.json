@@ -1,0 +1,13 @@
+{
+  "principal": {
+    "accessCode":"nope",
+    "verifyCode":"nope"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name":"XOBV TEST PING",
+    "context":"XOBV VISTALINK TESTER"
+  }
+}
