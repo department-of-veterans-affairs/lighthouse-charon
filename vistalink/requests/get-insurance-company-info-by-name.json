@@ -1,0 +1,16 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name": "DSIV INSURANCE COMPANY",
+    "context": "DSIV DOCMANAGER",
+    "parameters": [
+      { "string": "HEALTH INSURANCE PLUS" }
+    ]
+  }
+}
