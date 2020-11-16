@@ -99,7 +99,7 @@ mvnTests() {
   mvn test \
     -f 'vistalink/pom.xml' \
     -Dtest=VistalinkRpcInvokerTest \
-    -Dtest.vistalink=true \
+    -Dtest.rpcinvoker=true \
     -Dvista.host=localhost \
     -Dvista.port=8000 \
     -Dvista.access-code=$VISTA_ACCESS_CODE \
