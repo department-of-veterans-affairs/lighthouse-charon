@@ -9,10 +9,10 @@
 7. Person Name: `ANRVAPPLICATION,PROXY USER` (:space:+enter will also work -- uses the last edited user)                                                                                                             
 8. Arrow down to `SECONDARY MENU OPTIONS`                                                                                                                                                                            
 9. Press enter until field becomes blank                                                                                                                                                                             
-10. Type menu you wish to add (e.g. `DSIV DOCMANAGER`) and Enter                                                                                                                                                     
+10. Type the menu, i.e. RPC context, you wish to add (e.g. `DSIV DOCMANAGER`) and Enter                                                                                                                                                     
 11. Are you adding as a new `SECONDARY MENU OPTION`? -- YES                                                                                                                                                          
 12. Enter through menu                                                                                                                                                                                               
-13. Arrow down to command                                                                                                                                                                                            
+13. Arrow down to command (Your new value will disappear... this is normal)                                                                                                                                                                                        
 14. save, enter, exit, enter                                                                                                                                                                                         
 **You should now have access to all RPC's in the menu (context).**
 
