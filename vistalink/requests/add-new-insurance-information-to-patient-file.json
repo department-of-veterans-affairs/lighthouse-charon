@@ -1,0 +1,25 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name": "DSIV ACCEPT BUFFER ENTRY",
+    "context": "DSIV DOCMANAGER",
+    "parameters": [
+      { "string": "2" },
+      { "string": "100848" },
+      { "array": [
+          "IBINSDA^3",
+          "IBGRPDA^1",
+          "IBNEWINS^0",
+          "IBNEWGRP^0",
+          "IBNEWPOL^1"
+        ]
+      }
+    ]
+  }  
+}

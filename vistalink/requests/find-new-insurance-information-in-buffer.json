@@ -1,0 +1,18 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name": "DSIV FIND ENTRIES",
+    "context": "DSIV DOCMANAGER",
+    "parameters": [
+      { "string": "100848" },
+      { "string": "@;.01I;.02;.03;.04I;20.01;40.02;40.03;40.09;60.04" },
+      { "string": "1" }
+    ]
+  }
+}
