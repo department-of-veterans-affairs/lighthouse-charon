@@ -1,0 +1,24 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name": "DSIV ADD BUFFER ENTRY",
+    "context": "DSIV DOCMANAGER",
+    "parameters": [
+      { "string": "140" },
+      { "string": "X" },
+      { "string": "HEALTH INSURANCE PLUS" },
+      { "array": [
+          ".03^1",
+          "90.01^ALB-NEWYORK",
+          "90.02^2"
+        ]
+      }
+    ]
+  }
+}
