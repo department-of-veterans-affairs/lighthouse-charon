@@ -24,6 +24,10 @@ Clients will invoke the Vistalink API by posting a request. Requests contain thr
 - **The target vistas.** The Vistalink API allows clients to interact with VistA instances by name. Details such as host, port, division IEN, and network connectivity are handled by the API.
 - **The RPC details.** Clients must provide the RPC name, context, and any parameters.
 
+Applications will invoke the Vistalink API to gather data for a particular patient. In turn, the Vistalink API will access data from MPI to determine which VistA instances are likely to contain meaningful data for the patient.
+
+![typical-use-case](src/plantuml/typical-use-case.png)
+
 #### Request structure
 ```
 {
