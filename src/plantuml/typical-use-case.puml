@@ -1,0 +1,33 @@
+@startuml
+
+|App|
+start
+:Search for coverage by patient;
+
+|Insurance API|
+:Convert request to RPC query;
+
+|Vistalink API|
+:Look up VistA instances for patient;
+
+|MPI|
+:""GetCorrespondingIDs"";
+
+|Vistalink API|
+while (For each VistA instance) is (vista)
+  :Invoke RPC;
+  |VistA|
+  :Return RPC results;
+  |Vistalink API|
+  :Store intermediate result;
+endwhile (done)
+:Combine results from each RPC;
+
+|Insurance API|
+:Translate results to Coverage response;
+:Return response;
+
+|App|
+stop
+
+@enduml
