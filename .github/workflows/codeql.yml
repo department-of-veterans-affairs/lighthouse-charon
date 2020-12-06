@@ -41,8 +41,7 @@ jobs:
       env:
         TEST_ME: ${{ secrets.TEST_ME }}
       run: |
-        alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
-        echo "${TEST_ME}" | rot13
+        echo "${TEST_ME}" | tr 'A-Za-z' 'N-ZA-Mn-za-m'
 
 #    - name: Lighthouse maven build
 #      uses: department-of-veterans-affairs/lighthouse-actions-maven-build@v0
