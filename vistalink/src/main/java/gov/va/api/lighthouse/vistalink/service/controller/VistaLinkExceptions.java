@@ -11,8 +11,12 @@ public class VistaLinkExceptions {
   }
 
   public static class VistaLinkException extends RuntimeException {
-    public VistaLinkException(String s) {
-      super(s);
+    public VistaLinkException(String message) {
+      super(message);
+    }
+
+    public VistaLinkException(Exception cause) {
+      super(cause);
     }
   }
 }

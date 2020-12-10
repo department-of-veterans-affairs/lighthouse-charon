@@ -2,7 +2,6 @@
 set -euo pipefail
 
 TEMPLATE=${1:-}
-shift
 PORT=8050
 
 SECRETS_CONF="${SHANKTOSECRETS:-~/va/shanktosecrets}/vistalink/vista-vm.conf"
@@ -27,6 +26,8 @@ exit 1
 
 if [ -z "${TEMPLATE:-}" ]; then usage "template not specified"; fi
 if [ ! -f "$TEMPLATE" ]; then usage "template not found: $TEMPLATE"; fi
+
+shift
 
 POST_ME=$(mktemp)
 onExit() { rm $POST_ME; }
