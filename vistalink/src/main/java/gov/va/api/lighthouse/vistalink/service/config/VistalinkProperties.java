@@ -15,6 +15,7 @@ import lombok.Value;
 public class VistalinkProperties {
   @Singular List<ConnectionDetails> vistas;
 
+  /** Thrown a UnknownVista exception if any of the candidate names are unknown. */
   public void checkKnownNames(List<String> candidateNames) {
     if (candidateNames == null || candidateNames.isEmpty()) {
       return;
