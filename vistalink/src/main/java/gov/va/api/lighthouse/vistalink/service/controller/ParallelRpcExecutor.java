@@ -38,7 +38,12 @@ public class ParallelRpcExecutor implements RpcExecutor {
   @Override
   public RpcResponse execute(RpcRequest request) {
     var response = RpcResponse.builder();
-    List<ConnectionDetails> targets = vistaNameResolver.resolve(request.target());
+    List<ConnectionDetails> targets;
+    try {
+      targets = vistaNameResolver.resolve(request.target());
+    } catch (Exception e) {
+      return response.status(Status.VISTA_RESOLUTION_FAILURE).build();
+    }
     if (targets.isEmpty()) {
       return response.status(Status.NO_VISTAS_RESOLVED).build();
     }

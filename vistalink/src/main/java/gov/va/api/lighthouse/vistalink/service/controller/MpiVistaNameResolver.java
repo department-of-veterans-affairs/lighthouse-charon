@@ -9,7 +9,6 @@ import gov.va.api.lighthouse.mpi.SoapMasterPatientIndexClient;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
-import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.VistaLinkException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +37,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     try {
       return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
     } catch (Exception e) {
-      throw new MpiException(e);
+      throw new NameResolutionException(e);
     }
   }
 
@@ -72,7 +71,8 @@ public class MpiVistaNameResolver implements VistaNameResolver {
      * response to avoid leaking PII
      */
     if (maybePatients.size() != 1) {
-      throw new MpiException("Expected one patient in response, got " + maybePatients.size());
+      throw new NameResolutionException(
+          "Expected one patient in response, got " + maybePatients.size());
     }
 
     PRPAMT201304UV02Patient patient =
@@ -90,15 +90,5 @@ public class MpiVistaNameResolver implements VistaNameResolver {
 
     log.info("Stations: {}", stationIds);
     return stationIds;
-  }
-
-  public static class MpiException extends VistaLinkException {
-    public MpiException(String message) {
-      super(message);
-    }
-
-    public MpiException(Exception cause) {
-      super(cause);
-    }
   }
 }
