@@ -4,8 +4,9 @@ import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownPatient;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
-import gov.va.api.lighthouse.vistalink.service.controller.VistaNameResolver.NameResolutionException;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 import javax.security.auth.login.LoginException;
@@ -55,19 +56,11 @@ public class WebExceptionHandler {
     return failedResponseFor("Failed to login.");
   }
 
-  /** Return VISTA_RESOLUTION_FAILURE results. */
   @ExceptionHandler({NameResolutionException.class})
   @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
   public RpcResponse handleNameResolutionException(Exception e, HttpServletRequest request) {
     log.error("Name resolution exception", e);
-    String message = null;
-    if (e instanceof NameResolutionException) {
-      message = ((NameResolutionException) e).publicErrorCode();
-    }
-    return RpcResponse.builder()
-        .status(Status.VISTA_RESOLUTION_FAILURE)
-        .message(Optional.ofNullable(message))
-        .build();
+    return nameResolutionResponse(e);
   }
 
   @ExceptionHandler({TimeoutException.class})
@@ -76,9 +69,27 @@ public class WebExceptionHandler {
     return failedResponseFor("Request timed out.");
   }
 
+  @ExceptionHandler({UnknownPatient.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public RpcResponse handleUnknownPatient(Exception e, HttpServletRequest request) {
+    log.error("Unknown patient", e);
+    return nameResolutionResponse(e);
+  }
+
   @ExceptionHandler({UnknownVista.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RpcResponse handleUnknownVistaIncludes(Exception e, HttpServletRequest request) {
     return failedResponseFor("Unknown vista site specified: " + e.getMessage());
+  }
+
+  private RpcResponse nameResolutionResponse(Exception e) {
+    String message = null;
+    if (e instanceof NameResolutionException) {
+      message = ((NameResolutionException) e).publicErrorCode();
+    }
+    return RpcResponse.builder()
+        .status(Status.VISTA_RESOLUTION_FAILURE)
+        .message(Optional.ofNullable(message))
+        .build();
   }
 }

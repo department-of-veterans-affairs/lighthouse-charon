@@ -9,6 +9,8 @@ import gov.va.api.lighthouse.mpi.SoapMasterPatientIndexClient;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownPatient;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +39,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     try {
       return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
     } catch (Exception e) {
-      throw new NameResolutionException(ErrorCodes.MREQ01, e);
+      throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
     }
   }
 
@@ -71,7 +73,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
      * response to avoid leaking PII
      */
     if (maybePatients.size() != 1) {
-      throw new NameResolutionException(
+      throw new UnknownPatient(
           ErrorCodes.MRSP01, "Expected one patient in response, got " + maybePatients.size());
     }
 
