@@ -33,6 +33,7 @@ public class RpcResponse {
   public enum Status {
     OK,
     FAILED,
-    NO_VISTAS_RESOLVED
+    NO_VISTAS_RESOLVED,
+    VISTA_RESOLUTION_FAILURE
   }
 }

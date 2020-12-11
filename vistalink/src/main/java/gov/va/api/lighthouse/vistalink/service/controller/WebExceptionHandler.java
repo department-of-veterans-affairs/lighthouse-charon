@@ -2,7 +2,10 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownPatient;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
@@ -53,15 +56,40 @@ public class WebExceptionHandler {
     return failedResponseFor("Failed to login.");
   }
 
+  @ExceptionHandler({NameResolutionException.class})
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public RpcResponse handleNameResolutionException(Exception e, HttpServletRequest request) {
+    log.error("Name resolution exception", e);
+    return nameResolutionResponse(e);
+  }
+
   @ExceptionHandler({TimeoutException.class})
   @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
   public RpcResponse handleRequestTimeout(Exception e, HttpServletRequest request) {
     return failedResponseFor("Request timed out.");
   }
 
+  @ExceptionHandler({UnknownPatient.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public RpcResponse handleUnknownPatient(Exception e, HttpServletRequest request) {
+    log.error("Unknown patient", e);
+    return nameResolutionResponse(e);
+  }
+
   @ExceptionHandler({UnknownVista.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public RpcResponse handleUnknownVistaIncludes(Exception e, HttpServletRequest request) {
     return failedResponseFor("Unknown vista site specified: " + e.getMessage());
+  }
+
+  private RpcResponse nameResolutionResponse(Exception e) {
+    String message = null;
+    if (e instanceof NameResolutionException) {
+      message = ((NameResolutionException) e).publicErrorCode();
+    }
+    return RpcResponse.builder()
+        .status(Status.VISTA_RESOLUTION_FAILURE)
+        .message(Optional.ofNullable(message))
+        .build();
   }
 }
