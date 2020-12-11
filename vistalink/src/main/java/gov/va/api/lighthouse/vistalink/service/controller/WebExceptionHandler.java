@@ -2,8 +2,10 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaNameResolver.NameResolutionException;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 import javax.security.auth.login.LoginException;
@@ -51,6 +53,17 @@ public class WebExceptionHandler {
   public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
     log.error("Login failed", e);
     return failedResponseFor("Failed to login.");
+  }
+
+  /** Return VISTA_RESOLUTION_FAILURE results. */
+  @ExceptionHandler({NameResolutionException.class})
+  @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+  public RpcResponse handleNameResolutionException(Exception e, HttpServletRequest request) {
+    log.error("Name resolution exception", e);
+    return RpcResponse.builder()
+        .status(Status.VISTA_RESOLUTION_FAILURE)
+        .message(Optional.ofNullable(e.getMessage()))
+        .build();
   }
 
   @ExceptionHandler({TimeoutException.class})
