@@ -18,7 +18,7 @@
     <javax.resource-api.version>1.7.1</javax.resource-api.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
     <jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
-    <master-patient-index-client.version>1.0.1-SNAPSHOT</master-patient-index-client.version>
+    <master-patient-index-client.version>1.0.1</master-patient-index-client.version>
     <talos.version>0.0.1</talos.version>
     <vistalink-xob-bom.version>1.6.0.028</vistalink-xob-bom.version>
   </properties>
