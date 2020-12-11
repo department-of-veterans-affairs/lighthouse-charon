@@ -57,7 +57,7 @@ public class WebExceptionHandler {
   }
 
   @ExceptionHandler({NameResolutionException.class})
-  @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public RpcResponse handleNameResolutionException(Exception e, HttpServletRequest request) {
     log.error("Name resolution exception", e);
     return nameResolutionResponse(e);

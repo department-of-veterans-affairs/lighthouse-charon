@@ -14,10 +14,12 @@ import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;
+import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownPatient;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeoutException;
@@ -49,12 +51,24 @@ public class WebExceptionHandlerTest {
 
   public static Stream<Arguments> expectStatus() {
     return Stream.of(
-        arguments(HttpStatus.BAD_REQUEST, new HttpMessageConversionException("FUGAZI")),
-        arguments(HttpStatus.BAD_REQUEST, new InvalidRequest("FUGAZI")),
-        arguments(HttpStatus.UNAUTHORIZED, new LoginException("FUGAZI")),
-        arguments(HttpStatus.REQUEST_TIMEOUT, new TimeoutException("FUGAZI")),
-        arguments(HttpStatus.BAD_REQUEST, new UnknownVista("FUGAZI")),
-        arguments(HttpStatus.FORBIDDEN, new BadRpcContext("FUGAZI", new Throwable("FUGAZI"))));
+        arguments(
+            HttpStatus.BAD_REQUEST, Status.FAILED, new HttpMessageConversionException("FUGAZI")),
+        arguments(HttpStatus.BAD_REQUEST, Status.FAILED, new InvalidRequest("FUGAZI")),
+        arguments(HttpStatus.UNAUTHORIZED, Status.FAILED, new LoginException("FUGAZI")),
+        arguments(HttpStatus.REQUEST_TIMEOUT, Status.FAILED, new TimeoutException("FUGAZI")),
+        arguments(HttpStatus.BAD_REQUEST, Status.FAILED, new UnknownVista("FUGAZI")),
+        arguments(
+            HttpStatus.BAD_REQUEST,
+            Status.VISTA_RESOLUTION_FAILURE,
+            new UnknownPatient(Fugazi.FUGAZI, "FUGAZI")),
+        arguments(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            Status.VISTA_RESOLUTION_FAILURE,
+            new NameResolutionException(Fugazi.FUGAZI, null, null)),
+        arguments(
+            HttpStatus.FORBIDDEN,
+            Status.FAILED,
+            new BadRpcContext("FUGAZI", new Throwable("FUGAZI"))));
   }
 
   private ExceptionHandlerExceptionResolver createExceptionResolver() {
@@ -78,7 +92,7 @@ public class WebExceptionHandlerTest {
   @SneakyThrows
   @ParameterizedTest
   @MethodSource
-  void expectStatus(HttpStatus status, Exception e) {
+  void expectStatus(HttpStatus httpStatus, Status responseStatus, Exception e) {
     when(executor.execute(any()))
         .thenAnswer(
             i -> {
@@ -108,10 +122,14 @@ public class WebExceptionHandlerTest {
                 post("/rpc")
                     .contentType("application/json")
                     .content(JacksonConfig.createMapper().writeValueAsString(body)))
-            .andExpect(status().is(status.value()))
-            .andExpect(jsonPath("status", equalTo(RpcResponse.Status.FAILED.toString())))
+            .andExpect(status().is(httpStatus.value()))
+            .andExpect(jsonPath("status", equalTo(responseStatus.toString())))
             .andReturn()
             .getResponse();
     log.error("response: {}", response.getContentAsString());
+  }
+
+  enum Fugazi {
+    FUGAZI;
   }
 }
