@@ -60,9 +60,13 @@ public class WebExceptionHandler {
   @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
   public RpcResponse handleNameResolutionException(Exception e, HttpServletRequest request) {
     log.error("Name resolution exception", e);
+    String message = null;
+    if (e instanceof NameResolutionException) {
+      message = ((NameResolutionException) e).publicErrorCode();
+    }
     return RpcResponse.builder()
         .status(Status.VISTA_RESOLUTION_FAILURE)
-        .message(Optional.ofNullable(e.getMessage()))
+        .message(Optional.ofNullable(message))
         .build();
   }
 

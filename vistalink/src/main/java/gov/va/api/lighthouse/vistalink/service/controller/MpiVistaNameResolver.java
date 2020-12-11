@@ -37,7 +37,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     try {
       return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
     } catch (Exception e) {
-      throw new NameResolutionException(e);
+      throw new NameResolutionException(ErrorCodes.MREQ01, e);
     }
   }
 
@@ -72,7 +72,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
      */
     if (maybePatients.size() != 1) {
       throw new NameResolutionException(
-          "Expected one patient in response, got " + maybePatients.size());
+          ErrorCodes.MRSP01, "Expected one patient in response, got " + maybePatients.size());
     }
 
     PRPAMT201304UV02Patient patient =
@@ -90,5 +90,13 @@ public class MpiVistaNameResolver implements VistaNameResolver {
 
     log.info("Stations: {}", stationIds);
     return stationIds;
+  }
+
+  /** Error codes for name resolution errors. */
+  public enum ErrorCodes {
+    /** Soap request failure. */
+    MREQ01,
+    /** Wrong number of patients returned. */
+    MRSP01
   }
 }
