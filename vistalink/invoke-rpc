@@ -34,11 +34,16 @@ onExit() { rm $POST_ME; }
 trap onExit EXIT
 
 cat $TEMPLATE | envsubst > $POST_ME
+if [ "${LOG_REQUEST:-false}" == true ]
+then
+  echo "REQUEST:"
+  cat $POST_ME |  jq '.|.principal.accessCode="REDACTED"|.principal.verifyCode="REDACTED"'
+fi
 
 curl \
   -s \
   -XPOST \
   -H"Content-Type:application/json" \
   --data @$POST_ME \
-  http://localhost:$PORT/rpc \
+  ${URL:-http://localhost:$PORT/rpc} \
   $@
