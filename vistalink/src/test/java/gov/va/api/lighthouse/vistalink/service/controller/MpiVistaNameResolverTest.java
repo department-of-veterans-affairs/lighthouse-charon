@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gov.va.api.lighthouse.mpi.MpiConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
@@ -27,6 +28,7 @@ public class MpiVistaNameResolverTest {
           .build();
 
   @Mock PRPAIN201310UV02 mockResponse;
+  @Mock MpiConfig config;
 
   PRPAIN201310UV02MFMIMT700711UV01ControlActProcess controlActProcess =
       PRPAIN201310UV02MFMIMT700711UV01ControlActProcess.builder()
@@ -60,7 +62,7 @@ public class MpiVistaNameResolverTest {
         (s) -> {
           return mockResponse;
         };
-    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, mockFunction);
+    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, config, mockFunction);
 
     assertThat(resolver.resolve(RpcVistaTargets.builder().forPatient("1").build()))
         .isEqualTo(

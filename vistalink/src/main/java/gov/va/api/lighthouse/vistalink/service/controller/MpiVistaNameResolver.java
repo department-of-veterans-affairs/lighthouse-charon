@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,27 +31,34 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "vistalink.resolver", havingValue = "mpi")
 @Slf4j
 public class MpiVistaNameResolver implements VistaNameResolver {
-  @Getter private static MpiConfig mpiConfig;
+  @Getter private final MpiConfig mpiConfig;
 
   @Getter private final VistalinkProperties properties;
 
-  @Getter @Setter
-  private Function<String, PRPAIN201310UV02> request1309 =
-      (icn) -> {
-        try {
-          return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
-        } catch (Exception e) {
-          throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
-        }
-      };
+  @Getter @Setter private Function<String, PRPAIN201310UV02> request1309;
 
-  @Getter private final MpiConfig mpiConfig;
-
-  /** Create a new instance with required properties and mpi configuration. */
+  /**
+   * Create a new instance with required properties, mpi configuration, and MPI request. If the
+   * request is not specified, default to the SoapMPI request to 1309.
+   */
   public MpiVistaNameResolver(
-      @Autowired VistalinkProperties properties, @Autowired MpiConfig mpiConfig) {
+      @Autowired VistalinkProperties properties,
+      @Autowired MpiConfig mpiConfig,
+      Function<String, PRPAIN201310UV02> request1309) {
     this.properties = properties;
     this.mpiConfig = mpiConfig;
+    if (request1309 != null) {
+      this.request1309 = request1309;
+    } else {
+      this.request1309 =
+          (icn) -> {
+            try {
+              return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
+            } catch (Exception e) {
+              throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
+            }
+          };
+    }
     log.info("Accessing MPI at {}", mpiConfig.getUrl());
     log.info("Presenting as {}", mpiConfig().getKeyAlias());
   }
