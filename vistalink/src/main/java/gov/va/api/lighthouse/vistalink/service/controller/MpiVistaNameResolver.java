@@ -15,7 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hl7.v3.II;
 import org.hl7.v3.PRPAIN201310UV02;
@@ -29,11 +31,16 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "vistalink.resolver", havingValue = "mpi")
 @Slf4j
 public class MpiVistaNameResolver implements VistaNameResolver {
-  @Getter private final VistalinkProperties properties;
-
   @Getter private final MpiConfig mpiConfig;
 
-  /** Create a new instance with required properties and mpi configuration. */
+  @Getter private final VistalinkProperties properties;
+
+  @Setter private Function<String, PRPAIN201310UV02> request1309;
+
+  /**
+   * Create a new instance with required properties, mpi configuration, and MPI request. If the
+   * request is not specified, default to the SoapMPI request to 1309.
+   */
   public MpiVistaNameResolver(
       @Autowired VistalinkProperties properties, @Autowired MpiConfig mpiConfig) {
     this.properties = properties;
@@ -42,12 +49,18 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     log.info("Presenting as {}", mpiConfig().getKeyAlias());
   }
 
-  private PRPAIN201310UV02 lookupVistas(String icn) {
-    try {
-      return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
-    } catch (Exception e) {
-      throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
+  /** Lazy Getter. */
+  public Function<String, PRPAIN201310UV02> request1309() {
+    if (request1309 == null) {
+      return (icn) -> {
+        try {
+          return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
+        } catch (Exception e) {
+          throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
+        }
+      };
     }
+    return request1309;
   }
 
   @Override
@@ -55,7 +68,6 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     Set<String> vistas = new HashSet<>();
     properties.checkKnownNames(rpcVistaTargets.include());
     properties.checkKnownNames(rpcVistaTargets.exclude());
-
     vistas.addAll(rpcVistaTargets.include());
     vistas.addAll(targetsForPatient(rpcVistaTargets));
     vistas.removeAll(rpcVistaTargets.exclude());
@@ -70,8 +82,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     if (isBlank(icn)) {
       return List.of();
     }
-
-    PRPAIN201310UV02 response = lookupVistas(icn);
+    PRPAIN201310UV02 response = request1309.apply(icn);
     log.info("Response: {}", response);
     List<PRPAIN201310UV02MFMIMT700711UV01Subject1> maybePatients =
         response.getControlActProcess().getSubject();
@@ -83,10 +94,8 @@ public class MpiVistaNameResolver implements VistaNameResolver {
       throw new UnknownPatient(
           ErrorCodes.MRSP01, "Expected one patient in response, got " + maybePatients.size());
     }
-
     PRPAMT201304UV02Patient patient =
         maybePatients.get(0).getRegistrationEvent().getSubject1().getPatient();
-
     List<String> stationIds =
         patient.getId().stream()
             .filter(Objects::nonNull)
@@ -96,7 +105,6 @@ public class MpiVistaNameResolver implements VistaNameResolver {
             .filter(PatientIdentifierSegment::isVistaSite)
             .map(PatientIdentifierSegment::assigningLocation)
             .collect(toList());
-
     log.info("Stations: {}", stationIds);
     return stationIds;
   }
