@@ -35,32 +35,32 @@ public class MpiVistaNameResolver implements VistaNameResolver {
 
   @Getter private final VistalinkProperties properties;
 
-  @Getter @Setter private Function<String, PRPAIN201310UV02> request1309;
+  @Setter private Function<String, PRPAIN201310UV02> request1309;
 
   /**
    * Create a new instance with required properties, mpi configuration, and MPI request. If the
    * request is not specified, default to the SoapMPI request to 1309.
    */
   public MpiVistaNameResolver(
-      @Autowired VistalinkProperties properties,
-      @Autowired MpiConfig mpiConfig,
-      Function<String, PRPAIN201310UV02> request1309) {
+      @Autowired VistalinkProperties properties, @Autowired MpiConfig mpiConfig) {
     this.properties = properties;
     this.mpiConfig = mpiConfig;
-    if (request1309 != null) {
-      this.request1309 = request1309;
-    } else {
-      this.request1309 =
-          (icn) -> {
-            try {
-              return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
-            } catch (Exception e) {
-              throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
-            }
-          };
-    }
     log.info("Accessing MPI at {}", mpiConfig.getUrl());
     log.info("Presenting as {}", mpiConfig().getKeyAlias());
+  }
+
+  /** Lazy Getter. */
+  public Function<String, PRPAIN201310UV02> request1309() {
+    if (request1309 == null) {
+      return (icn) -> {
+        try {
+          return SoapMasterPatientIndexClient.of(mpiConfig).request1309ByIcn(icn);
+        } catch (Exception e) {
+          throw new NameResolutionException(ErrorCodes.MREQ01, "Failed to request 1309", e);
+        }
+      };
+    }
+    return request1309;
   }
 
   @Override

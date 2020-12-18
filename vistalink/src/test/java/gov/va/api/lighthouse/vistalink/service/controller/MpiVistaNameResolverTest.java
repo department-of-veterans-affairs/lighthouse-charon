@@ -61,6 +61,19 @@ public class MpiVistaNameResolverTest {
   }
 
   @Test
+  void request1309() {
+    var resolver = new MpiVistaNameResolver(properties, config);
+    assertThat(resolver.request1309()).isInstanceOf(Function.class);
+    Function<String, PRPAIN201310UV02> mockFunction =
+        (s) -> {
+          return mockResponse;
+        };
+    var resolverFunctionOverride = new MpiVistaNameResolver(properties, config);
+    resolverFunctionOverride.request1309(mockFunction);
+    assertThat(resolverFunctionOverride.request1309()).isEqualTo(mockFunction);
+  }
+
+  @Test
   void resolveExplodesWhenMultiplePatientsAreFound() {
     PRPAIN201310UV02MFMIMT700711UV01ControlActProcess controlActProcess =
         PRPAIN201310UV02MFMIMT700711UV01ControlActProcess.builder()
@@ -106,7 +119,8 @@ public class MpiVistaNameResolverTest {
         (s) -> {
           return mockResponse;
         };
-    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, config, mockFunction);
+    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, config);
+    resolver.request1309(mockFunction);
     assertThatExceptionOfType(VistaLinkExceptions.UnknownPatient.class)
         .isThrownBy(() -> resolver.resolve(RpcVistaTargets.builder().forPatient("1").build()));
   }
@@ -140,7 +154,8 @@ public class MpiVistaNameResolverTest {
         (s) -> {
           return mockResponse;
         };
-    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, config, mockFunction);
+    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, config);
+    resolver.request1309(mockFunction);
     assertThat(resolver.resolve(RpcVistaTargets.builder().forPatient("1").build()))
         .isEqualTo(
             List.of(
