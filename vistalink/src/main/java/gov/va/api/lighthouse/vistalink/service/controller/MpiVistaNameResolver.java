@@ -29,7 +29,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor(onConstructor_ = @Autowired)
 @ConditionalOnProperty(name = "vistalink.resolver", havingValue = "mpi")
 @Slf4j
 public class MpiVistaNameResolver implements VistaNameResolver {
@@ -47,6 +46,17 @@ public class MpiVistaNameResolver implements VistaNameResolver {
         }
       };
 
+  @Getter private final MpiConfig mpiConfig;
+
+  /** Create a new instance with required properties and mpi configuration. */
+  public MpiVistaNameResolver(
+      @Autowired VistalinkProperties properties, @Autowired MpiConfig mpiConfig) {
+    this.properties = properties;
+    this.mpiConfig = mpiConfig;
+    log.info("Accessing MPI at {}", mpiConfig.getUrl());
+    log.info("Presenting as {}", mpiConfig().getKeyAlias());
+  }
+
   @Override
   public List<ConnectionDetails> resolve(RpcVistaTargets rpcVistaTargets) {
     Set<String> vistas = new HashSet<>();
@@ -57,6 +67,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     vistas.removeAll(rpcVistaTargets.exclude());
     var knownVistas = properties.names();
     vistas.removeIf(s -> !knownVistas.contains(s));
+    log.info("Known Vistas: {}", knownVistas);
     return properties().vistas().stream().filter(c -> vistas.contains(c.name())).collect(toList());
   }
 
