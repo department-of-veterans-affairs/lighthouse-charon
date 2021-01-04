@@ -82,7 +82,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     if (isBlank(icn)) {
       return List.of();
     }
-    PRPAIN201310UV02 response = request1309.apply(icn);
+    PRPAIN201310UV02 response = request1309().apply(icn);
     log.info("Response: {}", response);
     List<PRPAIN201310UV02MFMIMT700711UV01Subject1> maybePatients =
         response.getControlActProcess().getSubject();
