@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.vistalink.service.api.RpcDetails.Parameter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,12 @@ public class RpcDetailsTest {
                 .build()
                 .type())
         .isEqualTo("array");
+    assertThat(
+            RpcDetails.Parameter.builder()
+                .namedArray(Map.of("RED", "RED FUGAZI", "BLUE", "BLUE FUGAZI"))
+                .build()
+                .type())
+        .isEqualTo("array");
   }
 
   @Test
@@ -90,6 +97,12 @@ public class RpcDetailsTest {
                 .build()
                 .value())
         .isEqualTo(List.of("RED FUGAZI", "BLUE FUGAZI"));
+    assertThat(
+            RpcDetails.Parameter.builder()
+                .namedArray(Map.of("RED", "RED FUGAZI", "BLUE", "BLUE FUGAZI"))
+                .build()
+                .value())
+        .isEqualTo(Map.of("RED", "RED FUGAZI", "BLUE", "BLUE FUGAZI"));
   }
 
   @Test
@@ -117,6 +130,7 @@ public class RpcDetailsTest {
                                 .ref("ONE FUGAZI")
                                 .string("TWO FUGAZI")
                                 .array(List.of("RED FUGAZI", "BLUE FUGAZI"))
+                                .namedArray(Map.of("RED", "RED FUGAZI", "BLUE", "BLUE FUGAZI"))
                                 .build())));
   }
 }

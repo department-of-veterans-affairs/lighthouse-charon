@@ -46,7 +46,8 @@ Applications will invoke the Vistalink API to gather data for a particular patie
     parameters: [   ................... Optional list of string, reference, or array type parameters
       { string: value },
       { ref: reference },
-      { array: [ value, value, ... ] }
+      { array: [ value, value, ... ] },
+      { namedArray: { key: value, key: value, ... }
     ]
   }
 }
@@ -138,7 +139,8 @@ VISTA_DIVISION_IEN=605
 #VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST STRING","parameters":[{"string":"shanktopus"}]}
 #VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST GLOBAL ARRAY","parameters":[{"array":["go","shanktopus"]}]}
 #VISTA_RPC={"context":"XOBV VISTALINK TESTER","name":"XOBV TEST LOCAL ARRAY","parameters":[{"array":["go","shanktopus"]}]}
-VISTA_RPC={"name":"VAFCTFU CONVERT DFN TO ICN","context":"VAFCTF RPC CALLS","parameters":[{"string":"100848"}]}
+#VISTA_RPC={"name":"VAFCTFU CONVERT DFN TO ICN","context":"VAFCTF RPC CALLS","parameters":[{"string":"100848"}]}
+VISTA_RPC={"name":"VPR GET PATIENT DATA JSON","context":"VPR APPLICATION PROXY","parameters":[{"namedArray":{"patientId":"100848","domain":"document","text":"1","start":"","stop":"","max":"","id":"","uid":""}}]}
 ```
 
 `VISTA_RPC` matches the `rpc` structure of the Vistalink API request.
