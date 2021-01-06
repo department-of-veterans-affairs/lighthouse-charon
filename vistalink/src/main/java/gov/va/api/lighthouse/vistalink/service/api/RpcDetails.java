@@ -2,6 +2,12 @@ package gov.va.api.lighthouse.vistalink.service.api;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @Builder
@@ -35,8 +42,13 @@ public class RpcDetails {
   @NoArgsConstructor
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   public static class Parameter {
+    @JsonDeserialize(using = ParameterValueDeserializer.class)
     private String ref;
+
+    @JsonDeserialize(using = ParameterValueDeserializer.class)
     private String string;
+
+    @JsonDeserialize(contentUsing = ParameterValueDeserializer.class)
     private List<String> array;
 
     /**
@@ -99,6 +111,19 @@ public class RpcDetails {
         return array;
       }
       throw new IllegalStateException("unknown type");
+    }
+  }
+
+  public static class ParameterValueDeserializer extends StdDeserializer<String> {
+
+    public ParameterValueDeserializer() {
+      super(String.class);
+    }
+
+    @Override
+    public String deserialize(JsonParser p, DeserializationContext ctxt)
+        throws IOException, JsonProcessingException {
+      return StringUtils.trim(p.getText());
     }
   }
 }
