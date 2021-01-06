@@ -2,14 +2,22 @@ package gov.va.api.lighthouse.vistalink.service.api;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @Builder
@@ -35,19 +43,29 @@ public class RpcDetails {
   @NoArgsConstructor
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   public static class Parameter {
+    @JsonDeserialize(using = ParameterValueDeserializer.class)
     private String ref;
+
+    @JsonDeserialize(using = ParameterValueDeserializer.class)
     private String string;
+
+    @JsonDeserialize(contentUsing = ParameterValueDeserializer.class)
     private List<String> array;
+
+    @JsonDeserialize(contentUsing = ParameterValueDeserializer.class)
+    private Map<String, String> namedArray;
 
     /**
      * Create a new instance, however only one parameter can be specified. The other must be null.
      * This constructor is explicitly intended to be used with a Builder.
      */
     @Builder
-    private Parameter(String ref, String string, List<String> array) {
+    private Parameter(
+        String ref, String string, List<String> array, Map<String, String> namedArray) {
       this.ref = ref;
       this.string = string;
       this.array = array;
+      this.namedArray = namedArray;
       checkOnlyOneSet();
     }
 
@@ -63,8 +81,12 @@ public class RpcDetails {
       if (array != null) {
         count++;
       }
+      if (namedArray != null) {
+        count++;
+      }
       if (count != 1) {
-        throw new IllegalArgumentException("Exact one of ref, string, or array must be specified");
+        throw new IllegalArgumentException(
+            "Exact one of ref, string, array, or namedArray must be specified");
       }
     }
 
@@ -84,6 +106,9 @@ public class RpcDetails {
       if (array != null) {
         return "array";
       }
+      if (namedArray != null) {
+        return "array";
+      }
       throw new IllegalStateException("unknown type");
     }
 
@@ -98,7 +123,23 @@ public class RpcDetails {
       if (array != null) {
         return array;
       }
+      if (namedArray != null) {
+        return namedArray;
+      }
       throw new IllegalStateException("unknown type");
+    }
+  }
+
+  public static class ParameterValueDeserializer extends StdDeserializer<String> {
+
+    public ParameterValueDeserializer() {
+      super(String.class);
+    }
+
+    @Override
+    public String deserialize(JsonParser p, DeserializationContext ctxt)
+        throws IOException, JsonProcessingException {
+      return StringUtils.trim(p.getText());
     }
   }
 }
