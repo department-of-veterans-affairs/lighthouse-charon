@@ -1,10 +1,10 @@
-package gov.va.api.lighthouse.vistalink.service.api;
+package gov.va.api.lighthouse.vistalink.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
-import gov.va.api.lighthouse.vistalink.service.api.RpcDetails.Parameter;
+import gov.va.api.lighthouse.vistalink.api.RpcDetails.Parameter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;

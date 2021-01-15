@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import gov.va.api.lighthouse.mpi.MpiConfig;
-import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
+import gov.va.api.lighthouse.vistalink.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import java.util.List;

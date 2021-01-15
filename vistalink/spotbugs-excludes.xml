@@ -15,15 +15,4 @@
     <Class name="gov.va.api.lighthouse.vistalink.service.config.VistalinkPropertiesConfig"/>
     <Bug pattern="PATH_TRAVERSAL_IN"/>
   </Match>
-  <!-- [ERROR] Redundant nullcheck of this$results, which is known to be non-null in gov.va.api.lighthouse.vistalink.service.api.RpcResponse.equals(Object) [gov.va.api.lighthouse.vistalink.service.api.RpcResponse] Redundant null check at RpcResponse.java:[line 10] RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE -->
-  <!--
-  Lombok generated code.
-  -->
-  <Match>
-    <Or>
-      <Class name="gov.va.api.lighthouse.vistalink.service.api.RpcResponse"/>
-      <Class name="gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets"/>
-    </Or>
-    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
-  </Match>
 </FindBugsFilter>

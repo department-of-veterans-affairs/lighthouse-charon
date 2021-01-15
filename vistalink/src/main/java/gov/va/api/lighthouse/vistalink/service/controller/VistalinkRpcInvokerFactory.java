@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

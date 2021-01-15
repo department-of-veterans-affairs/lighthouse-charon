@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.vistalink.service.api;
+package gov.va.api.lighthouse.vistalink.api;
 
 import java.util.ArrayList;
 import java.util.List;

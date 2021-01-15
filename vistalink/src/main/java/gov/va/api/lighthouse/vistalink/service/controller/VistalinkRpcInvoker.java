@@ -1,8 +1,8 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
-import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
-import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
+import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;

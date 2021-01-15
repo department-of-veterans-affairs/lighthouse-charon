@@ -1,8 +1,8 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownPatient;

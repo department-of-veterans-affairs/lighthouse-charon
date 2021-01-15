@@ -3,9 +3,9 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
+import gov.va.api.lighthouse.vistalink.api.RpcRequest;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse.Status;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import org.junit.jupiter.api.Test;
