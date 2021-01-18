@@ -3,9 +3,9 @@ package gov.va.api.lighthouse.vistalink.tests;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
-import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
-import gov.va.api.lighthouse.vistalink.service.api.RpcInvocationResult;
-import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
+import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.controller.VistalinkRpcInvokerFactory;
 import java.util.Locale;

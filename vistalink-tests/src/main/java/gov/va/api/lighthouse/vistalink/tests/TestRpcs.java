@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.vistalink.tests;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.api.RpcDetails;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;

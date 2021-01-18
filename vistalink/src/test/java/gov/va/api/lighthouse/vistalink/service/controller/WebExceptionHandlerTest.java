@@ -11,11 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
-import gov.va.api.lighthouse.vistalink.service.api.RpcDetails;
-import gov.va.api.lighthouse.vistalink.service.api.RpcPrincipal;
-import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse.Status;
-import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
+import gov.va.api.lighthouse.vistalink.api.RpcDetails;
+import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
+import gov.va.api.lighthouse.vistalink.api.RpcRequest;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse.Status;
+import gov.va.api.lighthouse.vistalink.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;

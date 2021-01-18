@@ -5,7 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.talos.ClientKeyProtectedEndpointFilter;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
