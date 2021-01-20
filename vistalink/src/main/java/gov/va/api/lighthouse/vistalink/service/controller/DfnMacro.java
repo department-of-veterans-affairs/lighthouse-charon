@@ -5,7 +5,7 @@ public class DfnMacro implements Macro {
   @Override
   public String evaluate(MacroExecutionContext ctx, String value) {
     // todo
-    return null;
+    return "todoDfnMacro";
   }
 
   @Override

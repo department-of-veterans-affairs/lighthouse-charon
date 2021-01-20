@@ -11,7 +11,7 @@ public class MacroProcessor {
 
   String evaluate(String value) {
     if (value.startsWith("${dfn(")) {
-      macro = new DfnMacro();
+      this.macro = new DfnMacro();
     }
     return macro.evaluate(macroExecutionContext, value);
   }
