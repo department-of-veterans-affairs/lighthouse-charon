@@ -2,7 +2,7 @@ package gov.va.api.lighthouse.vistalink.tests;
 
 import static org.junit.Assume.assumeTrue;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.health.autoconfig.logging.Redact;
-import gov.va.api.lighthouse.vistalink.service.api.RpcRequest;
-import gov.va.api.lighthouse.vistalink.service.api.RpcResponse;
+import gov.va.api.lighthouse.vistalink.api.RpcRequest;
+import gov.va.api.lighthouse.vistalink.api.RpcResponse;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;

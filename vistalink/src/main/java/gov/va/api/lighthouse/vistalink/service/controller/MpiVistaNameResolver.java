@@ -6,7 +6,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import gov.va.api.lighthouse.mpi.MpiConfig;
 import gov.va.api.lighthouse.mpi.PatientIdentifierSegment;
 import gov.va.api.lighthouse.mpi.SoapMasterPatientIndexClient;
-import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
+import gov.va.api.lighthouse.vistalink.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.NameResolutionException;

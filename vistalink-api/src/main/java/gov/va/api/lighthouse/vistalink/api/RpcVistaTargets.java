@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.vistalink.service.api;
+package gov.va.api.lighthouse.vistalink.api;
 
 import static io.micrometer.core.instrument.util.StringUtils.isNotBlank;
 

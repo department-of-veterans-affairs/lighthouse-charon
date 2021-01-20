@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.vistalink.service.api;
+package gov.va.api.lighthouse.vistalink.api;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;

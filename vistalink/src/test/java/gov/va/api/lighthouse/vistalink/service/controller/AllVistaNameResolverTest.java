@@ -3,7 +3,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
+import gov.va.api.lighthouse.vistalink.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.vistalink.service.controller.VistaLinkExceptions.UnknownVista;

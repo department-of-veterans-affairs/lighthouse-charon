@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-import gov.va.api.lighthouse.vistalink.service.api.RpcVistaTargets;
+import gov.va.api.lighthouse.vistalink.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import java.util.List;
