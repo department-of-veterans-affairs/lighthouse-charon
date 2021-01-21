@@ -14,6 +14,6 @@ public class MacroProcessorTest {
             .macroExecutionContext(new ExampleMacroExecutionContext())
             .build();
     assertThat(macroProcessor).isInstanceOf(MacroProcessor.class);
-    assertThat(macroProcessor.evaluate("${dfn(")).isEqualTo("todoDfnMacro");
+    assertThat(macroProcessor.evaluate("${dfn(123)}")).isEqualTo("todoDfnMacro");
   }
 }
