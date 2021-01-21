@@ -25,6 +25,6 @@ public class DfnMacro implements Macro {
 
   @Override
   public String name() {
-    return "ICN TO DFN";
+    return "dfn";
   }
 }

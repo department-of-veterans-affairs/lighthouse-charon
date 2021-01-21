@@ -18,6 +18,7 @@ public class MacroProcessor {
       return value;
     }
     log.info("Macro found: {}", macro.name());
-    return macro.evaluate(macroExecutionContext, value);
+    return macro.evaluate(
+        macroExecutionContext, value.substring(macro.name().length() + 3, value.length() - 2));
   }
 }
