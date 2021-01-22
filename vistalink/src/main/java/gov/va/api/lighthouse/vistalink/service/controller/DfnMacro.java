@@ -1,6 +1,5 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-
 public class DfnMacro implements Macro {
 
   @Override

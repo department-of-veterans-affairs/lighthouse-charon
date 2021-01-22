@@ -1,14 +1,17 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 @AllArgsConstructor(onConstructor_ = @Autowired)
 public class MacroProcessorFactory {
 
-  Macro macro;
+  List<Macro> macros;
 
   MacroProcessor create(MacroExecutionContext ctx) {
-    return MacroProcessor.builder().macro(macro).macroExecutionContext(ctx).build();
+    return MacroProcessor.builder().macros(macros).macroExecutionContext(ctx).build();
   }
 }

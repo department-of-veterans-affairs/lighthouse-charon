@@ -50,10 +50,17 @@ public class VistalinkRpcInvoker implements RpcInvoker {
 
   private final VistaLinkConnection connection;
 
+  @SuppressWarnings("unused")
+  private final MacroProcessorFactory macroProcessorFactory;
+
   @Builder
-  VistalinkRpcInvoker(RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
+  VistalinkRpcInvoker(
+      RpcPrincipal rpcPrincipal,
+      ConnectionDetails connectionDetails,
+      MacroProcessorFactory macroProcessorFactory) {
     this.rpcPrincipal = rpcPrincipal;
     this.connectionDetails = connectionDetails;
+    this.macroProcessorFactory = macroProcessorFactory;
     handler = createLoginCallbackHandler();
     loginContext = createLoginContext();
     kernelPrincipal = createVistaKernelPrincipal();
