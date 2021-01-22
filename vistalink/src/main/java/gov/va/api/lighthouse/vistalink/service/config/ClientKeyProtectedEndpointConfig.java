@@ -48,7 +48,8 @@ public class ClientKeyProtectedEndpointConfig {
             .unauthorizedResponse(unauthorizedResponse())
             .build());
 
-    rpcRequestFilter.addUrlPatterns("/rpc", "/rpc/connections");
+    rpcRequestFilter.addUrlPatterns(
+        "/rpc", "/rpc/connections", "/vistalink/rpc", "/vistalink/rpc/connections");
 
     return rpcRequestFilter;
   }
