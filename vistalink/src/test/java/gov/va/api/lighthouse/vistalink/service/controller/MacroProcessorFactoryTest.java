@@ -9,7 +9,5 @@ public class MacroProcessorFactoryTest {
   void buildMacroProcessorFactory() {
     var macroProcessorFactory = new MacroProcessorFactory(new DfnMacro());
     assertThat(macroProcessorFactory).isInstanceOf(MacroProcessorFactory.class);
-    assertThat(macroProcessorFactory.create(new ExampleMacroExecutionContext()))
-        .isInstanceOf(MacroProcessor.class);
   }
 }

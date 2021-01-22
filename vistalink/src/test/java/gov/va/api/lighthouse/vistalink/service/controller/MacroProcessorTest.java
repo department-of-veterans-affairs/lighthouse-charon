@@ -8,11 +8,7 @@ public class MacroProcessorTest {
 
   @Test
   void buildMacroProcessorTest() {
-    var macroProcessor =
-        MacroProcessor.builder()
-            .macro(new DfnMacro())
-            .macroExecutionContext(new ExampleMacroExecutionContext())
-            .build();
+    var macroProcessor = MacroProcessor.builder().macro(new DfnMacro()).build();
     assertThat(macroProcessor).isInstanceOf(MacroProcessor.class);
     assertThat(macroProcessor.evaluate("${dfn(123)}")).isEqualTo("todoDfnMacro");
   }
