@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ToString(onlyExplicitlyIncluded = true)
-public class VistalinkRpcInvoker implements RpcInvoker {
+public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
 
   private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
@@ -50,7 +50,6 @@ public class VistalinkRpcInvoker implements RpcInvoker {
 
   private final VistaLinkConnection connection;
 
-  @SuppressWarnings("unused")
   private final MacroProcessorFactory macroProcessorFactory;
 
   @Builder
@@ -160,9 +159,18 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       if (rpcDetails.version().isPresent()) {
         vistalinkRequest.setRpcVersion(rpcDetails.version().get());
       }
+      MacroProcessor macroProcessor = macroProcessorFactory.create(this);
       for (int i = 0; i < rpcDetails.parameters().size(); i++) {
         var parameter = rpcDetails.parameters().get(i);
-        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), parameter.value());
+        var value = parameter.value();
+        switch (parameter.type()) {
+          case "string":
+            value = macroProcessor.evaluate(value.toString());
+            break;
+          default:
+            // Type not supported by macros
+        }
+        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("{} Response {} chars", this, vistalinkResponse.getRawResponse().length());

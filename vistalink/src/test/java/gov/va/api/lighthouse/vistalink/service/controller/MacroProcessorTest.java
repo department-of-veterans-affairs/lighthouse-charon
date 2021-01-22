@@ -12,5 +12,6 @@ public class MacroProcessorTest {
     var macroProcessor = MacroProcessor.builder().macros(List.of(new DfnMacro())).build();
     assertThat(macroProcessor).isInstanceOf(MacroProcessor.class);
     assertThat(macroProcessor.evaluate("${dfn(123)}")).isEqualTo("todoDfnMacro");
+    assertThat(macroProcessor.evaluate("notAMacro")).isEqualTo("notAMacro");
   }
 }
