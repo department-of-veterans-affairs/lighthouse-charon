@@ -16,12 +16,12 @@ public class VistalinkModelExceptions {
   }
 
   public static final class InvalidVistaResponse extends VistaModelException {
-    public InvalidVistaResponse() {
-      super(String.format("VistA response is invalid"));
+    public InvalidVistaResponse(String message) {
+      super(message);
     }
 
-    public InvalidVistaResponse(Throwable cause) {
-      super(String.format("VistA response is invalid"), cause);
+    public InvalidVistaResponse(String message, Throwable cause) {
+      super(message, cause);
     }
   }
 }
