@@ -1,10 +1,12 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
+
+// @Slf4j
 public class DfnMacro implements Macro {
 
   @Override
   public String evaluate(MacroExecutionContext ctx, String value) {
-    //    try{
+    //    try {
     //      var vistalinkRequest = RpcRequestFactory.getRpcRequest();
     //      vistalinkRequest.setRpcContext("VAFCTF RPC CALLS");
     //      vistalinkRequest.setUseProprietaryMessageFormat(true);
@@ -14,7 +16,7 @@ public class DfnMacro implements Macro {
     //    } catch (FoundationsException e) {
     //      log.info("Exception: " + e.getMessage());
     //    }
-    return "todoDfnMacro";
+    return value;
   }
 
   @Override

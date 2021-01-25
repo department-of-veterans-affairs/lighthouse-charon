@@ -17,12 +17,11 @@ public class MacroProcessorTest {
   void checkMacroProcessor() {
     var macroProcessor =
         MacroProcessor.builder()
-            .macros(List.of(new AppendXMacro(), new ToUpperCaseMacro(), new DfnMacro()))
+            .macros(List.of(new AppendXMacro(), new ToUpperCaseMacro()))
             .macroExecutionContext(executionContext)
             .build();
     assertThat(macroProcessor.evaluate("${appendx(123)}")).isEqualTo("123x");
     assertThat(macroProcessor.evaluate("${touppercase(abc)}")).isEqualTo("ABC");
-    assertThat(macroProcessor.evaluate("${dfn(456)}")).isEqualTo("todoDfnMacro");
   }
 
   @Test
