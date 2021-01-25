@@ -80,6 +80,10 @@ public class VprGetPatientData
     }
   }
 
+  /**
+   * start and stop are currently not supported but nulls are added to the parameters in their place
+   * because VistA cares about parameter order.
+   */
   @Builder
   static class Request implements TypeSafeRpcRequest {
     String dfn;
@@ -102,6 +106,8 @@ public class VprGetPatientData
                   RpcDetails.Parameter.builder()
                       .array(type.stream().map(Enum::name).collect(Collectors.toList()))
                       .build(),
+                  RpcDetails.Parameter.builder().string(null).build(),
+                  RpcDetails.Parameter.builder().string(null).build(),
                   RpcDetails.Parameter.builder().string(max).build(),
                   RpcDetails.Parameter.builder().string(id).build(),
                   RpcDetails.Parameter.builder().array(filter).build()))

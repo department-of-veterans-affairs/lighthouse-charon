@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.vistalink.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -12,12 +13,35 @@ import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 public class XmlResponseRpcTest {
-
   Known itIsKnown =
       Known.builder()
           .knownAttribute("i know this attribute")
           .knownProperty("known property")
           .build();
+
+  @Test
+  public void deserializeBadKnownThrows() {
+    assertThrows(
+        VistalinkModelExceptions.VistaModelException.class,
+        () ->
+            XmlResponseRpc.deserialize(
+                "<known knownAttribute='i know this attribute'>\n"
+                    + "<knownProperty>know property</knownProperty>\n"
+                    + "<unclosed xml tag uh oh! known>",
+                Known.class));
+  }
+
+  @Test
+  public void deserializeBadKnownThrowsVistaModelException() {
+    assertThrows(
+        VistalinkModelExceptions.VistaModelException.class,
+        () ->
+            XmlResponseRpc.deserialize(
+                "<known knownAttribute='i know this attribute'>\n"
+                    + "<knownProperty>know property</knownProperty>\n"
+                    + "<unclosed xml tag uh oh! known>",
+                Known.class));
+  }
 
   @Test
   public void deserializeKnown() {
@@ -28,6 +52,13 @@ public class XmlResponseRpcTest {
                     + "</known>",
                 Known.class))
         .isEqualTo(itIsKnown);
+  }
+
+  @Test
+  public void deserializeNullThrowsVistaModelException() {
+    assertThrows(
+        VistalinkModelExceptions.VistaModelException.class,
+        () -> XmlResponseRpc.deserialize(null, Known.class));
   }
 
   @Test

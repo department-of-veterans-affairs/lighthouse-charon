@@ -12,7 +12,7 @@
   <version>2.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
-    <service-auto-config.version>7.0.20</service-auto-config.version>
+    <project.parent.version>7.0.20</project.parent.version>
     <!-- TODO: Remove this line when we have a full model to write tests for. -->
     <jacoco.coverage>0</jacoco.coverage>
   </properties>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>gov.va.api.health</groupId>
       <artifactId>service-auto-config</artifactId>
-      <version>${service-auto-config.version}</version>
+      <version>${project.parent.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
