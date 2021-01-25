@@ -5,5 +5,5 @@ import gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.TypeSafeRpcReque
 import java.util.List;
 
 public interface TypeSafeRpc<R extends TypeSafeRpcRequest, P extends TypeSafeRpcResponse> {
-  TypeSafeRpcResponse fromResult(List<RpcInvocationResult> results);
+  TypeSafeRpcResponse fromResults(List<RpcInvocationResult> results);
 }

@@ -5,10 +5,13 @@ import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpc;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcResponse;
 import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
-import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,14 +22,14 @@ public class VprGetPatientData
   private static final String RPC_CONTEXT = "VPR APPLICATION PROXY";
 
   /** Serialize the RPC results to a response object. */
-  public VprGetPatientData.Response fromResult(List<RpcInvocationResult> results) {
+  public VprGetPatientData.Response fromResults(List<RpcInvocationResult> invocationResults) {
     // TO-DO implement with help of XmlResponseRpc utility class
     return Response.builder()
         .results(
-            results.stream()
-                .filter(r -> r.error().isEmpty())
-                .map(r -> r.response())
-                .map(r -> XmlResponseRpc.deserialize(r, Response.Results.class))
+            invocationResults.stream()
+                .filter(invocationResult -> invocationResult.error().isEmpty())
+                .map(invocationResult -> invocationResult.response())
+                .map(response -> XmlResponseRpc.deserialize(response, Response.Results.class))
                 .collect(Collectors.toList()))
         .build();
   }
@@ -36,12 +39,20 @@ public class VprGetPatientData
     consults,
     demographics,
     documents,
+    education,
+    exams,
+    factors,
+    flags,
     immunizations,
+    insurance,
     labs,
     meds,
+    observations,
     problems,
     procedures,
     reactions,
+    reminders,
+    skinTests,
     visits,
     vitals
   }
@@ -52,24 +63,24 @@ public class VprGetPatientData
     List<Results> results;
 
     @Data
+    @XmlRootElement
+    @XmlAccessorType(XmlAccessType.FIELD)
     static class Results {
+      @XmlAttribute String version;
+      @XmlAttribute String timeZone;
       List<Vital> vitals;
     }
   }
 
   @Builder
   static class Request implements TypeSafeRpcRequest {
-    String icn;
+    String dfn;
 
-    Set<Domains> domains;
-
-    Instant start;
-
-    Instant stop;
+    Set<Domains> type;
 
     String max;
 
-    String item;
+    String id;
 
     List<String> filter;
 
@@ -79,18 +90,12 @@ public class VprGetPatientData
           .name(RPC_NAME)
           .parameters(
               List.of(
-                  RpcDetails.Parameter.builder().string(icn).build(),
+                  RpcDetails.Parameter.builder().string(dfn).build(),
                   RpcDetails.Parameter.builder()
-                      .array(domains.stream().map(Enum::name).collect(Collectors.toList()))
-                      .build(),
-                  RpcDetails.Parameter.builder()
-                      .string(start != null ? start.toString() : null)
-                      .build(),
-                  RpcDetails.Parameter.builder()
-                      .string(stop != null ? stop.toString() : null)
+                      .array(type.stream().map(Enum::name).collect(Collectors.toList()))
                       .build(),
                   RpcDetails.Parameter.builder().string(max).build(),
-                  RpcDetails.Parameter.builder().string(item).build(),
+                  RpcDetails.Parameter.builder().string(id).build(),
                   RpcDetails.Parameter.builder().array(filter).build()))
           .build();
     }
