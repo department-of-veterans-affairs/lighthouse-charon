@@ -162,14 +162,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
       MacroProcessor macroProcessor = macroProcessorFactory.create(this);
       for (int i = 0; i < rpcDetails.parameters().size(); i++) {
         var parameter = rpcDetails.parameters().get(i);
-        var value = parameter.value();
-        switch (parameter.type()) {
-          case "string":
-            value = macroProcessor.evaluate(value.toString());
-            break;
-          default:
-            // Type not supported by macros
-        }
+        var value = macroProcessor.evaluate(parameter.value().toString());
         vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);

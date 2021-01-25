@@ -9,7 +9,9 @@ public class VistalinkRpcInvokerFactoryTest {
 
   @Test
   void createReturnsAnRpcInvokerFactory() {
-    assertThat(new VistalinkRpcInvokerFactory(new MacroProcessorFactory(List.of(new DfnMacro()))))
+    assertThat(
+            new VistalinkRpcInvokerFactory(
+                new MacroProcessorFactory(List.of(new AppendXMacro(), new ToUpperCaseMacro()))))
         .isInstanceOf(RpcInvokerFactory.class);
   }
 }

@@ -2,22 +2,34 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import java.util.List;
 import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
+@Value
 @Slf4j
 @Builder
 public class MacroProcessor {
 
-  List<Macro> macros;
+  @NonNull List<Macro> macros;
 
-  MacroExecutionContext macroExecutionContext;
+  @NonNull MacroExecutionContext macroExecutionContext;
 
-  String evaluate(String value) {
+  /** Iterates over macro list, applies the one that is found in the syntax. */
+  public String evaluate(String value) {
     for (Macro macro : macros) {
       if (value.startsWith("${" + macro.name() + "(") && value.endsWith(")}")) {
-        log.info("Macro found: {}", macro.name());
-        return macro.evaluate(
-            macroExecutionContext, value.substring(macro.name().length() + 3, value.length() - 2));
+        try {
+          var subst =
+              macro.evaluate(
+                  macroExecutionContext,
+                  value.substring(macro.name().length() + 3, value.length() - 2));
+          log.info("Macro {}: {} = {}", macro.name(), value, subst);
+          return subst;
+        } catch (Exception e) {
+          log.error("Macro {}: {} failed.", macro.name(), value, e);
+          throw e;
+        }
       }
     }
     return value;
