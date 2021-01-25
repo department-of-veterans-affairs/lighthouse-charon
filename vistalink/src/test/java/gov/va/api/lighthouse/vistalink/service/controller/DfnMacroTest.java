@@ -15,7 +15,7 @@ public class DfnMacroTest {
   @Test
   void checkDfnMacro() {
     var dfn = new DfnMacro();
-    assertThat(dfn.name()).isEqualTo("dfn"); //Coverage requirement, will remove
+    assertThat(dfn.name()).isEqualTo("dfn"); // Coverage requirement, will remove
     assertThat(dfn.evaluate(executionContext, "5000000347")).isEqualTo("5000000347");
   }
 }

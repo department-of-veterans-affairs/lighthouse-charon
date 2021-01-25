@@ -1,6 +1,5 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
-
 // @Slf4j
 public class DfnMacro implements Macro {
 

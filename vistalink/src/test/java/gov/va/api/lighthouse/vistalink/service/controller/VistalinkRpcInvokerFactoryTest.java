@@ -11,7 +11,8 @@ public class VistalinkRpcInvokerFactoryTest {
   void createReturnsAnRpcInvokerFactory() {
     assertThat(
             new VistalinkRpcInvokerFactory(
-                new MacroProcessorFactory(List.of(new AppendXMacro(), new ToUpperCaseMacro()))))
+                new MacroProcessorFactory(
+                    List.of(new FugaziMacros.AppendXMacro(), new FugaziMacros.ToUpperCaseMacro()))))
         .isInstanceOf(RpcInvokerFactory.class);
   }
 }
