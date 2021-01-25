@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import gov.va.api.lighthouse.vistalink.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpc;
@@ -8,12 +10,11 @@ import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class VprGetPatientData
     implements TypeSafeRpc<VprGetPatientData.Request, VprGetPatientData.Response> {
@@ -23,7 +24,8 @@ public class VprGetPatientData
 
   /** Serialize the RPC results to a response object. */
   public VprGetPatientData.Response fromResults(List<RpcInvocationResult> invocationResults) {
-    // TO-DO implement with help of XmlResponseRpc utility class
+    // TO-DO needs to handle different bad result behaviors (e.g. : ignore errors, ignore a
+    // percentage, or throw exception on errors.)
     return Response.builder()
         .results(
             invocationResults.stream()
@@ -59,16 +61,22 @@ public class VprGetPatientData
 
   @Data
   @Builder
-  static class Response implements TypeSafeRpcResponse {
+  public static class Response implements TypeSafeRpcResponse {
     List<Results> results;
 
+    @AllArgsConstructor
+    @Builder
     @Data
-    @XmlRootElement
-    @XmlAccessorType(XmlAccessType.FIELD)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @JacksonXmlRootElement(localName = "results")
     static class Results {
-      @XmlAttribute String version;
-      @XmlAttribute String timeZone;
-      List<Vital> vitals;
+      @JacksonXmlProperty(isAttribute = true)
+      String version;
+
+      @JacksonXmlProperty(isAttribute = true)
+      String timeZone;
+
+      @JacksonXmlProperty List<Vital> vitals;
     }
   }
 

@@ -13,6 +13,8 @@
   <packaging>jar</packaging>
   <properties>
     <service-auto-config.version>7.0.20</service-auto-config.version>
+    <!-- TODO: Remove this line when we have a full model to write tests for. -->
+    <jacoco.coverage>0</jacoco.coverage>
   </properties>
   <dependencies>
     <dependency>
@@ -31,6 +33,16 @@
       <artifactId>vistalink-api</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
