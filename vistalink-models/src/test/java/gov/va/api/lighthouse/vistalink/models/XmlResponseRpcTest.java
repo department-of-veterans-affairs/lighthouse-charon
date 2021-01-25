@@ -13,23 +13,11 @@ import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 public class XmlResponseRpcTest {
-  Known itIsKnown =
-      Known.builder()
+  FugaziXmlModel itIsKnown =
+      FugaziXmlModel.builder()
           .knownAttribute("i know this attribute")
           .knownProperty("known property")
           .build();
-
-  @Test
-  public void deserializeBadKnownThrows() {
-    assertThrows(
-        VistalinkModelExceptions.VistaModelException.class,
-        () ->
-            XmlResponseRpc.deserialize(
-                "<known knownAttribute='i know this attribute'>\n"
-                    + "<knownProperty>know property</knownProperty>\n"
-                    + "<unclosed xml tag uh oh! known>",
-                Known.class));
-  }
 
   @Test
   public void deserializeBadKnownThrowsVistaModelException() {
@@ -40,7 +28,7 @@ public class XmlResponseRpcTest {
                 "<known knownAttribute='i know this attribute'>\n"
                     + "<knownProperty>know property</knownProperty>\n"
                     + "<unclosed xml tag uh oh! known>",
-                Known.class));
+                FugaziXmlModel.class));
   }
 
   @Test
@@ -50,7 +38,7 @@ public class XmlResponseRpcTest {
                 "<known knownAttribute='i know this attribute'>\n"
                     + "<knownProperty>known property</knownProperty>\n"
                     + "</known>",
-                Known.class))
+                FugaziXmlModel.class))
         .isEqualTo(itIsKnown);
   }
 
@@ -58,7 +46,7 @@ public class XmlResponseRpcTest {
   public void deserializeNullThrowsVistaModelException() {
     assertThrows(
         VistalinkModelExceptions.VistaModelException.class,
-        () -> XmlResponseRpc.deserialize(null, Known.class));
+        () -> XmlResponseRpc.deserialize(null, FugaziXmlModel.class));
   }
 
   @Test
@@ -72,7 +60,7 @@ public class XmlResponseRpcTest {
                     + "<unknown unattribute='????'>\n"
                     + "<unproperty>????<unproperty>\n"
                     + "</unknown>",
-                Known.class))
+                FugaziXmlModel.class))
         .isEqualTo(itIsKnown);
   }
 
@@ -81,7 +69,7 @@ public class XmlResponseRpcTest {
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   @JacksonXmlRootElement(localName = "known")
-  private static class Known {
+  private static class FugaziXmlModel {
     @JacksonXmlProperty(isAttribute = true)
     String knownAttribute;
 
