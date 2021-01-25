@@ -12,8 +12,8 @@
   <version>2.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
-    <!-- TODO: Remove this line when we have a full model to write tests for. -->
-    <jacoco.coverage>0</jacoco.coverage>
+    <!-- TODO: Increase Coverage. -->
+    <jacoco.coverage>0.25</jacoco.coverage>
   </properties>
   <dependencies>
     <dependency>
