@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import gov.va.api.lighthouse.vistalink.api.RpcDetails.Parameter;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.NonNull;
@@ -47,9 +46,10 @@ public class MacroProcessor {
 
   public Map<String, String> evaluate(Map<String, String> value) {
     return value.entrySet().stream()
-        .collect(Collectors.toMap(Entry::getKey, e -> evaluate(e.getValue())));
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> evaluate(e.getValue())));
   }
 
+  /** Evaluate parameter based on its type. */
   public Object evaluate(Parameter parameter) {
     if (parameter == null) {
       return null;
