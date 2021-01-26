@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import gov.va.api.lighthouse.vistalink.api.RpcDetails;
@@ -69,14 +70,29 @@ public class VprGetPatientData
     @Data
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @JacksonXmlRootElement(localName = "results")
-    static class Results {
+    public static class Results {
       @JacksonXmlProperty(isAttribute = true)
       String version;
 
       @JacksonXmlProperty(isAttribute = true)
       String timeZone;
 
-      @JacksonXmlProperty List<Vital> vitals;
+      @JacksonXmlProperty Vitals vitals;
+
+      @AllArgsConstructor
+      @Builder
+      @Data
+      @NoArgsConstructor(access = AccessLevel.PRIVATE)
+      @JacksonXmlRootElement(localName = "vitals")
+      public static class Vitals {
+
+        @JacksonXmlProperty(isAttribute = true)
+        String total;
+
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "vital")
+        List<Vital> vitals;
+      }
     }
   }
 

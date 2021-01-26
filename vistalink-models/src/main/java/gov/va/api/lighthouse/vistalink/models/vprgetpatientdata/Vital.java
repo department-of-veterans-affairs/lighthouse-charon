@@ -1,37 +1,122 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
-import java.math.BigDecimal;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@Builder
 @Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@JacksonXmlRootElement(localName = "vital")
 public class Vital {
-  BigDecimal entered;
-  Facility facility;
-  Location location;
-  List<Measurement> measurements;
-  BigDecimal taken;
+  @JacksonXmlProperty Entered entered;
+  @JacksonXmlProperty Facility facility;
+  @JacksonXmlProperty Location location;
+  @JacksonXmlProperty List<Measurement> measurements;
 
-  @Data
-  static class Facility {
-    String code;
-    String name;
-  }
+  @JacksonXmlProperty
+  @JacksonXmlElementWrapper(useWrapping = false)
+  List<Removed> removed;
 
-  @Data
-  static class Location {
-    String code;
-    String name;
-  }
+  @JacksonXmlProperty Taken taken;
 
+  @AllArgsConstructor
+  @Builder
   @Data
-  static class Measurement {
-    int id;
-    int vuid;
-    String name;
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "entered")
+  public static class Entered {
+    @JacksonXmlProperty(isAttribute = true)
     String value;
+  }
+
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "facility")
+  public static class Facility {
+    @JacksonXmlProperty(isAttribute = true)
+    String code;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String name;
+  }
+
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "location")
+  public static class Location {
+    @JacksonXmlProperty(isAttribute = true)
+    String code;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String name;
+  }
+
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "measurement")
+  public static class Measurement {
+    @JacksonXmlProperty(isAttribute = true)
+    String id;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String vuid;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String name;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String value;
+
+    @JacksonXmlProperty(isAttribute = true)
     String units;
+
+    @JacksonXmlProperty(isAttribute = true)
     String metricValue;
+
+    @JacksonXmlProperty(isAttribute = true)
     String metricUnits;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String high;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String low;
+
+    @JacksonXmlProperty(isAttribute = true)
+    String bmi;
+  }
+
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "removed")
+  public static class Removed {
+    @JacksonXmlProperty(isAttribute = true)
+    String value;
+  }
+
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "taken")
+  public static class Taken {
+    @JacksonXmlProperty(isAttribute = true)
+    String value;
   }
 }
