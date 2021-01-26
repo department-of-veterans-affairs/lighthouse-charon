@@ -3,9 +3,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 import gov.va.med.exception.FoundationsException;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class DfnMacro implements Macro {
 
   @SneakyThrows
