@@ -17,7 +17,7 @@ public class MacroProcessorTest {
   @Mock MacroExecutionContext executionContext;
 
   @Test
-  void checkMacroProcessor() {
+  void checkMacroProcessorEvaluatesGoodValue() {
     var macroProcessor = macroProcessor();
     List<String> stringList = List.of("${appendx(456)}", "zxc", "${touppercase(def)}");
     List<String> expectedList = List.of("456x", "zxc", "DEF");
@@ -42,6 +42,11 @@ public class MacroProcessorTest {
   }
 
   @Test
+  void checkMacroProcessorEvaluatesNullParameter() {
+    assertThat(macroProcessor().evaluate((Parameter) null)).isNull();
+  }
+
+  @Test
   void failedEvaluationPropagatesExceptions() {
     var macroProcessor =
         MacroProcessor.builder()
@@ -62,6 +67,8 @@ public class MacroProcessorTest {
             .build();
     assertThatExceptionOfType(BoomBoom.class)
         .isThrownBy(() -> macroProcessor.evaluate("${boom()}"));
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> macroProcessor.evaluate(Parameter.builder().build()));
   }
 
   private MacroProcessor macroProcessor() {
