@@ -18,20 +18,19 @@ public class DfnMacroTest {
   @Mock MacroExecutionContext executionContext;
 
   @Test
+  void evaluateReturnValueForUnknownIcn() {
+    var dfn = new DfnMacro();
+    when(executionContext.invoke(any(RpcRequest.class))).thenThrow(new DfnMacro.IcnNotFound());
+    assertThatExceptionOfType(DfnMacro.IcnNotFound.class)
+        .isThrownBy(() -> dfn.evaluate(executionContext, "badicn"));
+  }
+
+  @Test
   void evaluateReturnsDfnForKnownIcn() {
     var dfn = new DfnMacro();
     RpcResponse response = new FugaziRpcResponse("mydfn");
     when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
     assertThat(dfn.evaluate(executionContext, "myicn")).isEqualTo("mydfn");
-  }
-
-  @Test
-  void evaluateReturnValueForUnknownIcn() {
-    var dfn = new DfnMacro();
-    RpcResponse response = new FugaziRpcResponse("-1^ICN NOT IN DATABASE");
-    when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
-    assertThatExceptionOfType(InvalidRequest.class)
-        .isThrownBy(() -> dfn.evaluate(executionContext, "badIcn"));
   }
 
   static class FugaziRpcResponse extends RpcResponse {
