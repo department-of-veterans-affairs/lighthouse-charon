@@ -15,7 +15,11 @@ public class DfnMacro implements Macro {
       vistalinkRequest.setUseProprietaryMessageFormat(true);
       vistalinkRequest.setRpcName("VAFCTFU CONVERT ICN TO DFN");
       vistalinkRequest.getParams().setParam(0, "string", value);
-      return ctx.invoke(vistalinkRequest).getResults();
+      String result = ctx.invoke(vistalinkRequest).getResults();
+      if (result.equals("-1^ICN NOT IN DATABASE")) {
+        throw new InvalidRequest(result);
+      }
+      return result;
     } catch (FoundationsException e) {
       log.info("Exception: " + e.getMessage());
     }

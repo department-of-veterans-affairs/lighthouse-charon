@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -17,12 +18,20 @@ public class DfnMacroTest {
   @Mock MacroExecutionContext executionContext;
 
   @Test
-  void checkDfnMacro() {
+  void evaluateReturnsDfnForKnownIcn() {
     var dfn = new DfnMacro();
     RpcResponse response = new FugaziRpcResponse("mydfn");
     when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
-    assertThat(dfn.name()).isEqualTo("dfn"); // Coverage requirement, will remove
     assertThat(dfn.evaluate(executionContext, "myicn")).isEqualTo("mydfn");
+  }
+
+  @Test
+  void evaluateReturnValueForUnknownIcn() {
+    var dfn = new DfnMacro();
+    RpcResponse response = new FugaziRpcResponse("-1^ICN NOT IN DATABASE");
+    when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
+    assertThatExceptionOfType(InvalidRequest.class)
+        .isThrownBy(() -> dfn.evaluate(executionContext, "badIcn"));
   }
 
   static class FugaziRpcResponse extends RpcResponse {
