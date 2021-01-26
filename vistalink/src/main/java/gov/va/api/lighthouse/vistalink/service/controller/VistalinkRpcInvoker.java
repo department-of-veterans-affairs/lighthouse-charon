@@ -139,6 +139,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   }
 
   /** Invoke an RPC with raw types. */
+  @Override
   @SneakyThrows
   public RpcResponse invoke(RpcRequest request) {
     synchronized (VistalinkRpcInvoker.class) {
@@ -162,7 +163,8 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
       MacroProcessor macroProcessor = macroProcessorFactory.create(this);
       for (int i = 0; i < rpcDetails.parameters().size(); i++) {
         var parameter = rpcDetails.parameters().get(i);
-        var value = macroProcessor.evaluate(parameter.value().toString());
+        var value = macroProcessor.evaluate(parameter);
+        log.info("{} --> {}", parameter, value);
         vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);

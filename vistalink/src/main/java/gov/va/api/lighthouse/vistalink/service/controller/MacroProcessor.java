@@ -1,6 +1,12 @@
 package gov.va.api.lighthouse.vistalink.service.controller;
 
+import static java.util.stream.Collectors.toList;
+
+import gov.va.api.lighthouse.vistalink.api.RpcDetails.Parameter;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
@@ -33,5 +39,33 @@ public class MacroProcessor {
       }
     }
     return value;
+  }
+
+  public List<String> evaluate(List<String> value) {
+    return value.stream().map(this::evaluate).collect(toList());
+  }
+
+  public Map<String, String> evaluate(Map<String, String> value) {
+    return value.entrySet().stream()
+        .collect(Collectors.toMap(Entry::getKey, e -> evaluate(e.getValue())));
+  }
+
+  public Object evaluate(Parameter parameter) {
+    if (parameter == null) {
+      return null;
+    }
+    if (parameter.isString()) {
+      return evaluate(parameter.string());
+    }
+    if (parameter.isRef()) {
+      return evaluate(parameter.ref());
+    }
+    if (parameter.isArray()) {
+      return evaluate(parameter.array());
+    }
+    if (parameter.isNamedArray()) {
+      return evaluate(parameter.namedArray());
+    }
+    throw new IllegalArgumentException("Cannot evaluate type: " + parameter.type());
   }
 }
