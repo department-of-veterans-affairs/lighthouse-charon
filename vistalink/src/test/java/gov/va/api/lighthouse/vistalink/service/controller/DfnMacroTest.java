@@ -20,7 +20,8 @@ public class DfnMacroTest {
   @Test
   void evaluateReturnValueForUnknownIcn() {
     var dfn = new DfnMacro();
-    when(executionContext.invoke(any(RpcRequest.class))).thenThrow(new DfnMacro.IcnNotFound());
+    RpcResponse response = new FugaziRpcResponse("-1^ICN NOT IN DATABASE");
+    when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
     assertThatExceptionOfType(DfnMacro.IcnNotFound.class)
         .isThrownBy(() -> dfn.evaluate(executionContext, "badicn"));
   }
