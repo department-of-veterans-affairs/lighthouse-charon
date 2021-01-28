@@ -72,22 +72,38 @@ public class RpcDetails {
     /** Verify that only parameter field is set. */
     public void checkOnlyOneSet() {
       int count = 0;
-      if (ref != null) {
+      if (isRef()) {
         count++;
       }
-      if (string != null) {
+      if (isString()) {
         count++;
       }
-      if (array != null) {
+      if (isArray()) {
         count++;
       }
-      if (namedArray != null) {
+      if (isNamedArray()) {
         count++;
       }
       if (count != 1) {
         throw new IllegalArgumentException(
             "Exact one of ref, string, array, or namedArray must be specified");
       }
+    }
+
+    public boolean isArray() {
+      return array != null;
+    }
+
+    public boolean isNamedArray() {
+      return namedArray != null;
+    }
+
+    public boolean isRef() {
+      return ref != null;
+    }
+
+    public boolean isString() {
+      return string != null;
     }
 
     @Override
@@ -97,16 +113,16 @@ public class RpcDetails {
 
     /** Determine RPC parameter type based on the fields that are set. */
     public String type() {
-      if (ref != null) {
+      if (isRef()) {
         return "ref";
       }
-      if (string != null) {
+      if (isString()) {
         return "string";
       }
-      if (array != null) {
+      if (isArray()) {
         return "array";
       }
-      if (namedArray != null) {
+      if (isNamedArray()) {
         return "array";
       }
       throw new IllegalStateException("unknown type");
@@ -114,16 +130,16 @@ public class RpcDetails {
 
     /** Determine RPC parameter value based on the fields that are set. */
     public Object value() {
-      if (ref != null) {
+      if (isRef()) {
         return ref;
       }
-      if (string != null) {
+      if (isString()) {
         return string;
       }
-      if (array != null) {
+      if (isArray()) {
         return array;
       }
-      if (namedArray != null) {
+      if (isNamedArray()) {
         return namedArray;
       }
       throw new IllegalStateException("unknown type");
