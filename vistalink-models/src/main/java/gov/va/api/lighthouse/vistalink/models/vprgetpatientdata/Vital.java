@@ -31,7 +31,6 @@ public class Vital {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "entered")
   public static class Entered {
     @JacksonXmlProperty(isAttribute = true)
     String value;
@@ -41,7 +40,6 @@ public class Vital {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "facility")
   public static class Facility {
     @JacksonXmlProperty(isAttribute = true)
     String code;
@@ -54,7 +52,6 @@ public class Vital {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "location")
   public static class Location {
     @JacksonXmlProperty(isAttribute = true)
     String code;
@@ -67,7 +64,6 @@ public class Vital {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "measurement")
   public static class Measurement {
     @JacksonXmlProperty(isAttribute = true)
     String id;
@@ -104,7 +100,6 @@ public class Vital {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "removed")
   public static class Removed {
     @JacksonXmlProperty(isAttribute = true)
     String value;
@@ -114,7 +109,6 @@ public class Vital {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "taken")
   public static class Taken {
     @JacksonXmlProperty(isAttribute = true)
     String value;

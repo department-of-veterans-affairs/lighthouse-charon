@@ -84,7 +84,6 @@ public class VprGetPatientData
       @Builder
       @Data
       @NoArgsConstructor(access = AccessLevel.PRIVATE)
-      @JacksonXmlRootElement(localName = "vitals")
       public static class Vitals {
 
         @JacksonXmlProperty(isAttribute = true)
