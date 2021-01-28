@@ -11,11 +11,15 @@
         <measurement id="32074" vuid="4500636" name="PULSE" value="66" units="/min" high="120" low="60"/>\n"
         <measurement id="32077" vuid="4500637" name="PULSE OXIMETRY" value="95" units="%" high="100" low="50"/>
         <measurement id="32073" vuid="4688725" name="RESPIRATION" value="16" units="/min" high="30" low="8"/>
-        <measurement id="32072" vuid="4500638" name="TEMPERATURE" value="98.6" units="F" metricValue="37.0" metricUnits="C" high="102" low="95"/>
+        <measurement id="32072" vuid="4500638" name="TEMPERATURE" value="98.6" units="F" metricValue="37.0" metricUnits="C" high="102" low="95">
+          <qualifiers>
+            <qualifier name="ORAL" vuid="4500642"/>
+          </qualifiers>
+        </measurement>
         <measurement id="32076" vuid="4500639" name="WEIGHT" value="190" units="lb" metricValue="86.18" metricUnits="kg" bmi="25"/>
       </measurements>
       <taken value="3100406.14"/>
-      <removed value="9"/>
+      <removed value="INVALID RECORD"/>
     </vital>
   </vitals>
 </results>

@@ -1,12 +1,16 @@
-package gov.va.api.lighthouse.vistalink.models;
+package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
-import gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.Vital;
-import gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.VprGetPatientData;
+import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlField;
+import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlField;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class VprGetPatientDataSamples {
+  private static List<Vital.Qualifier> qualifiers() {
+    return List.of(Vital.Qualifier.builder().name("ORAL").vuid("4500642").build());
+  }
+
   List<Vital.Measurement> measurements() {
     return List.of(
         Vital.Measurement.builder()
@@ -65,6 +69,7 @@ public class VprGetPatientDataSamples {
             .metricUnits("C")
             .high("102")
             .low("95")
+            .qualifiers(qualifiers())
             .build(),
         Vital.Measurement.builder()
             .id("32076")
@@ -89,7 +94,7 @@ public class VprGetPatientDataSamples {
             .timeZone("-0500")
             .vitals(
                 VprGetPatientData.Response.Results.Vitals.builder()
-                    .total("1")
+                    .total(1)
                     .vitals(vitals())
                     .build())
             .build());
@@ -98,12 +103,12 @@ public class VprGetPatientDataSamples {
   List<Vital> vitals() {
     return List.of(
         Vital.builder()
-            .entered(Vital.Entered.builder().value("3110225.110428").build())
-            .facility(Vital.Facility.builder().code("673").name("TAMPA (JAH VAH)").build())
-            .location(Vital.Location.builder().code("23").name("GENERAL MEDICINE").build())
+            .entered(ValueOnlyXmlField.builder().value("3110225.110428").build())
+            .facility(CodeAndNameXmlField.builder().code("673").name("TAMPA (JAH VAH)").build())
+            .location(CodeAndNameXmlField.builder().code("23").name("GENERAL MEDICINE").build())
             .measurements(measurements())
-            .taken(Vital.Taken.builder().value("3100406.14").build())
-            .removed(List.of(Vital.Removed.builder().value("9").build()))
+            .taken(ValueOnlyXmlField.builder().value("3100406.14").build())
+            .removed(List.of(ValueOnlyXmlField.builder().value("INVALID RECORD").build()))
             .build());
   }
 }

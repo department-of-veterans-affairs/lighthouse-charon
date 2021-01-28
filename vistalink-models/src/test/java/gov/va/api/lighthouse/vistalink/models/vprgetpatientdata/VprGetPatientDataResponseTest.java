@@ -1,11 +1,9 @@
-package gov.va.api.lighthouse.vistalink.models;
+package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
-import gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.VprGetPatientData;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import io.micrometer.core.instrument.util.IOUtils;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ public class VprGetPatientDataResponseTest {
   @Test
   public void deserializeValidVprGetPatientDataResponse() {
     String invocationResponse =
-        Files.readString(Path.of("src/test/resources/SampleVitalsResult.xml"));
+        IOUtils.toString(getClass().getResourceAsStream("/SampleVitalsResult.xml"));
     RpcInvocationResult invocationResult =
         RpcInvocationResult.builder().response(invocationResponse).build();
     assertThat(VprGetPatientData.create().fromResults(List.of(invocationResult)))

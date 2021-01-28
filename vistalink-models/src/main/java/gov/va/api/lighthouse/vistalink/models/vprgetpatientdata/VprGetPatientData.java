@@ -87,7 +87,7 @@ public class VprGetPatientData
       public static class Vitals {
 
         @JacksonXmlProperty(isAttribute = true)
-        String total;
+        Integer total;
 
         @JacksonXmlElementWrapper(useWrapping = false)
         @JacksonXmlProperty(localName = "vital")
