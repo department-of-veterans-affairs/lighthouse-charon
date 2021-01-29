@@ -7,14 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Defines an XML element with attribute value.
+ *
+ * <pre>{@code
+ * <MyXmlElement value="value"/>
+ *
+ * }</pre>
+ */
 @AllArgsConstructor
 @Builder
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CodeAndNameXmlField {
+public class ValueOnlyXmlAttribute {
   @JacksonXmlProperty(isAttribute = true)
-  String code;
-
-  @JacksonXmlProperty(isAttribute = true)
-  String name;
+  String value;
 }

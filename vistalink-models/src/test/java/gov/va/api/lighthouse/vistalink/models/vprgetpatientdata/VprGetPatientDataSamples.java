@@ -1,7 +1,8 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
-import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlField;
-import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlField;
+import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlAttribute;
+import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlAttribute;
+import gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.Vitals.Vital;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 
@@ -92,23 +93,19 @@ public class VprGetPatientDataSamples {
         VprGetPatientData.Response.Results.builder()
             .version("1.13")
             .timeZone("-0500")
-            .vitals(
-                VprGetPatientData.Response.Results.Vitals.builder()
-                    .total(1)
-                    .vitals(vitals())
-                    .build())
+            .vitals(Vitals.builder().total(1).vitals(vitals()).build())
             .build());
   }
 
   List<Vital> vitals() {
     return List.of(
-        Vital.builder()
-            .entered(ValueOnlyXmlField.builder().value("3110225.110428").build())
-            .facility(CodeAndNameXmlField.builder().code("673").name("TAMPA (JAH VAH)").build())
-            .location(CodeAndNameXmlField.builder().code("23").name("GENERAL MEDICINE").build())
+        Vitals.Vital.builder()
+            .entered(ValueOnlyXmlAttribute.builder().value("3110225.110428").build())
+            .facility(CodeAndNameXmlAttribute.builder().code("673").name("TAMPA (JAH VAH)").build())
+            .location(CodeAndNameXmlAttribute.builder().code("23").name("GENERAL MEDICINE").build())
             .measurements(measurements())
-            .taken(ValueOnlyXmlField.builder().value("3100406.14").build())
-            .removed(List.of(ValueOnlyXmlField.builder().value("INVALID RECORD").build()))
+            .taken(ValueOnlyXmlAttribute.builder().value("3100406.14").build())
+            .removed(List.of(ValueOnlyXmlAttribute.builder().value("INVALID RECORD").build()))
             .build());
   }
 }
