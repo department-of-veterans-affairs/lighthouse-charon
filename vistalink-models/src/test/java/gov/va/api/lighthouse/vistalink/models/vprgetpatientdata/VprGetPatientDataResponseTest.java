@@ -12,12 +12,12 @@ public class VprGetPatientDataResponseTest {
 
   @SneakyThrows
   @Test
-  public void deserializeValidVprGetPatientDataResponse() {
+  public void fromResultsDeserializeValidVprGetPatientDataResponse() {
     String invocationResponse =
         IOUtils.toString(getClass().getResourceAsStream("/SampleVitalsResult.xml"));
     RpcInvocationResult invocationResult =
         RpcInvocationResult.builder().response(invocationResponse).build();
     assertThat(VprGetPatientData.create().fromResults(List.of(invocationResult)))
-        .isEqualTo(VprGetPatientDataSamples.response());
+        .isEqualTo(VprGetPatientDataSamples.Response.create().response());
   }
 }

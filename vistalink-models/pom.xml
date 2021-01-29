@@ -12,8 +12,7 @@
   <version>2.0.5-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
-    <!-- TODO: Increase Coverage. -->
-    <jacoco.coverage>0.40</jacoco.coverage>
+    <jacoco.coverage>0.95</jacoco.coverage>
   </properties>
   <dependencies>
     <dependency>

@@ -87,8 +87,8 @@ public class VprGetPatientData
                   RpcDetails.Parameter.builder()
                       .array(type.stream().map(Enum::name).collect(Collectors.toList()))
                       .build(),
-                  RpcDetails.Parameter.builder().build(),
-                  RpcDetails.Parameter.builder().build(),
+                  RpcDetails.Parameter.builder().string("").build(),
+                  RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string(max).build(),
                   RpcDetails.Parameter.builder().string(id).build(),
                   RpcDetails.Parameter.builder().array(filter).build()))
