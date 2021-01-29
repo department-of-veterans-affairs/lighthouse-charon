@@ -41,55 +41,55 @@ public class Vitals {
     List<ValueOnlyXmlAttribute> removed;
 
     @JacksonXmlProperty ValueOnlyXmlAttribute taken;
+  }
 
-    @AllArgsConstructor
-    @Builder
-    @Data
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Measurement {
-      @JacksonXmlProperty(isAttribute = true)
-      String id;
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class Measurement {
+    @JacksonXmlProperty(isAttribute = true)
+    String id;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String vuid;
+    @JacksonXmlProperty(isAttribute = true)
+    String vuid;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String name;
+    @JacksonXmlProperty(isAttribute = true)
+    String name;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String value;
+    @JacksonXmlProperty(isAttribute = true)
+    String value;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String units;
+    @JacksonXmlProperty(isAttribute = true)
+    String units;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String metricValue;
+    @JacksonXmlProperty(isAttribute = true)
+    String metricValue;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String metricUnits;
+    @JacksonXmlProperty(isAttribute = true)
+    String metricUnits;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String high;
+    @JacksonXmlProperty(isAttribute = true)
+    String high;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String low;
+    @JacksonXmlProperty(isAttribute = true)
+    String low;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String bmi;
+    @JacksonXmlProperty(isAttribute = true)
+    String bmi;
 
-      @JacksonXmlProperty List<Qualifier> qualifiers;
-    }
+    @JacksonXmlProperty List<Qualifier> qualifiers;
+  }
 
-    @AllArgsConstructor
-    @Builder
-    @Data
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Qualifier {
-      @JacksonXmlProperty(isAttribute = true)
-      String name;
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class Qualifier {
+    @JacksonXmlProperty(isAttribute = true)
+    String name;
 
-      @JacksonXmlProperty(isAttribute = true)
-      String vuid;
-    }
+    @JacksonXmlProperty(isAttribute = true)
+    String vuid;
   }
 }

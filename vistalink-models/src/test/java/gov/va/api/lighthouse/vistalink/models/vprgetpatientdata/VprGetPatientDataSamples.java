@@ -2,19 +2,18 @@ package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
 import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlAttribute;
 import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlAttribute;
-import gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.Vitals.Vital;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class VprGetPatientDataSamples {
-  private static List<Vital.Qualifier> qualifiers() {
-    return List.of(Vital.Qualifier.builder().name("ORAL").vuid("4500642").build());
+  private static List<Vitals.Qualifier> qualifiers() {
+    return List.of(Vitals.Qualifier.builder().name("ORAL").vuid("4500642").build());
   }
 
-  List<Vital.Measurement> measurements() {
+  List<Vitals.Measurement> measurements() {
     return List.of(
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32071")
             .vuid("4500634")
             .name("BLOOD PRESSURE")
@@ -23,7 +22,7 @@ public class VprGetPatientDataSamples {
             .high("210/110")
             .low("100/60")
             .build(),
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32075")
             .vuid("4688724")
             .name("HEIGHT")
@@ -32,7 +31,7 @@ public class VprGetPatientDataSamples {
             .metricValue("185.42")
             .metricUnits("cm")
             .build(),
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32074")
             .vuid("4500636")
             .name("PULSE")
@@ -41,7 +40,7 @@ public class VprGetPatientDataSamples {
             .high("120")
             .low("60")
             .build(),
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32077")
             .vuid("4500637")
             .name("PULSE OXIMETRY")
@@ -50,7 +49,7 @@ public class VprGetPatientDataSamples {
             .high("100")
             .low("50")
             .build(),
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32073")
             .vuid("4688725")
             .name("RESPIRATION")
@@ -59,7 +58,7 @@ public class VprGetPatientDataSamples {
             .high("30")
             .low("8")
             .build(),
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32072")
             .vuid("4500638")
             .low("100/60")
@@ -72,7 +71,7 @@ public class VprGetPatientDataSamples {
             .low("95")
             .qualifiers(qualifiers())
             .build(),
-        Vital.Measurement.builder()
+        Vitals.Measurement.builder()
             .id("32076")
             .vuid("4500639")
             .name("WEIGHT")
@@ -97,7 +96,7 @@ public class VprGetPatientDataSamples {
             .build());
   }
 
-  List<Vital> vitals() {
+  List<Vitals.Vital> vitals() {
     return List.of(
         Vitals.Vital.builder()
             .entered(ValueOnlyXmlAttribute.builder().value("3110225.110428").build())
