@@ -65,7 +65,7 @@ public class VprGetPatientData
    * after type in their place because VistA cares about parameter order.
    */
   @Builder
-  static class Request implements TypeSafeRpcRequest {
+  public static class Request implements TypeSafeRpcRequest {
     String dfn;
 
     Set<Domains> type;
@@ -76,6 +76,7 @@ public class VprGetPatientData
 
     List<String> filter;
 
+    /** Build RpcDetails out of the request. */
     public RpcDetails asDetails() {
       return RpcDetails.builder()
           .context(RPC_CONTEXT)
