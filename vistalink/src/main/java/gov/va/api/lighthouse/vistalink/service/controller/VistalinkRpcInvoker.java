@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ToString(onlyExplicitlyIncluded = true)
-public class VistalinkRpcInvoker implements RpcInvoker {
+public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
 
   private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
@@ -50,10 +50,16 @@ public class VistalinkRpcInvoker implements RpcInvoker {
 
   private final VistaLinkConnection connection;
 
+  private final MacroProcessorFactory macroProcessorFactory;
+
   @Builder
-  VistalinkRpcInvoker(RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
+  VistalinkRpcInvoker(
+      RpcPrincipal rpcPrincipal,
+      ConnectionDetails connectionDetails,
+      MacroProcessorFactory macroProcessorFactory) {
     this.rpcPrincipal = rpcPrincipal;
     this.connectionDetails = connectionDetails;
+    this.macroProcessorFactory = macroProcessorFactory;
     handler = createLoginCallbackHandler();
     loginContext = createLoginContext();
     kernelPrincipal = createVistaKernelPrincipal();
@@ -133,6 +139,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
   }
 
   /** Invoke an RPC with raw types. */
+  @Override
   @SneakyThrows
   public RpcResponse invoke(RpcRequest request) {
     synchronized (VistalinkRpcInvoker.class) {
@@ -153,9 +160,11 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       if (rpcDetails.version().isPresent()) {
         vistalinkRequest.setRpcVersion(rpcDetails.version().get());
       }
+      MacroProcessor macroProcessor = macroProcessorFactory.create(this);
       for (int i = 0; i < rpcDetails.parameters().size(); i++) {
         var parameter = rpcDetails.parameters().get(i);
-        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), parameter.value());
+        var value = macroProcessor.evaluate(parameter);
+        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
       }
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("{} Response {} chars", this, vistalinkResponse.getRawResponse().length());
