@@ -37,7 +37,7 @@ public class VprGetPatientData
         .build();
   }
 
-  enum Domains {
+  public enum Domains {
     appointments,
     consults,
     demographics,
