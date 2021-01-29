@@ -60,27 +60,6 @@ public class VprGetPatientData
     vitals
   }
 
-  @Data
-  @Builder
-  public static class Response implements TypeSafeRpcResponse {
-    List<Results> results;
-
-    @AllArgsConstructor
-    @Builder
-    @Data
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @JacksonXmlRootElement(localName = "results")
-    public static class Results {
-      @JacksonXmlProperty(isAttribute = true)
-      String version;
-
-      @JacksonXmlProperty(isAttribute = true)
-      String timeZone;
-
-      @JacksonXmlProperty Vitals vitals;
-    }
-  }
-
   /**
    * Start and stop are currently not supported but empty parameters are added to the parameters
    * after type in their place because VistA cares about parameter order.
@@ -113,6 +92,27 @@ public class VprGetPatientData
                   RpcDetails.Parameter.builder().string(id).build(),
                   RpcDetails.Parameter.builder().array(filter).build()))
           .build();
+    }
+  }
+
+  @Data
+  @Builder
+  public static class Response implements TypeSafeRpcResponse {
+    List<Results> results;
+
+    @AllArgsConstructor
+    @Builder
+    @Data
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @JacksonXmlRootElement(localName = "results")
+    public static class Results {
+      @JacksonXmlProperty(isAttribute = true)
+      String version;
+
+      @JacksonXmlProperty(isAttribute = true)
+      String timeZone;
+
+      @JacksonXmlProperty Vitals vitals;
     }
   }
 }

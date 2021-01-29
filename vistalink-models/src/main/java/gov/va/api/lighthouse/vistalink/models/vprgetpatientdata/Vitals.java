@@ -29,24 +29,6 @@ public class Vitals {
   @Builder
   @Data
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @JacksonXmlRootElement(localName = "vital")
-  public static class Vital {
-    @JacksonXmlProperty ValueOnlyXmlAttribute entered;
-    @JacksonXmlProperty CodeAndNameXmlAttribute facility;
-    @JacksonXmlProperty CodeAndNameXmlAttribute location;
-    @JacksonXmlProperty List<Measurement> measurements;
-
-    @JacksonXmlProperty
-    @JacksonXmlElementWrapper(useWrapping = false)
-    List<ValueOnlyXmlAttribute> removed;
-
-    @JacksonXmlProperty ValueOnlyXmlAttribute taken;
-  }
-
-  @AllArgsConstructor
-  @Builder
-  @Data
-  @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Measurement {
     @JacksonXmlProperty(isAttribute = true)
     String id;
@@ -91,5 +73,23 @@ public class Vitals {
 
     @JacksonXmlProperty(isAttribute = true)
     String vuid;
+  }
+
+  @AllArgsConstructor
+  @Builder
+  @Data
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @JacksonXmlRootElement(localName = "vital")
+  public static class Vital {
+    @JacksonXmlProperty ValueOnlyXmlAttribute entered;
+    @JacksonXmlProperty CodeAndNameXmlAttribute facility;
+    @JacksonXmlProperty CodeAndNameXmlAttribute location;
+    @JacksonXmlProperty List<Measurement> measurements;
+
+    @JacksonXmlProperty
+    @JacksonXmlElementWrapper(useWrapping = false)
+    List<ValueOnlyXmlAttribute> removed;
+
+    @JacksonXmlProperty ValueOnlyXmlAttribute taken;
   }
 }

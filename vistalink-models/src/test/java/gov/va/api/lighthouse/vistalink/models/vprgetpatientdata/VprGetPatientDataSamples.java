@@ -7,10 +7,6 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class VprGetPatientDataSamples {
-  private static List<Vitals.Qualifier> qualifiers() {
-    return List.of(Vitals.Qualifier.builder().name("ORAL").vuid("4500642").build());
-  }
-
   List<Vitals.Measurement> measurements() {
     return List.of(
         Vitals.Measurement.builder()
@@ -81,6 +77,10 @@ public class VprGetPatientDataSamples {
             .metricUnits("kg")
             .bmi("25")
             .build());
+  }
+
+  List<Vitals.Qualifier> qualifiers() {
+    return List.of(Vitals.Qualifier.builder().name("ORAL").vuid("4500642").build());
   }
 
   VprGetPatientData.Response response() {
