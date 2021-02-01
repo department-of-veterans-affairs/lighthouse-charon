@@ -8,6 +8,8 @@ import gov.va.api.lighthouse.vistalink.models.TypeSafeRpc;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcResponse;
 import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -110,23 +112,23 @@ public class VprGetPatientData
     /** Lazy getter. */
     List<String> filter() {
       if (filter == null) {
-        return List.of();
+        filter = new ArrayList<>();
       }
       return filter;
     }
 
     /** Lazy getter. */
     Optional<String> id() {
-      if (type == null) {
-        return Optional.empty();
+      if (id == null) {
+        id = Optional.empty();
       }
       return id;
     }
 
     /** Lazy getter. */
     Optional<String> max() {
-      if (type == null) {
-        return Optional.empty();
+      if (max == null) {
+        max = Optional.empty();
       }
       return max;
     }
@@ -134,7 +136,7 @@ public class VprGetPatientData
     /** Lazy getter. */
     Set<Domains> type() {
       if (type == null) {
-        return Set.of();
+        type = new HashSet<>();
       }
       return type;
     }
