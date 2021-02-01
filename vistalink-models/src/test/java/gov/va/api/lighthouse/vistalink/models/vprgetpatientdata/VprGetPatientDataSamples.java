@@ -101,7 +101,7 @@ public class VprGetPatientDataSamples {
           VprGetPatientData.Response.Results.builder()
               .version("1.13")
               .timeZone("-0500")
-              .vitals(Vitals.builder().total(1).vitals(vitals()).build())
+              .vitals(Vitals.builder().total(1).vitalList(vitals()).build())
               .build());
     }
 
