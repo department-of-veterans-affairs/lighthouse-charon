@@ -10,6 +10,7 @@ import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcResponse;
 import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -92,7 +93,11 @@ public class VprGetPatientData
               List.of(
                   RpcDetails.Parameter.builder().string(dfn).build(),
                   RpcDetails.Parameter.builder()
-                      .array(type().stream().map(Enum::name).collect(Collectors.toList()))
+                      .string(
+                          type().stream()
+                              .filter(Objects::nonNull)
+                              .map(Enum::name)
+                              .collect(Collectors.joining(";")))
                       .build(),
                   RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string("").build(),
