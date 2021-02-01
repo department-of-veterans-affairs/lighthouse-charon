@@ -129,7 +129,7 @@ public class VprGetPatientDataSamples {
           .parameters(
               List.of(
                   RpcDetails.Parameter.builder().string("I2-0000").build(),
-                  RpcDetails.Parameter.builder().string("labs;vitals").build(),
+                  RpcDetails.Parameter.builder().string("vitals").build(),
                   RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string("1").build(),
@@ -141,7 +141,7 @@ public class VprGetPatientDataSamples {
     public VprGetPatientData.Request request() {
       return VprGetPatientData.Request.builder()
           .dfn("I2-0000")
-          .type(Set.of(VprGetPatientData.Domains.vitals, VprGetPatientData.Domains.labs))
+          .type(Set.of(VprGetPatientData.Domains.vitals))
           .max(Optional.of("1"))
           .id(Optional.of("32071"))
           .filter(List.of())
