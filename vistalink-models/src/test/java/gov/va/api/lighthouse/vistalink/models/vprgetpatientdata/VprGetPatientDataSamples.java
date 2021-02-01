@@ -5,6 +5,8 @@ import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlAttribute;
 import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlAttribute;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
@@ -93,8 +95,9 @@ public class VprGetPatientDataSamples {
       return VprGetPatientData.Response.builder().results(results()).build();
     }
 
-    public List<VprGetPatientData.Response.Results> results() {
-      return List.of(
+    public Map<String, VprGetPatientData.Response.Results> results() {
+      return Map.of(
+          "673",
           VprGetPatientData.Response.Results.builder()
               .version("1.13")
               .timeZone("-0500")
@@ -138,10 +141,10 @@ public class VprGetPatientDataSamples {
     public VprGetPatientData.Request request() {
       return VprGetPatientData.Request.builder()
           .dfn("I2-0000")
-          .filter(Collections.emptyList())
-          .id("32071")
-          .max("1")
-          .type(Set.of(VprGetPatientData.Domains.vitals))
+          .filter(Optional.empty())
+          .id(Optional.of("32071"))
+          .max(Optional.of("1"))
+          .type(Optional.of(Set.of(VprGetPatientData.Domains.vitals)))
           .build();
     }
   }

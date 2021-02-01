@@ -16,7 +16,7 @@ public class VprGetPatientDataResponseTest {
     String invocationResponse =
         IOUtils.toString(getClass().getResourceAsStream("/SampleVitalsResult.xml"));
     RpcInvocationResult invocationResult =
-        RpcInvocationResult.builder().response(invocationResponse).build();
+        RpcInvocationResult.builder().vista("673").response(invocationResponse).build();
     assertThat(VprGetPatientData.create().fromResults(List.of(invocationResult)))
         .isEqualTo(VprGetPatientDataSamples.Response.create().response());
   }

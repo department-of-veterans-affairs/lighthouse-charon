@@ -5,9 +5,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import gov.va.api.lighthouse.vistalink.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpc;
+import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcResponse;
 import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -15,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @NoArgsConstructor(staticName = "create")
 public class VprGetPatientData
@@ -31,9 +36,12 @@ public class VprGetPatientData
         .results(
             invocationResults.stream()
                 .filter(invocationResult -> invocationResult.error().isEmpty())
-                .map(invocationResult -> invocationResult.response())
-                .map(response -> XmlResponseRpc.deserialize(response, Response.Results.class))
-                .collect(Collectors.toList()))
+                .collect(
+                    Collectors.toMap(
+                        invocationResult -> invocationResult.vista(),
+                        invocationResult ->
+                            XmlResponseRpc.deserialize(
+                                invocationResult.response(), Response.Results.class))))
         .build();
   }
 
@@ -66,15 +74,15 @@ public class VprGetPatientData
    */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
-    String dfn;
+    @NonNull String dfn;
 
-    Set<Domains> type;
+    Optional<Set<Domains>> type;
 
-    String max;
+    Optional<String> max;
 
-    String id;
+    Optional<String> id;
 
-    List<String> filter;
+    Optional<List<String>> filter;
 
     /** Build RpcDetails out of the request. */
     public RpcDetails asDetails() {
@@ -85,13 +93,18 @@ public class VprGetPatientData
               List.of(
                   RpcDetails.Parameter.builder().string(dfn).build(),
                   RpcDetails.Parameter.builder()
-                      .array(type.stream().map(Enum::name).collect(Collectors.toList()))
+                      .array(
+                          type.orElse(Collections.emptySet()).stream()
+                              .map(Enum::name)
+                              .collect(Collectors.toList()))
                       .build(),
                   RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string("").build(),
-                  RpcDetails.Parameter.builder().string(max).build(),
-                  RpcDetails.Parameter.builder().string(id).build(),
-                  RpcDetails.Parameter.builder().array(filter).build()))
+                  RpcDetails.Parameter.builder().string(max.orElse("")).build(),
+                  RpcDetails.Parameter.builder().string(id.orElse("")).build(),
+                  RpcDetails.Parameter.builder()
+                      .array(filter.orElse(Collections.emptyList()))
+                      .build()))
           .build();
     }
   }
@@ -99,7 +112,7 @@ public class VprGetPatientData
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
-    List<Results> results;
+    Map<String, Results> results;
 
     @AllArgsConstructor
     @Builder
