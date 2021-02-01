@@ -92,10 +92,10 @@ public class VprGetPatientDataSamples {
     }
 
     public VprGetPatientData.Response response() {
-      return VprGetPatientData.Response.builder().results(results()).build();
+      return VprGetPatientData.Response.builder().resultsByStation(resultsByStation()).build();
     }
 
-    public Map<String, VprGetPatientData.Response.Results> results() {
+    public Map<String, VprGetPatientData.Response.Results> resultsByStation() {
       return Map.of(
           "673",
           VprGetPatientData.Response.Results.builder()
@@ -141,10 +141,10 @@ public class VprGetPatientDataSamples {
     public VprGetPatientData.Request request() {
       return VprGetPatientData.Request.builder()
           .dfn("I2-0000")
-          .filter(Optional.empty())
+          .filter(List.of())
           .id(Optional.of("32071"))
           .max(Optional.of("1"))
-          .type(Optional.of(Set.of(VprGetPatientData.Domains.vitals)))
+          .type(Set.of(VprGetPatientData.Domains.vitals))
           .build();
     }
   }

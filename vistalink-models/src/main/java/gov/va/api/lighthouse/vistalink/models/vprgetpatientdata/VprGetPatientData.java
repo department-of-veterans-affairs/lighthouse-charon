@@ -8,7 +8,6 @@ import gov.va.api.lighthouse.vistalink.models.TypeSafeRpc;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcResponse;
 import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class VprGetPatientData
     // TO-DO needs to handle different bad result behaviors (e.g. : ignore errors, ignore a
     // percentage, or throw exception on errors.)
     return Response.builder()
-        .results(
+        .resultsByStation(
             invocationResults.stream()
                 .filter(invocationResult -> invocationResult.error().isEmpty())
                 .collect(
@@ -76,13 +75,13 @@ public class VprGetPatientData
   public static class Request implements TypeSafeRpcRequest {
     @NonNull String dfn;
 
-    Optional<Set<Domains>> type;
+    Set<Domains> type;
 
     Optional<String> max;
 
     Optional<String> id;
 
-    Optional<List<String>> filter;
+    List<String> filter;
 
     /** Build RpcDetails out of the request. */
     public RpcDetails asDetails() {
@@ -93,26 +92,53 @@ public class VprGetPatientData
               List.of(
                   RpcDetails.Parameter.builder().string(dfn).build(),
                   RpcDetails.Parameter.builder()
-                      .array(
-                          type.orElse(Collections.emptySet()).stream()
-                              .map(Enum::name)
-                              .collect(Collectors.toList()))
+                      .array(type().stream().map(Enum::name).collect(Collectors.toList()))
                       .build(),
                   RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string("").build(),
-                  RpcDetails.Parameter.builder().string(max.orElse("")).build(),
-                  RpcDetails.Parameter.builder().string(id.orElse("")).build(),
-                  RpcDetails.Parameter.builder()
-                      .array(filter.orElse(Collections.emptyList()))
-                      .build()))
+                  RpcDetails.Parameter.builder().string(max().orElse("")).build(),
+                  RpcDetails.Parameter.builder().string(id().orElse("")).build(),
+                  RpcDetails.Parameter.builder().array(filter()).build()))
           .build();
+    }
+
+    /** Lazy getter. */
+    List<String> filter() {
+      if (filter == null) {
+        return List.of();
+      }
+      return filter;
+    }
+
+    /** Lazy getter. */
+    Optional<String> id() {
+      if (type == null) {
+        return Optional.empty();
+      }
+      return id;
+    }
+
+    /** Lazy getter. */
+    Optional<String> max() {
+      if (type == null) {
+        return Optional.empty();
+      }
+      return max;
+    }
+
+    /** Lazy getter. */
+    Set<Domains> type() {
+      if (type == null) {
+        return Set.of();
+      }
+      return type;
     }
   }
 
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
-    Map<String, Results> results;
+    Map<String, Results> resultsByStation;
 
     @AllArgsConstructor
     @Builder
