@@ -24,13 +24,13 @@ public class VprGetPatientDataResponseTest {
 
   @Test
   void vitalStream() {
+    assertThat(VprGetPatientData.Response.Results.builder().build().vitalStream()).isEmpty();
     assertThat(
             VprGetPatientDataSamples.Response.create()
                 .response()
                 .resultsByStation()
                 .get("673")
                 .vitalStream()
-                .filter(Vitals::isNotEmpty)
                 .collect(Collectors.toList()))
         .isEqualTo(VprGetPatientDataSamples.Response.create().vitals());
   }
