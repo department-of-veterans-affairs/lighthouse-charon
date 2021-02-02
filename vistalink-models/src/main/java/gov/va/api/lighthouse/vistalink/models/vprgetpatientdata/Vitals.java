@@ -23,7 +23,7 @@ public class Vitals {
 
   @JacksonXmlElementWrapper(useWrapping = false)
   @JacksonXmlProperty(localName = "vital")
-  List<Vital> vitalList;
+  List<Vital> vitalResults;
 
   @AllArgsConstructor
   @Builder
