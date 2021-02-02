@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import io.micrometer.core.instrument.util.IOUtils;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -22,13 +23,15 @@ public class VprGetPatientDataResponseTest {
   }
 
   @Test
-  void vitals() {
+  void vitalStream() {
     assertThat(
             VprGetPatientDataSamples.Response.create()
                 .response()
                 .resultsByStation()
                 .get("673")
-                .vitals())
+                .vitalStream()
+                .filter(Vitals::isNotEmpty)
+                .collect(Collectors.toList()))
         .isEqualTo(VprGetPatientDataSamples.Response.create().vitals());
   }
 }

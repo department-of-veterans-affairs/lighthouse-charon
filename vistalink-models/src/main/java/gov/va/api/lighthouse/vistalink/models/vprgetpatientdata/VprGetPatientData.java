@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -159,36 +160,14 @@ public class VprGetPatientData
       @JacksonXmlProperty(isAttribute = true)
       String timeZone;
 
-      @JacksonXmlProperty(localName = "vitals")
-      Vitals vitalInformation;
+      @JacksonXmlProperty Vitals vitals;
 
-      /** Determine if array of values are all null. */
-      private static boolean allNull(Object... values) {
-        for (Object value : values) {
-          if (value != null) {
-            return false;
-          }
+      /** Get a stream of vitals for a patient. */
+      public Stream<Vitals.Vital> vitalStream() {
+        if (vitals() == null) {
+          return Stream.empty();
         }
-        return true;
-      }
-
-      /** Get the list of vitals for a patient. */
-      public List<Vitals.Vital> vitals() {
-        if (vitalInformation() == null) {
-          return List.of();
-        }
-        // If even one field isn't null in a result, we should return it
-        return vitalInformation().vitalResults().stream()
-            .filter(
-                result ->
-                    !allNull(
-                        result.entered(),
-                        result.facility(),
-                        result.location(),
-                        result.measurements(),
-                        result.removed(),
-                        result.taken()))
-            .collect(Collectors.toList());
+        return vitals().vitalResults().stream();
       }
     }
   }

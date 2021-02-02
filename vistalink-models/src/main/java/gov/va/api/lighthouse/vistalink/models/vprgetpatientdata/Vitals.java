@@ -25,6 +25,27 @@ public class Vitals {
   @JacksonXmlProperty(localName = "vital")
   List<Vital> vitalResults;
 
+  /** Determine if array of values are all null. */
+  private static boolean allNull(Object... values) {
+    for (Object value : values) {
+      if (value != null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /** Check if a Vital result is empty (e.g. all fields are null). */
+  public static boolean isNotEmpty(Vital vital) {
+    return !allNull(
+        vital.entered(),
+        vital.facility(),
+        vital.location(),
+        vital.measurements(),
+        vital.removed(),
+        vital.taken());
+  }
+
   /** Lazy Initializer. */
   public List<Vital> vitalResults() {
     if (vitalResults == null) {
