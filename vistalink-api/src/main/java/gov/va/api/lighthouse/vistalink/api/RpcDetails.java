@@ -175,11 +175,7 @@ public class RpcDetails {
     public void serialize(
         String s, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
         throws IOException {
-      if (s != null && s.isBlank()) {
-        jsonGenerator.writeString("");
-      } else {
-        jsonGenerator.writeString(s);
-      }
+      jsonGenerator.writeString(s);
     }
   }
 }
