@@ -5,9 +5,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import gov.va.api.lighthouse.vistalink.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpc;
+import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.vistalink.models.TypeSafeRpcResponse;
 import gov.va.api.lighthouse.vistalink.models.XmlResponseRpc;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -15,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @NoArgsConstructor(staticName = "create")
 public class VprGetPatientData
@@ -28,12 +35,15 @@ public class VprGetPatientData
     // TO-DO needs to handle different bad result behaviors (e.g. : ignore errors, ignore a
     // percentage, or throw exception on errors.)
     return Response.builder()
-        .results(
+        .resultsByStation(
             invocationResults.stream()
                 .filter(invocationResult -> invocationResult.error().isEmpty())
-                .map(invocationResult -> invocationResult.response())
-                .map(response -> XmlResponseRpc.deserialize(response, Response.Results.class))
-                .collect(Collectors.toList()))
+                .collect(
+                    Collectors.toMap(
+                        invocationResult -> invocationResult.vista(),
+                        invocationResult ->
+                            XmlResponseRpc.deserialize(
+                                invocationResult.response(), Response.Results.class))))
         .build();
   }
 
@@ -66,13 +76,13 @@ public class VprGetPatientData
    */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
-    String dfn;
+    @NonNull String dfn;
 
     Set<Domains> type;
 
-    String max;
+    Optional<String> max;
 
-    String id;
+    Optional<String> id;
 
     List<String> filter;
 
@@ -85,21 +95,57 @@ public class VprGetPatientData
               List.of(
                   RpcDetails.Parameter.builder().string(dfn).build(),
                   RpcDetails.Parameter.builder()
-                      .array(type.stream().map(Enum::name).collect(Collectors.toList()))
+                      .string(
+                          type().stream()
+                              .filter(Objects::nonNull)
+                              .map(Enum::name)
+                              .collect(Collectors.joining(";")))
                       .build(),
                   RpcDetails.Parameter.builder().string("").build(),
                   RpcDetails.Parameter.builder().string("").build(),
-                  RpcDetails.Parameter.builder().string(max).build(),
-                  RpcDetails.Parameter.builder().string(id).build(),
-                  RpcDetails.Parameter.builder().array(filter).build()))
+                  RpcDetails.Parameter.builder().string(max().orElse("")).build(),
+                  RpcDetails.Parameter.builder().string(id().orElse("")).build(),
+                  RpcDetails.Parameter.builder().array(filter()).build()))
           .build();
+    }
+
+    /** Lazy getter. */
+    List<String> filter() {
+      if (filter == null) {
+        filter = new ArrayList<>();
+      }
+      return filter;
+    }
+
+    /** Lazy getter. */
+    Optional<String> id() {
+      if (id == null) {
+        id = Optional.empty();
+      }
+      return id;
+    }
+
+    /** Lazy getter. */
+    Optional<String> max() {
+      if (max == null) {
+        max = Optional.empty();
+      }
+      return max;
+    }
+
+    /** Lazy getter. */
+    Set<Domains> type() {
+      if (type == null) {
+        type = new HashSet<>();
+      }
+      return type;
     }
   }
 
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
-    List<Results> results;
+    Map<String, Results> resultsByStation;
 
     @AllArgsConstructor
     @Builder
