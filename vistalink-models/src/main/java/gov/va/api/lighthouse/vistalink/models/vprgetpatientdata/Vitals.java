@@ -25,6 +25,14 @@ public class Vitals {
   @JacksonXmlProperty(localName = "vital")
   List<Vital> vitalResults;
 
+  /** Lazy Initializer. */
+  public List<Vital> vitalResults() {
+    if (vitalResults == null) {
+      vitalResults = List.of();
+    }
+    return vitalResults;
+  }
+
   @AllArgsConstructor
   @Builder
   @Data

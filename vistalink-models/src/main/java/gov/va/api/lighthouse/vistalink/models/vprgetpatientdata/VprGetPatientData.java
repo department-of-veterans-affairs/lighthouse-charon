@@ -159,7 +159,37 @@ public class VprGetPatientData
       @JacksonXmlProperty(isAttribute = true)
       String timeZone;
 
-      @JacksonXmlProperty Vitals vitals;
+      @JacksonXmlProperty(localName = "vitals")
+      Vitals vitalInformation;
+
+      /** Determine if array of values are all null. */
+      private static boolean allNull(Object... values) {
+        for (Object value : values) {
+          if (value != null) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      /** Get the list of vitals for a patient. */
+      public List<Vitals.Vital> vitals() {
+        if (vitalInformation() == null) {
+          return List.of();
+        }
+        // If even one field isn't null in a result, we should return it
+        return vitalInformation().vitalResults().stream()
+            .filter(
+                result ->
+                    !allNull(
+                        result.entered(),
+                        result.facility(),
+                        result.location(),
+                        result.measurements(),
+                        result.removed(),
+                        result.taken()))
+            .collect(Collectors.toList());
+      }
     }
   }
 }

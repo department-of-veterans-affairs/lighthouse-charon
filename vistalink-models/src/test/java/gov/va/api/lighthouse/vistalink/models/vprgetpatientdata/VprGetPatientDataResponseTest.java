@@ -20,4 +20,15 @@ public class VprGetPatientDataResponseTest {
     assertThat(VprGetPatientData.create().fromResults(List.of(invocationResult)))
         .isEqualTo(VprGetPatientDataSamples.Response.create().response());
   }
+
+  @Test
+  void vitals() {
+    assertThat(
+            VprGetPatientDataSamples.Response.create()
+                .response()
+                .resultsByStation()
+                .get("673")
+                .vitals())
+        .isEqualTo(VprGetPatientDataSamples.Response.create().vitals());
+  }
 }
