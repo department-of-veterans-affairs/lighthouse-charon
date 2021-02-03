@@ -19,7 +19,7 @@
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
     <jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
     <master-patient-index-client.version>1.0.3</master-patient-index-client.version>
-    <talos.version>0.0.2</talos.version>
+    <talos.version>0.0.3</talos.version>
     <vistalink-xob-bom.version>1.6.0.028</vistalink-xob-bom.version>
   </properties>
   <dependencyManagement>
