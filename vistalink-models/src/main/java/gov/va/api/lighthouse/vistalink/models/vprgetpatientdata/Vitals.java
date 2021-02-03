@@ -1,7 +1,5 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
-import static gov.va.api.lighthouse.vistalink.models.Models.allNull;
-
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -91,6 +89,9 @@ public class Vitals {
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   @JacksonXmlRootElement(localName = "vital")
   public static class Vital {
+
+    private static final Vital EMPTY = new Vital();
+
     @JacksonXmlProperty ValueOnlyXmlAttribute entered;
     @JacksonXmlProperty CodeAndNameXmlAttribute facility;
     @JacksonXmlProperty CodeAndNameXmlAttribute location;
@@ -104,7 +105,7 @@ public class Vitals {
 
     /** Check if a Vital result is empty (e.g. all fields are null). */
     public boolean isNotEmpty() {
-      return !allNull(entered(), facility(), location(), measurements(), removed(), taken());
+      return !equals(EMPTY);
     }
   }
 }
