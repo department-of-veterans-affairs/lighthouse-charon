@@ -48,8 +48,9 @@ public class ClientKeyProtectedEndpointConfig {
             .unauthorizedResponse(unauthorizedResponse())
             .build());
 
-    registration.addUrlPatterns(
-        "/rpc", "/rpc/connections", "/vistalink/rpc", "/vistalink/rpc/connections");
+    registration.setOrder(1);
+
+    registration.addUrlPatterns("/rpc/*", "/vistalink/*");
 
     return registration;
   }

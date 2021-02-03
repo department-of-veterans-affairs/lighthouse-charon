@@ -26,5 +26,8 @@ public class PathRewriteConfigTest {
     assertThat(
         restTemplate.getForObject(
             "http://localhost:" + port + "/vistalink/rpc/connections", VistalinkProperties.class));
+    assertThat(
+        restTemplate.getForObject(
+            "http://localhost:" + port + "/rpc/connections", VistalinkProperties.class));
   }
 }
