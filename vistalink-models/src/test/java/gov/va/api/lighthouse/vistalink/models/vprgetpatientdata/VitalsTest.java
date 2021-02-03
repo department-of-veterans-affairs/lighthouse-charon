@@ -37,6 +37,6 @@ public class VitalsTest {
   @ParameterizedTest
   @MethodSource
   void isNotEmpty(Vitals.Vital vital, boolean expected) {
-    assertThat(Vitals.isNotEmpty(vital)).isEqualTo(expected);
+    assertThat(vital.isNotEmpty()).isEqualTo(expected);
   }
 }
