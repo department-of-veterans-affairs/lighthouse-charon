@@ -50,7 +50,7 @@ public class ClientKeyProtectedEndpointConfig {
 
     registration.setOrder(1);
 
-    registration.addUrlPatterns("/rpc/*", "/vistalink/*");
+    registration.addUrlPatterns("/rpc/*", "/vistalink/rpc/*");
 
     return registration;
   }
