@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 @Slf4j
 @Configuration
@@ -15,7 +16,7 @@ public class PathRewriteConfig {
     var registration = new FilterRegistrationBean<PathRewriteFilter>();
     PathRewriteFilter filter = PathRewriteFilter.builder().removeLeadingPath("/vistalink/").build();
     registration.setFilter(filter);
-    registration.setOrder(2);
+    registration.setOrder(Ordered.LOWEST_PRECEDENCE);
     registration.addUrlPatterns(filter.removeLeadingPathsAsUrlPatterns());
     log.info("PathRewriteFilter is enabled.");
     return registration;
