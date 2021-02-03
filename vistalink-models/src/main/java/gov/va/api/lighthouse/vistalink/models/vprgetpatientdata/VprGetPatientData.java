@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -160,6 +161,14 @@ public class VprGetPatientData
       String timeZone;
 
       @JacksonXmlProperty Vitals vitals;
+
+      /** Get a stream of vitals for a patient. */
+      public Stream<Vitals.Vital> vitalStream() {
+        if (vitals() == null) {
+          return Stream.empty();
+        }
+        return vitals().vitalResults().stream();
+      }
     }
   }
 }

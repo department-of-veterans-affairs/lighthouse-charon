@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlAttribute;
 import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlAttribute;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,14 @@ public class Vitals {
   @JacksonXmlElementWrapper(useWrapping = false)
   @JacksonXmlProperty(localName = "vital")
   List<Vital> vitalResults;
+
+  /** Lazy Initializer. */
+  public List<Vital> vitalResults() {
+    if (vitalResults == null) {
+      vitalResults = new ArrayList<>();
+    }
+    return vitalResults;
+  }
 
   @AllArgsConstructor
   @Builder
@@ -81,6 +90,9 @@ public class Vitals {
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   @JacksonXmlRootElement(localName = "vital")
   public static class Vital {
+
+    private static final Vital EMPTY = new Vital();
+
     @JacksonXmlProperty ValueOnlyXmlAttribute entered;
     @JacksonXmlProperty CodeAndNameXmlAttribute facility;
     @JacksonXmlProperty CodeAndNameXmlAttribute location;
@@ -91,5 +103,10 @@ public class Vitals {
     List<ValueOnlyXmlAttribute> removed;
 
     @JacksonXmlProperty ValueOnlyXmlAttribute taken;
+
+    /** Check if a Vital result is empty (e.g. all fields are null). */
+    public boolean isNotEmpty() {
+      return !equals(EMPTY);
+    }
   }
 }
