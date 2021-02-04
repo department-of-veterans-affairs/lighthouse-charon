@@ -1,23 +1,25 @@
 package gov.va.api.lighthouse.vistalink.tests;
 
-import gov.va.api.lighthouse.vistalink.api.RpcResponse;
-import lombok.SneakyThrows;
+import static gov.va.api.health.sentinel.EnvironmentAssumptions.assumeEnvironmentIn;
+import static org.hamcrest.CoreMatchers.equalTo;
+
+import gov.va.api.health.sentinel.Environment;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @Slf4j
 public class HealthCheckIT {
 
-    private static SystemDefinition systemDefinition = SystemDefinitions.get();
-
-
-    @Test
-    @SneakyThrows
-    void healthCheckIsUnprotected(){
-        var response = TestClients.vistalink()
-                .get(TestClients.headers(), systemDefinition.vistalink().url() + "actuator/health")
-                .expect(200)
-                .expectValid(String.class);
-        log.info(response);
-    }
+  @ParameterizedTest
+  @ValueSource(strings = {"/", "/vistalink/"})
+  void healthCheckIsUnprotected(String basePath) {
+    // Local Testing Only
+    assumeEnvironmentIn(Environment.LOCAL);
+    TestClients.vistalink()
+        .get(basePath + "actuator/health")
+        .response()
+        .then()
+        .body("status", equalTo("UP"));
+  }
 }
