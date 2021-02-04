@@ -8,6 +8,7 @@ import gov.va.api.lighthouse.vistalink.models.CodeAndNameXmlAttribute;
 import gov.va.api.lighthouse.vistalink.models.ValueOnlyXmlAttribute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -73,13 +74,20 @@ public class Vitals {
 
     /** Split a blood pressure type measurement into a systolic and diastolic. */
     @JsonIgnore
-    public BloodPressure asBloodPressure() {
-      if (high != null && low != null && value != null) {
-        String[] highs = high.split("/", -1);
-        String[] lows = low.split("/", -1);
-        String[] values = value.split("/", -1);
-        if (highs.length == 2 && lows.length == 2 && values.length == 2) {
-          return BloodPressure.builder()
+    public Optional<BloodPressure> asBloodPressure() {
+      if (high == null || low == null || value == null) {
+        return Optional.empty();
+      }
+
+      String[] highs = high.split("/", -1);
+      String[] lows = low.split("/", -1);
+      String[] values = value.split("/", -1);
+
+      if (highs.length != 2 || lows.length != 2 || values.length != 2) {
+        return Optional.empty();
+      }
+      return Optional.of(
+          BloodPressure.builder()
               .systolic(
                   BloodPressure.BloodPressureMeasurement.builder()
                       .high(highs[0])
@@ -94,10 +102,7 @@ public class Vitals {
                       .units(units)
                       .value(values[1])
                       .build())
-              .build();
-        }
-      }
-      return null;
+              .build());
     }
 
     /** Check if a measurement is a blood pressure. */

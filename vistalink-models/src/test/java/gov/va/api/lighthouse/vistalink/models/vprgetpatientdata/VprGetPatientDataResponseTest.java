@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import io.micrometer.core.instrument.util.IOUtils;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,9 @@ public class VprGetPatientDataResponseTest {
 
   @Test
   public void bloodPressure() {
-    assertThat(samples.measurements().get(0).asBloodPressure()).isEqualTo(samples.bloodPressure());
-    assertThat(samples.measurements().get(1).asBloodPressure()).isNull();
+    assertThat(samples.measurements().get(0).asBloodPressure())
+        .isEqualTo(Optional.of(samples.bloodPressure()));
+    assertThat(samples.measurements().get(1).asBloodPressure()).isEqualTo(Optional.empty());
   }
 
   @SneakyThrows
