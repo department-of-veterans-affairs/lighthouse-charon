@@ -14,7 +14,6 @@ public class HealthCheckIT {
   @ParameterizedTest
   @ValueSource(strings = {"/", "/vistalink/"})
   void healthCheckIsUnprotected(String basePath) {
-    // Local Testing Only
     assumeEnvironmentIn(Environment.LOCAL);
     var requestPath = basePath + "actuator/health";
     log.info("Running health-check for path: {}", requestPath);
