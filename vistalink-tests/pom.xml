@@ -53,61 +53,48 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Launch Vistalink for ITs -->
+      <plugin>
+        <groupId>com.bazaarvoice.maven.plugins</groupId>
+        <artifactId>process-exec-maven-plugin</artifactId>
+        <version>${process-exec-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>vistalink-process</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <name>vistalink</name>
+              <healthcheckUrl>http://localhost:8050/actuator/health</healthcheckUrl>
+              <processLogFile>${project.build.directory}/vistalink.log</processLogFile>
+              <arguments>
+                <argument>java</argument>
+                <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5090</argument>
+                <argument>-cp</argument>
+                <argument>vistalink.jar</argument>
+                <argument>-Dlogging.level.root=INFO</argument>
+                <argument>-Dloader=gov.va.api.lighthouse.vistalink.service.Application</argument>
+                <argument>-Dvistalink.configuration=${project.basedir}/../vistalink/src/main/resources/vistalink.properties</argument>
+                <argument>-Dspring.config.location=classpath:/application.properties,file:${project.basedir}/config/secrets.properties</argument>
+                <argument>-Dvistalink.rpc.client-keys=~shanktopus~</argument>
+                <argument>org.springframework.boot.loader.PropertiesLauncher</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>stop-all</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop-all</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <profiles>
-    <profile>
-      <id>vistalink-application</id>
-      <activation>
-        <property>
-          <name>test.vistalink</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <!-- Launch Vistalink for ITs -->
-          <plugin>
-            <groupId>com.bazaarvoice.maven.plugins</groupId>
-            <artifactId>process-exec-maven-plugin</artifactId>
-            <version>${process-exec-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>vistalink-process</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>start</goal>
-                </goals>
-                <configuration>
-                  <name>vistalink</name>
-                  <healthcheckUrl>http://localhost:8050/actuator/health</healthcheckUrl>
-                  <processLogFile>${project.build.directory}/vistalink.log</processLogFile>
-                  <arguments>
-                    <argument>java</argument>
-                    <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5090</argument>
-                    <argument>-cp</argument>
-                    <argument>vistalink.jar</argument>
-                    <argument>-Dlogging.level.root=INFO</argument>
-                    <argument>-Dloader=gov.va.api.lighthouse.vistalink.service.Application</argument>
-                    <argument>-Dvistalink.configuration=${project.basedir}/../vistalink/src/main/resources/vistalink.properties</argument>
-                    <argument>-Dspring.config.location=classpath:/application.properties,file:${project.basedir}/config/secrets.properties</argument>
-                    <argument>-Dvistalink.rpc.client-keys=disabled</argument>
-                    <argument>org.springframework.boot.loader.PropertiesLauncher</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>stop-all</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>stop-all</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>release</id>
       <build>

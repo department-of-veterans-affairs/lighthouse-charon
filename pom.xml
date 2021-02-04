@@ -13,8 +13,8 @@
   <packaging>pom</packaging>
   <modules>
     <module>vistalink-api</module>
+    <module>vistalink-models</module>
     <module>vistalink</module>
     <module>vistalink-tests</module>
-    <module>vistalink-models</module>
   </modules>
 </project>
