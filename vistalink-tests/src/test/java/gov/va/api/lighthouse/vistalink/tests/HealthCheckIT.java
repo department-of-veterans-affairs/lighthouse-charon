@@ -16,10 +16,8 @@ public class HealthCheckIT {
   void healthCheckIsUnprotected(String basePath) {
     // Local Testing Only
     assumeEnvironmentIn(Environment.LOCAL);
-    TestClients.vistalink()
-        .get(basePath + "actuator/health")
-        .response()
-        .then()
-        .body("status", equalTo("UP"));
+    var requestPath = basePath + "actuator/health";
+    log.info("Running health-check for path: {}", requestPath);
+    TestClients.vistalink().get(requestPath).response().then().body("status", equalTo("UP"));
   }
 }
