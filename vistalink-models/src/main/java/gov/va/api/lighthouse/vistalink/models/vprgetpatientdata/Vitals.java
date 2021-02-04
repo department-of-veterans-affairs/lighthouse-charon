@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -70,7 +71,9 @@ public class Vitals {
 
     @JacksonXmlProperty List<Qualifier> qualifiers;
 
-    BloodPressure asBloodPressure() {
+    /** Split a blood pressure type measurement into a systolic and diastolic. */
+    @JsonIgnore
+    public BloodPressure asBloodPressure() {
       if (high != null && low != null && value != null) {
         String[] highs = high.split("/", -1);
         String[] lows = low.split("/", -1);
@@ -97,7 +100,9 @@ public class Vitals {
       return null;
     }
 
-    boolean isBloodPressure() {
+    /** Check if a measurement is a blood pressure. */
+    @JsonIgnore
+    public boolean isBloodPressure() {
       return "BLOOD PRESSURE".equals(name);
     }
   }
