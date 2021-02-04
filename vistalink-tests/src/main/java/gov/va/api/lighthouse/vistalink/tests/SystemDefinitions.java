@@ -33,7 +33,7 @@ public class SystemDefinitions {
     // Static client-key is being passed here for other tests to use.
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
-        .clientKey(Optional.of("~shanktopus~"))
+        .clientKey(Optional.of(System.getProperty("client-key","~shanktopus~")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .testTargets(rpcTargets())
