@@ -26,6 +26,7 @@ public class TestClients {
     return BasicTestClient.builder()
         .service(SystemDefinitions.get().vistalink())
         .mapper(JacksonConfig::createMapper)
+        .contentType("application/json")
         .build();
   }
 }
