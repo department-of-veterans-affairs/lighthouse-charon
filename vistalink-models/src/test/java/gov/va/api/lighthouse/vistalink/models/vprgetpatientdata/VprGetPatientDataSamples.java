@@ -15,6 +15,25 @@ import lombok.experimental.UtilityClass;
 public class VprGetPatientDataSamples {
   @AllArgsConstructor(staticName = "create")
   public static class Response {
+    public BloodPressure bloodPressure() {
+      return BloodPressure.builder()
+          .diastolic(
+              BloodPressure.BloodPressureMeasurement.builder()
+                  .high("110")
+                  .low("60")
+                  .units("mm[Hg]")
+                  .value("65")
+                  .build())
+          .systolic(
+              BloodPressure.BloodPressureMeasurement.builder()
+                  .high("210")
+                  .low("100")
+                  .units("mm[Hg]")
+                  .value("126")
+                  .build())
+          .build();
+    }
+
     public List<Vitals.Measurement> measurements() {
       return List.of(
           Vitals.Measurement.builder()
