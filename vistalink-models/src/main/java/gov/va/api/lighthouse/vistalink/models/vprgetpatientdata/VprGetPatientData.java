@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import gov.va.api.lighthouse.vistalink.api.RpcDetails;
@@ -151,6 +153,7 @@ public class VprGetPatientData
     @AllArgsConstructor
     @Builder
     @Data
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @JacksonXmlRootElement(localName = "results")
     public static class Results {
@@ -160,9 +163,21 @@ public class VprGetPatientData
       @JacksonXmlProperty(isAttribute = true)
       String timeZone;
 
+      @JacksonXmlProperty Labs labs;
+
       @JacksonXmlProperty Vitals vitals;
 
+      /** Get a stream of labs for a patient. */
+      @JsonIgnore
+      public Stream<Labs.Lab> labStream() {
+        if (labs() == null) {
+          return Stream.empty();
+        }
+        return labs().labResults().stream();
+      }
+
       /** Get a stream of vitals for a patient. */
+      @JsonIgnore
       public Stream<Vitals.Vital> vitalStream() {
         if (vitals() == null) {
           return Stream.empty();
