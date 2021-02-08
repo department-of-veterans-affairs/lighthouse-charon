@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.vistalink.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,10 @@ import lombok.NoArgsConstructor;
  *
  * }</pre>
  */
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @Builder
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CodeAndNameXmlAttribute {
   @JacksonXmlProperty(isAttribute = true)

@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.vistalink.models.vprgetpatientdata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Vitals {
   @JacksonXmlProperty(isAttribute = true)
@@ -38,6 +40,7 @@ public class Vitals {
   @AllArgsConstructor
   @Builder
   @Data
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Measurement {
     @JacksonXmlProperty(isAttribute = true)
@@ -115,6 +118,7 @@ public class Vitals {
   @AllArgsConstructor
   @Builder
   @Data
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Qualifier {
     @JacksonXmlProperty(isAttribute = true)
@@ -127,6 +131,7 @@ public class Vitals {
   @AllArgsConstructor
   @Builder
   @Data
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   @JacksonXmlRootElement(localName = "vital")
   public static class Vital {
