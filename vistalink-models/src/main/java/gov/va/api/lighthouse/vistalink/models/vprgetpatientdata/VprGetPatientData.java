@@ -25,6 +25,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 
 @NoArgsConstructor(staticName = "create")
 public class VprGetPatientData
@@ -34,6 +35,7 @@ public class VprGetPatientData
   private static final String RPC_CONTEXT = "VPR APPLICATION PROXY";
 
   /** Serialize the RPC results to a response object. */
+  @Override
   public VprGetPatientData.Response fromResults(List<RpcInvocationResult> invocationResults) {
     // TO-DO needs to handle different bad result behaviors (e.g. : ignore errors, ignore a
     // percentage, or throw exception on errors.)
@@ -79,24 +81,25 @@ public class VprGetPatientData
    */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
-    @NonNull String dfn;
+    @NonNull private PatientId dfn;
 
-    Set<Domains> type;
+    private Set<Domains> type;
 
-    Optional<String> max;
+    private Optional<String> max;
 
-    Optional<String> id;
+    private Optional<String> id;
 
-    List<String> filter;
+    private List<String> filter;
 
     /** Build RpcDetails out of the request. */
+    @Override
     public RpcDetails asDetails() {
       return RpcDetails.builder()
           .context(RPC_CONTEXT)
           .name(RPC_NAME)
           .parameters(
               List.of(
-                  RpcDetails.Parameter.builder().string(dfn).build(),
+                  RpcDetails.Parameter.builder().string(dfn.toString()).build(),
                   RpcDetails.Parameter.builder()
                       .string(
                           type().stream()
@@ -143,12 +146,48 @@ public class VprGetPatientData
       }
       return type;
     }
+
+    @Value
+    public static class PatientId {
+      String dfn;
+      String icn;
+
+      /** You must specify dfn or icn, or both. */
+      @Builder
+      public PatientId(String dfn, String icn) {
+        this.dfn = dfn;
+        this.icn = icn;
+        if (dfn == null && icn == null) {
+          throw new IllegalArgumentException("At least one of DFN or ICN must be specified.");
+        }
+      }
+
+      public static PatientId forDfn(String dfn) {
+        return new PatientId(dfn, null);
+      }
+
+      public static PatientId forIcn(String icn) {
+        return new PatientId(null, icn);
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder s = new StringBuilder();
+        if (dfn != null) {
+          s.append(dfn);
+        }
+        if (icn != null) {
+          s.append(';').append(icn);
+        }
+        return s.toString();
+      }
+    }
   }
 
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
-    Map<String, Results> resultsByStation;
+    private Map<String, Results> resultsByStation;
 
     @AllArgsConstructor
     @Builder
@@ -158,14 +197,14 @@ public class VprGetPatientData
     @JacksonXmlRootElement(localName = "results")
     public static class Results {
       @JacksonXmlProperty(isAttribute = true)
-      String version;
+      private String version;
 
       @JacksonXmlProperty(isAttribute = true)
-      String timeZone;
+      private String timeZone;
 
-      @JacksonXmlProperty Labs labs;
+      @JacksonXmlProperty private Labs labs;
 
-      @JacksonXmlProperty Vitals vitals;
+      @JacksonXmlProperty private Vitals vitals;
 
       /** Get a stream of labs for a patient. */
       @JsonIgnore
