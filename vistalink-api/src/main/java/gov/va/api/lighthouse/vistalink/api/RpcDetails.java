@@ -2,11 +2,15 @@ package gov.va.api.lighthouse.vistalink.api;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +45,14 @@ public class RpcDetails {
 
   @Data
   @NoArgsConstructor
-  @JsonAutoDetect(fieldVisibility = Visibility.ANY)
+  @JsonAutoDetect(fieldVisibility = Visibility.ANY, isGetterVisibility = Visibility.NONE)
   public static class Parameter {
     @JsonDeserialize(using = ParameterValueDeserializer.class)
+    @JsonSerialize(using = ParameterValueSerializer.class)
     private String ref;
 
     @JsonDeserialize(using = ParameterValueDeserializer.class)
+    @JsonSerialize(using = ParameterValueSerializer.class)
     private String string;
 
     @JsonDeserialize(contentUsing = ParameterValueDeserializer.class)
@@ -72,22 +78,38 @@ public class RpcDetails {
     /** Verify that only parameter field is set. */
     public void checkOnlyOneSet() {
       int count = 0;
-      if (ref != null) {
+      if (isRef()) {
         count++;
       }
-      if (string != null) {
+      if (isString()) {
         count++;
       }
-      if (array != null) {
+      if (isArray()) {
         count++;
       }
-      if (namedArray != null) {
+      if (isNamedArray()) {
         count++;
       }
       if (count != 1) {
         throw new IllegalArgumentException(
-            "Exact one of ref, string, array, or namedArray must be specified");
+            "Exactly one of ref, string, array, or namedArray must be specified. Found " + count);
       }
+    }
+
+    public boolean isArray() {
+      return array != null;
+    }
+
+    public boolean isNamedArray() {
+      return namedArray != null;
+    }
+
+    public boolean isRef() {
+      return ref != null;
+    }
+
+    public boolean isString() {
+      return string != null;
     }
 
     @Override
@@ -97,16 +119,16 @@ public class RpcDetails {
 
     /** Determine RPC parameter type based on the fields that are set. */
     public String type() {
-      if (ref != null) {
+      if (isRef()) {
         return "ref";
       }
-      if (string != null) {
+      if (isString()) {
         return "string";
       }
-      if (array != null) {
+      if (isArray()) {
         return "array";
       }
-      if (namedArray != null) {
+      if (isNamedArray()) {
         return "array";
       }
       throw new IllegalStateException("unknown type");
@@ -114,16 +136,16 @@ public class RpcDetails {
 
     /** Determine RPC parameter value based on the fields that are set. */
     public Object value() {
-      if (ref != null) {
+      if (isRef()) {
         return ref;
       }
-      if (string != null) {
+      if (isString()) {
         return string;
       }
-      if (array != null) {
+      if (isArray()) {
         return array;
       }
-      if (namedArray != null) {
+      if (isNamedArray()) {
         return namedArray;
       }
       throw new IllegalStateException("unknown type");
@@ -140,6 +162,20 @@ public class RpcDetails {
     public String deserialize(JsonParser p, DeserializationContext ctxt)
         throws IOException, JsonProcessingException {
       return StringUtils.trim(p.getText());
+    }
+  }
+
+  public static class ParameterValueSerializer extends StdSerializer<String> {
+
+    public ParameterValueSerializer() {
+      super(String.class);
+    }
+
+    @Override
+    public void serialize(
+        String s, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+        throws IOException {
+      jsonGenerator.writeString(s);
     }
   }
 }

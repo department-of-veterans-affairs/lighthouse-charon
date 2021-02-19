@@ -7,7 +7,10 @@ import gov.va.api.lighthouse.vistalink.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
 import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.vistalink.service.controller.DfnMacro;
+import gov.va.api.lighthouse.vistalink.service.controller.MacroProcessorFactory;
 import gov.va.api.lighthouse.vistalink.service.controller.VistalinkRpcInvokerFactory;
+import java.util.List;
 import java.util.Locale;
 import lombok.Builder;
 import lombok.SneakyThrows;
@@ -30,7 +33,8 @@ public class VistalinkRpcInvokerTest {
             "Set system property 'test.rpcinvoker' or environment variable 'TEST_RPCINVOKER' to true to enable.")
         .isTrue();
     config = VistalinkTestConfig.fromSystemProperties();
-    vistalinkRpcInvokerFactory = new VistalinkRpcInvokerFactory();
+    vistalinkRpcInvokerFactory =
+        new VistalinkRpcInvokerFactory(new MacroProcessorFactory(List.of(new DfnMacro())));
     var rpcPrincipal =
         RpcPrincipal.builder().accessCode(config.accessCode).verifyCode(config.verifyCode).build();
     var connectionDetails =

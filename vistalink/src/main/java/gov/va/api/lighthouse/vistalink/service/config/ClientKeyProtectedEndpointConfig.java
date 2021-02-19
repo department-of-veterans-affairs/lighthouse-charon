@@ -1,7 +1,6 @@
 package gov.va.api.lighthouse.vistalink.service.config;
 
 import static gov.va.api.lighthouse.talos.Responses.unauthorizedAsJson;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.talos.ClientKeyProtectedEndpointFilter;
@@ -26,32 +25,34 @@ public class ClientKeyProtectedEndpointConfig {
   @Bean
   FilterRegistrationBean<ClientKeyProtectedEndpointFilter> clientKeyProtectedEndpointFilter(
       @Value("${vistalink.rpc.client-keys}") String rpcClientKeysCsv) {
-    var rpcRequestFilter = new FilterRegistrationBean<ClientKeyProtectedEndpointFilter>();
+    var registration = new FilterRegistrationBean<ClientKeyProtectedEndpointFilter>();
 
     List<String> clientKeys;
 
-    if (isBlank(rpcClientKeysCsv) || "unset".equals(rpcClientKeysCsv)) {
+    if ("disabled".equals(rpcClientKeysCsv)) {
       log.warn(
-          "RPC Request client-key is disabled. To enable, "
-              + "set vistalink.rpc.client-keys to a value other than unset.");
+          "ClientKeyProtectedEndpointFilter is disabled. To enable, "
+              + "set vistalink.rpc.client-keys to a value other than disabled.");
 
-      rpcRequestFilter.setEnabled(false);
+      registration.setEnabled(false);
       clientKeys = List.of();
     } else {
+      log.info("ClientKeyProtectedEndpointFilter is enabled.");
       clientKeys = Arrays.stream(rpcClientKeysCsv.split(",")).collect(Collectors.toList());
     }
 
-    rpcRequestFilter.setFilter(
+    registration.setFilter(
         ClientKeyProtectedEndpointFilter.builder()
             .clientKeys(clientKeys)
             .name("RPC Request")
             .unauthorizedResponse(unauthorizedResponse())
             .build());
 
-    rpcRequestFilter.addUrlPatterns(
-        "/rpc", "/rpc/connections", "/vistalink/rpc", "/vistalink/rpc/connections");
+    registration.setOrder(1);
 
-    return rpcRequestFilter;
+    registration.addUrlPatterns("/rpc/*", "/vistalink/rpc/*");
+
+    return registration;
   }
 
   @SneakyThrows
