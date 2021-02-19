@@ -10,4 +10,5 @@ public class ConnectionDetails {
   String host;
   int port;
   String divisionIen;
+  String timezone;
 }

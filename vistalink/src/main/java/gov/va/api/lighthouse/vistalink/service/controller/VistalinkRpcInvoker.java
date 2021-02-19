@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.vistalink.service.controller;
 
 import gov.va.api.lighthouse.vistalink.api.RpcDetails;
 import gov.va.api.lighthouse.vistalink.api.RpcInvocationResult;
+import gov.va.api.lighthouse.vistalink.api.RpcMetadata;
 import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
@@ -162,6 +163,7 @@ public class VistalinkRpcInvoker implements RpcInvoker {
       VistalinkXmlResponse xmlResponse = parse(vistalinkResponse);
       return RpcInvocationResult.builder()
           .vista(vista())
+          .metadata(RpcMetadata.builder().timezone(connectionDetails.timezone()).build())
           .response(xmlResponse.getResponse().getValue())
           .build();
     } catch (NoRpcContextFaultException e) {
