@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 public class RpcInvocationResult {
   private String vista;
+  private RpcMetadata metadata;
   private String response;
   private Optional<String> error;
 

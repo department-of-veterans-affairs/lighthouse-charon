@@ -23,7 +23,7 @@ public class VistalinkPropertiesConfig {
       throw badValue(name, value, "value is blank");
     }
     var parts = value.split(":", -1);
-    if (parts.length != 3) {
+    if (parts.length != 4) {
       throw badValue(name, value, "incorrect number of parts");
     }
     try {
@@ -32,6 +32,7 @@ public class VistalinkPropertiesConfig {
           .host(parts[0])
           .port(Integer.parseInt(parts[1]))
           .divisionIen(parts[2])
+          .timezone(parts[3])
           .build();
     } catch (NumberFormatException e) {
       throw badValue(name, value, "port is not an integer");
@@ -41,7 +42,7 @@ public class VistalinkPropertiesConfig {
   private IllegalArgumentException badValue(String name, String value, String message) {
     return new IllegalArgumentException(
         String.format(
-            "Cannot parse value %s=\"%s\", expected \"hostname:port:divisionIen\" (%s)",
+            "Cannot parse value %s=\"%s\", expected \"hostname:port:divisionIen:timezone\" (%s)",
             name, value, message));
   }
 
