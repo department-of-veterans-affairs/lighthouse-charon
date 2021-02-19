@@ -29,9 +29,11 @@ public class SystemDefinitions {
 
   private static SystemDefinition local() {
     String url = "http://localhost";
+    // Client-Key is enabled for Health-Check IT.
+    // Static client-key is being passed here for other tests to use.
     return SystemDefinition.builder()
         .vistalink(serviceDefinition("vistalink", url, 8050, ""))
-        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
+        .clientKey(Optional.of(System.getProperty("client-key", "~shanktopus~")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .testTargets(rpcTargets())

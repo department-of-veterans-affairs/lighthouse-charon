@@ -6,6 +6,8 @@ skinparam {
  ClassBackgroundColor<<data>> #EFF
  ClassBackgroundColor<<vistalink>> #FEE
  ClassBackgroundColor<<future>> #DDD
+ ClassBackgroundColor<<mpi>> #FFE
+ ClassBackgroundColor<<macro>> #EDE
 }
 
 together {
@@ -64,14 +66,40 @@ interface VistaNameResolver {
 VistaNameResolver --> RpcVistaTargets: <<use>>
 
 class AllVistaNameResolver  <<Component>> <<temporary>> implements VistaNameResolver
-class MpiVistaNameResolver  <<Component>> <<future>> implements VistaNameResolver
+class MpiVistaNameResolver  <<Component>> <<mpi>> implements VistaNameResolver
 
 together {
-class VistalinkRpcInvoker  <<Component>> <<vistalink>> implements RpcInvoker
-class VistalinkRpcInvokerFactory  <<Component>> <<vistalink>> implements RpcInvokerFactory
+  class VistalinkRpcInvoker  <<Component>> <<vistalink>> implements RpcInvoker
+  class VistalinkRpcInvokerFactory  <<Component>> <<vistalink>> implements RpcInvokerFactory
 }
+together {
+  class MacroProcessorFactory <<Component>> <<macro>> {
+    MacroProcessor create(MacroExecutionContext ctx)
+  }
+  class MacroProcessor <<macro>> {
+    String evaluate(String value)
+  }
+  interface Macro <<macro>> {
+    String name()
+    String evaluate(MacroExecutionContext ctx, String value)
+  }
+  interface MacroExecutionContext <<macro>> {
+    RpcResponse invoke(RpcRequest request)
+  }
+  class DfnMacro <<Component>> <<macro>> implements Macro
+}
+MacroProcessorFactory o--> "*" Macro:<<Autowire>> macros
+MacroProcessorFactory --> MacroProcessor: <<create>>
+MacroProcessor o--> MacroExecutionContext
+MacroProcessor o--> "*" Macro:macros
+Macro --> MacroExecutionContext
+
 VistalinkRpcInvokerFactory --> VistalinkRpcInvoker: <<create>>
 VistalinkRpcInvokerFactory o--> VistalinkProperties:<<Autowire>>
+VistalinkRpcInvokerFactory o--> "*" MacroProcessorFactory:<<Autowire>>
+VistalinkRpcInvoker o--> MacroProcessorFactory:<<use>>
+VistalinkRpcInvoker --> MacroProcessor:<<use>>
+VistalinkRpcInvoker --> MacroExecutionContext:<<create>>
 
 class RpcController <<RestController>>
 RpcController o-> RpcExecutor: <<Autowire>>

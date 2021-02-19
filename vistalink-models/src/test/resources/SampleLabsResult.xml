@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results version="1.13" timeZone="-0500">
+  <labs total="1">
+    <lab>
+      <collected value="3100715.110005"/>
+      <comment>Ordering Provider: Eightyeight Vehu Report Released\nDate/Time: Apr 12, 2011@12:51\nPerforming Lab: ALBANY VA MEDICAL CENTER VA MEDICAL CENTER 1 3RD sT. ALBANY, NY 12180-0097</comment>
+      <facility code="500" name="CAMP MASTER"/>
+      <groupName value="RIA 0412 7"/>
+      <high value="15"/>
+      <id value="CH;6899283.889996;741"/>
+      <interpretation value="EXP"/>
+      <labOrderID value="6899283.889995"/>
+      <localName value="TSH"/>
+      <loinc value="10347-3"/>
+      <low value="7"/>
+      <performingLab value="ALBANY VA MEDICAL CENTER"/>
+      <provider code="20090" name="VEHU,EIGHTYEIGHT" officePhone="(518) 827-3158" analogPager="(518) 930-4216" fax="(518) 123-4567" email="eightyeight.vehu@va.gov" taxonomyCode="203B00000N" providerType="Physicians (M.D. and D.O.)" classification="Physician/Osteopath" specialization="Emergency Medicine" service="MEDICINE"/>
+      <orderID value="500049"/>
+      <result value="11"/>
+      <resulted value="3110425.190958"/>
+      <sample value="SERUM"/>
+      <specimen code="0X500" name="SERUM"/>
+      <status value="completed"/>
+      <test value="TSH"/>
+      <type value="CH"/>
+      <units value="MCIU/ML"/>
+      <vuid value="1234"/>
+    </lab>
+  </labs>
+</results>
