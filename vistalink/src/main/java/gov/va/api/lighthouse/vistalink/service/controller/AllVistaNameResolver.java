@@ -4,6 +4,8 @@ import gov.va.api.lighthouse.vistalink.api.RpcVistaTargets;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.config.VistalinkProperties;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,15 @@ public class AllVistaNameResolver implements VistaNameResolver {
   public List<ConnectionDetails> resolve(RpcVistaTargets rpcVistaTargets) {
     properties.checkKnownNames(rpcVistaTargets.include());
     properties.checkKnownNames(rpcVistaTargets.exclude());
-    return properties().vistas();
+    Predicate<ConnectionDetails> allowed;
+    if (rpcVistaTargets.include().isEmpty()) {
+      allowed = s -> true;
+    } else {
+      allowed = s -> rpcVistaTargets.include().contains(s.name());
+    }
+    if (!rpcVistaTargets.exclude().isEmpty()) {
+      allowed = allowed.and(s -> !rpcVistaTargets.exclude().contains(s.name()));
+    }
+    return properties().vistas().stream().filter(allowed).collect(Collectors.toList());
   }
 }

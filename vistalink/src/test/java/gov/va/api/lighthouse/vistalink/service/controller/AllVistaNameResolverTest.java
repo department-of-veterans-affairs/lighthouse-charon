@@ -46,6 +46,18 @@ class AllVistaNameResolverTest {
   }
 
   @Test
+  void onlyKnownExcludesAreNotReturnedWhenSpecified() {
+    assertThat(resolver.resolve(RpcVistaTargets.builder().exclude(List.of("v1", "v3")).build()))
+        .containsExactlyInAnyOrderElementsOf(List.of(details[0], details[2], details[4]));
+  }
+
+  @Test
+  void onlyKnownIncludesAreReturnedWhenSpecified() {
+    assertThat(resolver.resolve(RpcVistaTargets.builder().include(List.of("v1", "v3")).build()))
+        .containsExactlyInAnyOrderElementsOf(List.of(details[1], details[3]));
+  }
+
+  @Test
   void unknownVistaExceptionIsThrownForIncludedUnknownVista() {
     assertThatExceptionOfType(UnknownVista.class)
         .isThrownBy(
