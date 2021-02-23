@@ -76,14 +76,18 @@ public class VprGetPatientData
   }
 
   /**
-   * Start and stop are currently not supported but empty parameters are added to the parameters
-   * after type in their place because VistA cares about parameter order.
+   * Start and stop are currently supported as fileman date strings. Later a macro will be used to
+   * change an ISO 8601 into a fileman date for the target VistA's correct timezone.
    */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
     @NonNull private PatientId dfn;
 
     private Set<Domains> type;
+
+    private Optional<String> start;
+
+    private Optional<String> stop;
 
     private Optional<String> max;
 
@@ -107,8 +111,8 @@ public class VprGetPatientData
                               .map(Enum::name)
                               .collect(Collectors.joining(";")))
                       .build(),
-                  RpcDetails.Parameter.builder().string("").build(),
-                  RpcDetails.Parameter.builder().string("").build(),
+                  RpcDetails.Parameter.builder().string(start().orElse("")).build(),
+                  RpcDetails.Parameter.builder().string(stop().orElse("")).build(),
                   RpcDetails.Parameter.builder().string(max().orElse("")).build(),
                   RpcDetails.Parameter.builder().string(id().orElse("")).build(),
                   RpcDetails.Parameter.builder().array(filter()).build()))
@@ -137,6 +141,22 @@ public class VprGetPatientData
         max = Optional.empty();
       }
       return max;
+    }
+
+    /** Lazy getter. */
+    Optional<String> start() {
+      if (start == null) {
+        start = Optional.empty();
+      }
+      return start;
+    }
+
+    /** Lazy getter. */
+    Optional<String> stop() {
+      if (stop == null) {
+        stop = Optional.empty();
+      }
+      return stop;
     }
 
     /** Lazy getter. */

@@ -21,6 +21,8 @@ public class VprGetPatientDataRequestTest {
   void lazyInitializers() {
     var sample = VprGetPatientData.Request.builder().dfn(PatientId.forDfn("dfn")).build();
     assertThat(sample.type()).isEmpty();
+    assertThat(sample.start()).isEqualTo(Optional.empty());
+    assertThat(sample.stop()).isEqualTo(Optional.empty());
     assertThat(sample.max()).isEqualTo(Optional.empty());
     assertThat(sample.id()).isEqualTo(Optional.empty());
     assertThat(sample.filter()).isEmpty();
