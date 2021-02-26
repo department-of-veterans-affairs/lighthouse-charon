@@ -165,13 +165,13 @@ public class FilemanDate {
     }
 
     private int readRemainingIntAndPadToSize(int chars) {
-      int remainingInt = readInt(remaining());
       int notRead = chars - remaining();
+      int remainingInt = readInt(remaining());
       if (notRead <= 0) {
         return remainingInt;
       }
       try {
-        BigInteger paddingMultiplier = BigInteger.TEN.pow(notRead - 1);
+        BigInteger paddingMultiplier = BigInteger.TEN.pow(notRead);
         return paddingMultiplier.multiply(BigInteger.valueOf(remainingInt)).intValueExact();
       } catch (ArithmeticException e) {
         throw new BadFilemanDate("Unable to pad remaining characters.", value);
