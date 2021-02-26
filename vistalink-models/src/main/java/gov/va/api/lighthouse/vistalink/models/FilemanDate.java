@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.vistalink.models;
 
 import java.io.Serial;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -75,20 +76,17 @@ public class FilemanDate {
       if (!hasValue(zdt.getHour(), zdt.getMinute(), zdt.getSecond())) {
         return result.toString();
       }
-
       result.append('.');
       if (hasValue(zdt.getMinute(), zdt.getSecond())) {
         result.append(zeroPaddedNumber(zdt.getHour()));
       } else {
         return result.append(noTrailingZero(zdt.getHour())).toString();
       }
-
       if (hasValue(zdt.getSecond())) {
         result.append(zeroPaddedNumber(zdt.getMinute()));
       } else {
         return result.append(noTrailingZero(zdt.getMinute())).toString();
       }
-
       return result.append(noTrailingZero(zdt.getSecond())).toString();
     }
 
@@ -132,7 +130,13 @@ public class FilemanDate {
     }
 
     private int nextIfAvailable(int chars, int defaultValue) {
-      return (remaining() == 0) ? defaultValue : readInt(chars);
+      if (remaining() == 0) {
+        return defaultValue;
+      }
+      if (remaining() >= chars) {
+        return readInt(chars);
+      }
+      return readRemainingIntAndPadToSize(chars);
     }
 
     public Instant parse() {
@@ -157,6 +161,20 @@ public class FilemanDate {
         throw new BadFilemanDate("Contains invalid characters.", value);
       } finally {
         index += chars;
+      }
+    }
+
+    private int readRemainingIntAndPadToSize(int chars) {
+      int remainingInt = readInt(remaining());
+      int notRead = chars - remaining();
+      if (notRead <= 0) {
+        return remainingInt;
+      }
+      try {
+        BigInteger paddingMultiplier = BigInteger.TEN.pow(notRead - 1);
+        return paddingMultiplier.multiply(BigInteger.valueOf(remainingInt)).intValueExact();
+      } catch (ArithmeticException e) {
+        throw new BadFilemanDate("Unable to pad remaining characters.", value);
       }
     }
 
