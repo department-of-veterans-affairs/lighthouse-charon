@@ -20,7 +20,10 @@ public class FilemanDateTest {
         Arguments.arguments("2970919.08", ZoneId.of("UTC"), "1997-09-19T08:00:00Z"),
         Arguments.arguments("2970919.0827", ZoneId.of("UTC"), "1997-09-19T08:27:00Z"),
         Arguments.arguments("2970919.082701", ZoneId.of("UTC"), "1997-09-19T08:27:01Z"),
-        Arguments.arguments("2970919.082701", ZoneId.of("UTC"), "1997-09-19T08:27:01Z"),
+        Arguments.arguments("2970919.122731", ZoneId.of("UTC"), "1997-09-19T12:27:31Z"),
+        Arguments.arguments("2970919.12273", ZoneId.of("UTC"), "1997-09-19T12:27:30Z"),
+        Arguments.arguments("2970919.122", ZoneId.of("UTC"), "1997-09-19T12:20:00Z"),
+        Arguments.arguments("2970919.1", ZoneId.of("UTC"), "1997-09-19T10:00:00Z"),
         Arguments.arguments(
             "2970919.082701", ZoneId.of("America/New_York"), "1997-09-19T12:27:01Z"),
         Arguments.arguments("2970919.082701", ZoneId.of("America/Chicago"), "1997-09-19T13:27:01Z"),
