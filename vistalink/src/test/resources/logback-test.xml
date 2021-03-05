@@ -6,4 +6,5 @@
   <logger level="INFO" name="org.apache.http.wire"/>
   <logger level="OFF" name="org.apache.http"/>
   <logger level="OFF" name="org.hibernate.validator.internal"/>
+  <logger level="INFO" name="gov.va.med.vistalink"/>
 </configuration>

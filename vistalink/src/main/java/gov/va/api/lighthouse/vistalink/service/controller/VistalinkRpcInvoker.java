@@ -6,6 +6,7 @@ import gov.va.api.lighthouse.vistalink.api.RpcMetadata;
 import gov.va.api.lighthouse.vistalink.api.RpcPrincipal;
 import gov.va.api.lighthouse.vistalink.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.vistalink.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
+import gov.va.med.exception.FoundationsException;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import gov.va.med.vistalink.rpc.NoRpcContextFaultException;
 import gov.va.med.vistalink.rpc.RpcRequest;
@@ -18,6 +19,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
@@ -90,7 +92,9 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   }
 
   private VistaLinkConnection createConnection() {
-    return kernelPrincipal.getAuthenticatedConnection();
+    VistaLinkConnection authenticatedConnection = kernelPrincipal.getAuthenticatedConnection();
+
+    return authenticatedConnection;
   }
 
   private CallbackHandler createLoginCallbackHandler() {
@@ -136,7 +140,8 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   private VistaKernelPrincipalImpl createVistaKernelPrincipal() {
     log.info("{} Logging in", this);
     loginContext.login();
-    return VistaKernelPrincipalImpl.getKernelPrincipal(loginContext.getSubject());
+    Subject subject = loginContext.getSubject();
+    return VistaKernelPrincipalImpl.getKernelPrincipal(subject);
   }
 
   /** Invoke an RPC with raw types. */
@@ -154,19 +159,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   public RpcInvocationResult invoke(RpcDetails rpcDetails) {
     var start = Instant.now();
     try {
-      var vistalinkRequest = RpcRequestFactory.getRpcRequest();
-      vistalinkRequest.setRpcContext(rpcDetails.context());
-      vistalinkRequest.setUseProprietaryMessageFormat(true);
-      vistalinkRequest.setRpcName(rpcDetails.name());
-      if (rpcDetails.version().isPresent()) {
-        vistalinkRequest.setRpcVersion(rpcDetails.version().get());
-      }
-      MacroProcessor macroProcessor = macroProcessorFactory.create(this);
-      for (int i = 0; i < rpcDetails.parameters().size(); i++) {
-        var parameter = rpcDetails.parameters().get(i);
-        var value = macroProcessor.evaluate(parameter);
-        vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
-      }
+      RpcRequest vistalinkRequest = toRpcRequest(rpcDetails);
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("{} Response {} chars", this, vistalinkResponse.getRawResponse().length());
       VistalinkXmlResponse xmlResponse = parse(vistalinkResponse);
@@ -184,6 +177,23 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
           Duration.between(start, Instant.now()).toMillis(),
           rpcDetails.name());
     }
+  }
+
+  RpcRequest toRpcRequest(RpcDetails rpcDetails) throws FoundationsException {
+    var vistalinkRequest = RpcRequestFactory.getRpcRequest();
+    vistalinkRequest.setRpcContext(rpcDetails.context());
+    vistalinkRequest.setUseProprietaryMessageFormat(true);
+    vistalinkRequest.setRpcName(rpcDetails.name());
+    if (rpcDetails.version().isPresent()) {
+      vistalinkRequest.setRpcVersion(rpcDetails.version().get());
+    }
+    MacroProcessor macroProcessor = macroProcessorFactory.create(this);
+    for (int i = 0; i < rpcDetails.parameters().size(); i++) {
+      var parameter = rpcDetails.parameters().get(i);
+      var value = macroProcessor.evaluate(parameter);
+      vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
+    }
+    return vistalinkRequest;
   }
 
   @ToString.Include
