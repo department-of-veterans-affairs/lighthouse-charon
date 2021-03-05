@@ -12,6 +12,7 @@ import gov.va.med.vistalink.adapter.cci.VistaLinkResourceException;
 import gov.va.med.vistalink.adapter.spi.EMAdapterEnvironment;
 import gov.va.med.vistalink.adapter.spi.EMReAuthState;
 import gov.va.med.vistalink.adapter.spi.VistaLinkConnectionImpl;
+import gov.va.med.vistalink.adapter.spi.VistaLinkConnectionRequestInfo;
 import gov.va.med.vistalink.adapter.spi.VistaLinkManagedConnection;
 import gov.va.med.vistalink.adapter.spi.VistaLinkManagedConnectionFactory;
 import gov.va.med.vistalink.rpc.RpcRequest;
@@ -21,9 +22,11 @@ import gov.va.med.vistalink.security.m.KernelSecurityHandshake;
 import gov.va.med.vistalink.security.m.KernelSecurityHandshakeManaged;
 import gov.va.med.vistalink.security.m.SecurityResponse;
 import gov.va.med.vistalink.security.m.SecurityResponseFactory;
+import gov.va.med.vistalink.security.m.SecurityVOLogon;
 import java.util.List;
 import javax.resource.spi.ConnectionEvent;
 import javax.resource.spi.ConnectionEventListener;
+import javax.resource.spi.ConnectionRequestInfo;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Level;
@@ -36,10 +39,13 @@ public class InteractiveTest {
   @SneakyThrows
   void ping() {
     String appProxyName = "LHS,CONNECTOR PROXY";
-    //  "LHS,APPLICATION PROXY";
+    appProxyName = "LHS,APPLICATION PROXY";
+
     RpcPrincipal principal =
-        //    RpcPrincipal.builder().accessCode("1PROGRAMMER").verifyCode("PROGRAMMER1").build();
+        RpcPrincipal.builder().accessCode("1PROGRAMMER").verifyCode("PROGRAMMER1").build();
+    principal =
         RpcPrincipal.builder().accessCode("123LIGHTHOUSE").verifyCode("321LIGHTHOUSE*").build();
+
     ConnectionDetails connectionDetails =
         ConnectionDetails.builder()
             .name("673")
@@ -49,13 +55,14 @@ public class InteractiveTest {
             .timezone("America/New_York")
             .build();
     RpcDetails rpc =
-        // RpcDetails.builder().context("XOBV VISTALINK TESTER").name("XOBV TEST PING").build();
+        RpcDetails.builder().context("XOBV VISTALINK TESTER").name("XOBV TEST PING").build();
+    rpc =
         RpcDetails.builder()
             .context("LHS RPC CONTEXT")
             .name("VPR GET PATIENT DATA")
             .parameters(
                 List.of(
-                    RpcDetails.Parameter.builder().string("5000000347").build(),
+                    RpcDetails.Parameter.builder().string("140").build(),
                     RpcDetails.Parameter.builder().string("vitals").build(),
                     RpcDetails.Parameter.builder().string("").build(),
                     RpcDetails.Parameter.builder().string("").build(),
@@ -80,44 +87,63 @@ public class InteractiveTest {
     }
 
     if (hack) {
-      VistaLinkManagedConnectionFactory mcf = new VistaLinkManagedConnectionFactory();
+      WtfVistaLinkManagedConnectionFactory mcf = new WtfVistaLinkManagedConnectionFactory();
+      mcf.setPrimaryStation("673");
       mcf.setNonManagedHostPort(connectionDetails.port());
       mcf.setNonManagedHostIPAddress(connectionDetails.host());
+      mcf.setNonManagedAccessCode(principal.accessCode());
+      mcf.setNonManagedVerifyCode(principal.verifyCode());
+      mcf.setAdapterEnvironment(EMAdapterEnvironment.J2EE); // DEFAULT J2SE
 
       VistaLinkManagedConnection mc = new WtfVistaLinkManagedConnection(mcf, 666);
       mc.addConnectionEventListener(new SpamConnectionEventListener());
-      VistaLinkConnectionImpl connection = new VistaLinkConnectionImpl(mc);
 
-      log.info("Starting KernelSecurityHandshakeManaged.doSetupAndGetIntroText");
-      SecurityResponse securityResponse =
-          KernelSecurityHandshakeManaged.doSetupAndGetIntroText(
-              mc,
-              new SecurityResponseFactory(),
-              true,
-              Environment.isProduction(),
-              mcf.getPrimaryStation());
-      log.info(
-          "Security Response {}/{}/{}",
-          securityResponse.getResultType(),
-          securityResponse.getResultMessage(),
-          securityResponse.getRawResponse());
-
-      KernelSecurityHandshake.doAVLogon(
-              connection,
-              new SecurityResponseFactory(),
-              principal.accessCode(),
-              principal.verifyCode(),
-              false)
-          .getSecurityVOLogon();
-
-      RpcRequest request = toRpcRequest(mpf, rpc);
       VistaLinkConnectionSpecImpl cs =
           new VistaLinkAppProxyConnectionSpec(connectionDetails.divisionIen(), appProxyName);
+      ConnectionRequestInfo connReq = new VistaLinkConnectionRequestInfo(cs);
+      VistaLinkConnectionImpl connection =
+          (VistaLinkConnectionImpl) mc.getConnection(null, connReq);
+
+      // VistaLinkConnectionImpl connection = new VistaLinkConnectionImpl(mc);
+
+      if (false) {
+        log.info("Starting KernelSecurityHandshakeManaged.doSetupAndGetIntroText");
+        SecurityResponse securityResponse =
+            KernelSecurityHandshakeManaged.doSetupAndGetIntroText(
+                mc,
+                new SecurityResponseFactory(),
+                true,
+                Environment.isProduction(),
+                mcf.getPrimaryStation());
+        log.info(
+            "Security Response {}/{}/{}",
+            securityResponse.getResultType(),
+            securityResponse.getResultMessage(),
+            securityResponse.getRawResponse());
+
+        SecurityVOLogon logon =
+            KernelSecurityHandshake.doAVLogon(
+                    connection,
+                    new SecurityResponseFactory(),
+                    principal.accessCode(),
+                    principal.verifyCode(),
+                    false)
+                .getSecurityVOLogon();
+
+        log.info(
+            "Logon {}/{}/{}",
+            logon.getPostSignInText(),
+            logon.getResultMessage(),
+            logon.getDivisionList());
+      }
+
+      RpcRequest request = toRpcRequest(mpf, rpc);
+      request.setReAuthenticateInfo(cs, EMReAuthState.VIRGIN, EMAdapterEnvironment.J2EE);
       // new VistaLinkJ2SEConnSpec(connectionDetails.divisionIen());
-      request.setReAuthenticateInfo(cs, EMReAuthState.VIRGIN, EMAdapterEnvironment.J2SE);
+      //    request.setReAuthenticateInfo(cs, EMReAuthState.VIRGIN, EMAdapterEnvironment.J2SE);
       var response = connection.executeRPC(request);
 
-      log.info("{}", response);
+      log.info("{}", response.getRawResponse());
     }
   }
 
@@ -190,6 +216,15 @@ public class InteractiveTest {
         VistaLinkManagedConnectionFactory mcf, long distinguishedIdentifier)
         throws VistaLinkResourceException {
       super(mcf, distinguishedIdentifier);
+    }
+  }
+
+  public static class WtfVistaLinkManagedConnectionFactory
+      extends VistaLinkManagedConnectionFactory {
+
+    @Override
+    protected void setPrimaryStation(String primaryStation) {
+      super.setPrimaryStation(primaryStation);
     }
   }
 }
