@@ -1,0 +1,25 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name":"DVP ADD PATIENT INSURANCE",
+    "context":"DVP MANAGER",
+    "parameters":[
+         { "string":"5000000347V502052" },
+         { "string":"X" },
+         { "array":[
+               ".03^WELLHIVE",
+               "20.01^HEALTH INSURANCE PLUS",
+               "90.01^ALB-NEWYORK",
+               "90.02^555112345",
+               "90.03^000112233"
+            ]
+         }
+      ]
+   }
+}

@@ -1,9 +1,9 @@
-# Vistalink API
+# Charon API
 
-This Vistalink API provides a simplified mechanism for executing VistA RPC. The REST API allows
+This Charon API provides a simplified mechanism for executing VistA RPC. The REST API allows
 business applications the ability interact with VistA without the complexity of integrating EJB
-technology. The Vistalink API also provides RPC broadcasting, allow an application to invoke an RPC
-across a number of VistA instances simultaneously. In particular, the Vistalink API will discover
+technology. The Charon API also provides RPC broadcasting, allow an application to invoke an RPC
+across a number of VistA instances simultaneously. In particular, the Charon API will discover
 relevant VistA sites for a patient.
 
 ![components](src/plantuml/vl-api-components.png)
@@ -32,19 +32,19 @@ Note:
 
 ## Invoking RPCs
 
-Clients will invoke the Vistalink API by posting a request. Requests contain three pieces of
+Clients will invoke the Charon API by posting a request. Requests contain three pieces of
 information:
 
-- **The VistA credentials.** The Vistalink API does not provide credentials, each application must
+- **The VistA credentials.** The Charon API does not provide credentials, each application must
   provide their own.
-- **The target vistas.** The Vistalink API allows clients to interact with VistA instances by name.
+- **The target vistas.** The Charon API allows clients to interact with VistA instances by name.
   Details such as host, port, division IEN, and network connectivity are handled by the API.
 - **The RPC details.** Clients must provide the RPC name, context, and any parameters. RPC details
   support macros for performing common, but complex tasks, such as substituting an ICN with vista
   site specific DNF value. See [Macros](macros.md)
 
-Applications will invoke the Vistalink API to gather data for a particular patient. In turn, the
-Vistalink API will access data from MPI to determine which VistA instances are likely to contain
+Applications will invoke the Charon API to gather data for a particular patient. In turn, the
+Charon API will access data from MPI to determine which VistA instances are likely to contain
 meaningful data for the patient.
 
 ![typical-use-case](src/plantuml/typical-use-case.png)
@@ -104,7 +104,7 @@ HTTP Status
 
 ### Vistalink "invoke RPC" flow
 
-The Vistalink API will determine the VistA instances to involve in the request based on the `target`
+The Charon API will determine the VistA instances to involve in the request based on the `target`
 specification of the request. VistA instances will be invoked in parallel.
 
 ![flow](src/plantuml/vistalink-api-flow.png)
@@ -122,7 +122,7 @@ specification of the request. VistA instances will be invoked in parallel.
 
 ## Under the hood
 
-The Vistalink isolates the details of interacting with VistA to just a couple of classes. This
+The Charon API isolates the details of interacting with VistA to just a couple of classes. This
 approach allows for easier testing and a separation of concerns.
 
 ![class](src/plantuml/vl-classes.png)
@@ -147,12 +147,12 @@ VistaLink EJB technology is very difficult to mock when compared to REST or SOAP
 communication. Mock integration testing will be skipped. Unit tests and live integration tests will
 be required to validate functionality.
 
-To support synthetic environments, a Mock Vistalink API will be created, similar to Mock EE. This
+To support synthetic environments, a Mock Charon API will be created, similar to Mock EE. This
 mock implementation will have canned responses based on RPC requests.
 
 ## Manually testing RPCs.
 
-The Vistalink API provides a test image that can be used for ad-hoc testing of RPCs.
+The Charon API provides a test image that can be used for ad-hoc testing of RPCs.
 
 ```
 docker run --rm --env-file vista.env vasdvp/lighthouse-vistalink-tests:latest run --module-name vistalink-tests --test-pattern '.*VistalinkRpcInvokerTest'

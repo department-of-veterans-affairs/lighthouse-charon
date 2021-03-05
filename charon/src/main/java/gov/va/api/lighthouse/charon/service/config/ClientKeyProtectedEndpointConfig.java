@@ -24,7 +24,7 @@ public class ClientKeyProtectedEndpointConfig {
 
   @Bean
   FilterRegistrationBean<ClientKeyProtectedEndpointFilter> clientKeyProtectedEndpointFilter(
-      @Value("${vistalink.rpc.client-keys}") String rpcClientKeysCsv) {
+      @Value("${charon.rpc.client-keys}") String rpcClientKeysCsv) {
     var registration = new FilterRegistrationBean<ClientKeyProtectedEndpointFilter>();
 
     List<String> clientKeys;
@@ -32,7 +32,7 @@ public class ClientKeyProtectedEndpointConfig {
     if ("disabled".equals(rpcClientKeysCsv)) {
       log.warn(
           "ClientKeyProtectedEndpointFilter is disabled. To enable, "
-              + "set vistalink.rpc.client-keys to a value other than disabled.");
+              + "set charon.rpc.client-keys to a value other than disabled.");
 
       registration.setEnabled(false);
       clientKeys = List.of();
@@ -50,7 +50,7 @@ public class ClientKeyProtectedEndpointConfig {
 
     registration.setOrder(1);
 
-    registration.addUrlPatterns("/rpc/*", "/vistalink/rpc/*");
+    registration.addUrlPatterns("/rpc/*", PathRewriteConfig.leadingPath() + "rpc/*");
 
     return registration;
   }

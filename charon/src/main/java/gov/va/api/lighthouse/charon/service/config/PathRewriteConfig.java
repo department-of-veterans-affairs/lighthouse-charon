@@ -11,10 +11,14 @@ import org.springframework.core.Ordered;
 @Configuration
 public class PathRewriteConfig {
 
+  static String leadingPath() {
+    return "/charon/";
+  }
+
   @Bean
   FilterRegistrationBean<PathRewriteFilter> pathRewriteFilter() {
     var registration = new FilterRegistrationBean<PathRewriteFilter>();
-    PathRewriteFilter filter = PathRewriteFilter.builder().removeLeadingPath("/vistalink/").build();
+    PathRewriteFilter filter = PathRewriteFilter.builder().removeLeadingPath(leadingPath()).build();
     registration.setFilter(filter);
     registration.setOrder(Ordered.LOWEST_PRECEDENCE);
     registration.addUrlPatterns(filter.removeLeadingPathsAsUrlPatterns());
