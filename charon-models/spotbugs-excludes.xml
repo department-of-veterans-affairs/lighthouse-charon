@@ -6,8 +6,8 @@
   -->
     <Match>
         <Or>
-            <Class name="gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.Vitals"/>
-            <Class name="gov.va.api.lighthouse.vistalink.models.vprgetpatientdata.Labs"/>
+            <Class name="gov.va.api.lighthouse.charon.models.vprgetpatientdata.Vitals"/>
+            <Class name="gov.va.api.lighthouse.charon.models.vprgetpatientdata.Labs"/>
         </Or>
         <Or>
             <Method name="equals"/>

@@ -7,8 +7,8 @@
   -->
   <Match>
     <Or>
-      <Class name="gov.va.api.lighthouse.vistalink.api.RpcResponse"/>
-      <Class name="gov.va.api.lighthouse.vistalink.api.RpcVistaTargets"/>
+      <Class name="gov.va.api.lighthouse.charon.api.RpcResponse"/>
+      <Class name="gov.va.api.lighthouse.charon.api.RpcVistaTargets"/>
     </Or>
     <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
   </Match>
