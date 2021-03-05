@@ -8,7 +8,7 @@
     <relativePath/>
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
-  <artifactId>vistalink-api</artifactId>
+  <artifactId>charon-api</artifactId>
   <version>2.0.20-SNAPSHOT</version>
   <packaging>jar</packaging>
   <dependencies>

@@ -8,11 +8,11 @@
     <relativePath/>
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
-  <artifactId>vistalink</artifactId>
+  <artifactId>charon</artifactId>
   <version>2.0.20-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
-    <docker.imageName>lighthouse-vistalink</docker.imageName>
+    <docker.imageName>lighthouse-${project.artifactId}</docker.imageName>
     <!-- TODO: CAN COVERAGE REACH .95 ??? -->
     <jacoco.coverage>0.65</jacoco.coverage>
     <javax.resource-api.version>1.7.1</javax.resource-api.version>
@@ -34,6 +34,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>gov.va.api.lighthouse</groupId>
+      <artifactId>charon-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>gov.va.api.lighthouse</groupId>
       <artifactId>talos</artifactId>
@@ -87,11 +92,6 @@
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
       <version>${jaxb-runtime.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>gov.va.api.lighthouse</groupId>
-      <artifactId>vistalink-api</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
   <build>

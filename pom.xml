@@ -8,13 +8,13 @@
     <version>7.0.22</version>
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
-  <artifactId>vistalink-parent</artifactId>
+  <artifactId>charon-parent</artifactId>
   <version>2.0.20-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-    <module>vistalink-api</module>
-    <module>vistalink-models</module>
-    <module>vistalink</module>
-    <module>vistalink-tests</module>
+    <module>charon-api</module>
+    <module>charon-models</module>
+    <module>charon</module>
+    <module>charon-tests</module>
   </modules>
 </project>
