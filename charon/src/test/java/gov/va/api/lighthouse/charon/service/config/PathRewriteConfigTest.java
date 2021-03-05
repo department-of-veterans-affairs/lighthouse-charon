@@ -14,7 +14,7 @@ import org.springframework.boot.web.server.LocalServerPort;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "vistalink.configuration=src/test/resources/vistalink.properties",
-      "vistalink.rpc.client-keys=disabled"
+      "charon.rpc.client-keys=disabled"
     })
 public class PathRewriteConfigTest {
   @Autowired TestRestTemplate restTemplate;
@@ -25,7 +25,7 @@ public class PathRewriteConfigTest {
   void pathIsRewritten() {
     assertThat(
         restTemplate.getForObject(
-            "http://localhost:" + port + "/vistalink/rpc/connections", VistalinkProperties.class));
+            "http://localhost:" + port + "/charon/rpc/connections", VistalinkProperties.class));
     assertThat(
         restTemplate.getForObject(
             "http://localhost:" + port + "/rpc/connections", VistalinkProperties.class));

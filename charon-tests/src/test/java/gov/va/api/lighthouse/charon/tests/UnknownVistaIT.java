@@ -16,7 +16,7 @@ public class UnknownVistaIT {
   @SneakyThrows
   void requestUnkonwnVistaWith400() {
     var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistalinkAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable());
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
@@ -24,7 +24,7 @@ public class UnknownVistaIT {
             .target(RpcVistaTargets.builder().include(List.of("who dis")).build())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
+        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
             .expect(400)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

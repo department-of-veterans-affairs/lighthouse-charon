@@ -38,7 +38,7 @@ run() {
     -e K8S_ENVIRONMENT=${ENV:-local} \
     -e SENTINEL_ENV=${ENV:-local} \
     -e CLIENT_KEY="${CLIENT_KEY:-hello}" \
-     vasdvp/lighthouse-vistalink-tests:latest $@
+     vasdvp/lighthouse-charon-tests:latest $@
 }
 
 main() {

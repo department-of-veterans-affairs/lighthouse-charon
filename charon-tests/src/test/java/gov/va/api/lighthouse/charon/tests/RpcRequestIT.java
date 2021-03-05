@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-public class VistalinkRequestIT {
+public class RpcRequestIT {
 
   private static SystemDefinition systemDefinition = SystemDefinitions.get();
 
@@ -31,7 +31,7 @@ public class VistalinkRequestIT {
 
   @SneakyThrows
   void requestRpcWithValidResponse(RpcDetails rpc) {
-    assumeTrue(systemDefinition.isVistalinkAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable());
     log.info(rpc.name());
     RpcRequest body =
         RpcRequest.builder()
@@ -40,7 +40,7 @@ public class VistalinkRequestIT {
             .target(systemDefinition.testTargets())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
+        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
             .expect(200)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

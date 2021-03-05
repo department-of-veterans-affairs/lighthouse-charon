@@ -16,7 +16,7 @@ public class UnauthorizedIT {
   @SneakyThrows
   void requestFailedLoginResponseWith401() {
     var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistalinkAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable());
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
@@ -28,7 +28,7 @@ public class UnauthorizedIT {
             .target(systemDefinition.testTargets())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
+        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
             .expect(401)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

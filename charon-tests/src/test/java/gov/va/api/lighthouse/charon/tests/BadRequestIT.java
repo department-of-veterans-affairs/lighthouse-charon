@@ -14,11 +14,11 @@ public class BadRequestIT {
   @SneakyThrows
   void requestInvalidBodyResponseWith400() {
     var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistalinkAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable());
     String body = "{\"message\": \"Im a malformed request.\"}";
     var response =
-        TestClients.vistalink()
-            .post(TestClients.headers(), systemDefinition.vistalink().apiPath() + "rpc", body)
+        TestClients.charon()
+            .post(TestClients.headers(), systemDefinition.charon().apiPath() + "rpc", body)
             .expect(400)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

@@ -12,11 +12,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class HealthCheckIT {
 
   @ParameterizedTest
-  @ValueSource(strings = {"/", "/vistalink/"})
+  @ValueSource(strings = {"/", "/charon/"})
   void healthCheckIsUnprotected(String basePath) {
     assumeEnvironmentIn(Environment.LOCAL);
     var requestPath = basePath + "actuator/health";
     log.info("Running health-check for path: {}", requestPath);
-    TestClients.vistalink().get(requestPath).response().then().body("status", equalTo("UP"));
+    TestClients.charon().get(requestPath).response().then().body("status", equalTo("UP"));
   }
 }

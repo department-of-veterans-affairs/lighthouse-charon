@@ -10,7 +10,7 @@
       <directory>${project.build.directory}</directory>
       <outputDirectory/>
       <includes>
-        <include>**/vistalink-tests-*.jar</include>
+        <include>**/charon-tests-*.jar</include>
         <include>**/junit-platform-console-standalone.jar</include>
       </includes>
       <useDefaultExcludes>true</useDefaultExcludes>

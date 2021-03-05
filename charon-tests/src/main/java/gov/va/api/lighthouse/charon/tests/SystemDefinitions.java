@@ -32,24 +32,24 @@ public class SystemDefinitions {
     // Client-Key is enabled for Health-Check IT.
     // Static client-key is being passed here for other tests to use.
     return SystemDefinition.builder()
-        .vistalink(serviceDefinition("vistalink", url, 8050, ""))
+        .charon(serviceDefinition("charon", url, 8050, "/"))
         .clientKey(Optional.of(System.getProperty("client-key", "~shanktopus~")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .testTargets(rpcTargets())
-        .isVistalinkAvailable(BooleanUtils.toBoolean(System.getProperty("test.vistalink", "false")))
+        .isVistaAvailable(BooleanUtils.toBoolean(System.getProperty("test.charon", "false")))
         .build();
   }
 
   private static SystemDefinition qa() {
     String url = "https://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
-        .vistalink(serviceDefinition("vistalink", url, 443, "/vistalink/"))
+        .charon(serviceDefinition("charon", url, 443, "/charon/"))
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .testTargets(rpcTargets())
-        .isVistalinkAvailable(true)
+        .isVistaAvailable(true)
         .build();
   }
 

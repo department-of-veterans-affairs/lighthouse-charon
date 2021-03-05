@@ -102,9 +102,9 @@ HTTP Status
 - `408` if any RPC times out.
 - `500` if MPI call fails or unexpected errors occur.
 
-### Vistalink "invoke RPC" flow
+### Charon "invoke RPC" flow
 
-The Charon API will determine the VistA instances to involve in the request based on the `target`
+Charon will determine the VistA instances to involve in the request based on the `target`
 specification of the request. VistA instances will be invoked in parallel.
 
 ![flow](src/plantuml/vistalink-api-flow.png)
@@ -129,8 +129,8 @@ approach allows for easier testing and a separation of concerns.
 
 ### Configuration
 
-Configuration is managed per environment and deployed with the Vistalink API. You may inspect the
-configuration using by invoking `GET ${vistalink-url}/rpc/connections`
+Configuration is managed per environment and deployed with the Charon API. You may inspect the
+configuration using by invoking `GET ${charon-url}/rpc/connections`
 
 ```
 {
@@ -155,7 +155,7 @@ mock implementation will have canned responses based on RPC requests.
 The Charon API provides a test image that can be used for ad-hoc testing of RPCs.
 
 ```
-docker run --rm --env-file vista.env vasdvp/lighthouse-vistalink-tests:latest run --module-name vistalink-tests --test-pattern '.*VistalinkRpcInvokerTest'
+docker run --rm --env-file vista.env vasdvp/lighthouse-charon-tests:latest run --module-name charon-tests --test-pattern '.*VistalinkRpcInvokerTest'
 ```
 
 You must specify a series of environment variables, which can be provided as a Docker envfile
@@ -182,7 +182,7 @@ VISTA_DIVISION_IEN=605
 VISTA_RPC={"name":"VPR GET PATIENT DATA JSON","context":"VPR APPLICATION PROXY","parameters":[{"namedArray":{"patientId":"100848","domain":"document","text":"1","start":"","stop":"","max":"","id":"","uid":""}}]}
 ```
 
-`VISTA_RPC` matches the `rpc` structure of the Vistalink API request.
+`VISTA_RPC` matches the `rpc` structure of the Charon API request.
 
 > `K8S_LOAD_BALANCER` and `VISTA_HOST` use `host.docker.internal` on Windows and Mac.
 > Use `localhost` on Linux.

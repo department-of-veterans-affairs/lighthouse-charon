@@ -11,10 +11,10 @@ import lombok.Value;
 @Value
 @Builder
 public class SystemDefinition {
-  @NotNull ServiceDefinition vistalink;
+  @NotNull ServiceDefinition charon;
   @NotNull TestRpcs testRpcs;
   Optional<String> clientKey;
-  boolean isVistalinkAvailable;
+  boolean isVistaAvailable;
   @NotNull RpcPrincipal testRpcPrincipal;
   @NotNull RpcVistaTargets testTargets;
 }

@@ -12,14 +12,14 @@ public final class XmlResponseRpc {
   @SneakyThrows
   public <T> T deserialize(String xmlResponse, Class<T> clazz) {
     if (xmlResponse == null) {
-      throw new VistalinkModelExceptions.InvalidVistaResponse("Vista response is null");
+      throw new RpcModelExceptions.InvalidRpcResponse("Vista response is null");
     }
     try {
       return new XmlMapper()
           .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
           .readValue(xmlResponse, clazz);
     } catch (Exception e) {
-      throw new VistalinkModelExceptions.InvalidVistaResponse(
+      throw new RpcModelExceptions.InvalidRpcResponse(
           "Failed to deserialize to " + clazz.getSimpleName(), e);
     }
   }

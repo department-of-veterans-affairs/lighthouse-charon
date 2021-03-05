@@ -15,7 +15,7 @@ public class BadRpcContextIT {
   @SneakyThrows
   void requestForbiddenRpcContext() {
     var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistalinkAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable());
     RpcRequest body =
         RpcRequest.builder()
             .rpc(
@@ -29,7 +29,7 @@ public class BadRpcContextIT {
             .build();
     log.info(body.toString());
     var response =
-        TestClients.rpcRequest(systemDefinition.vistalink().apiPath() + "rpc", body)
+        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
             .expect(403)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

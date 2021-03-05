@@ -22,7 +22,7 @@ public class XmlResponseRpcTest {
   @Test
   public void deserializeBadKnownThrowsVistaModelException() {
     assertThrows(
-        VistalinkModelExceptions.VistaModelException.class,
+        RpcModelExceptions.RpcModelException.class,
         () ->
             XmlResponseRpc.deserialize(
                 "<known knownAttribute='i know this attribute'>\n"
@@ -45,7 +45,7 @@ public class XmlResponseRpcTest {
   @Test
   public void deserializeNullThrowsVistaModelException() {
     assertThrows(
-        VistalinkModelExceptions.VistaModelException.class,
+        RpcModelExceptions.RpcModelException.class,
         () -> XmlResponseRpc.deserialize(null, FugaziXmlModel.class));
   }
 

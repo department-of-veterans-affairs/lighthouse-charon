@@ -8,14 +8,14 @@ cd $SENTINEL_BASE_DIR
 test -n "${K8S_ENVIRONMENT}"
 test -n "${CLIENT_KEY}"
 if [ -z "${SENTINEL_ENV:-}" ]; then SENTINEL_ENV=$K8S_ENVIRONMENT; fi
-if [ -z "${VISTALINK_URL:-}" ]; then VISTALINK_URL=https://$K8S_LOAD_BALANCER; fi
+if [ -z "${CHARON_URL:-}" ]; then CHARON_URL=https://$K8S_LOAD_BALANCER; fi
 
 java-tests \
-  --module-name "vistalink-tests" \
+  --module-name "charon-tests" \
   --regression-test-pattern ".*IT\$" \
   --smoke-test-pattern ".*PingIT\$" \
   -Dsentinel="$SENTINEL_ENV" \
-  -Dsentinel.vistalink.url=$VISTALINK_URL \
+  -Dsentinel.charon.url=$CHARON_URL \
   -Dvista.access-code="$VISTA_ACCESS_CODE" \
   -Dvista.verify-code="$VISTA_VERIFY_CODE" \
   -Dclient-key="${CLIENT_KEY}" \

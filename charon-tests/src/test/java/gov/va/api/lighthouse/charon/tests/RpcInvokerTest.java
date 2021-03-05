@@ -20,9 +20,9 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-public class VistalinkRpcInvokerTest {
+public class RpcInvokerTest {
 
-  VistalinkTestConfig config;
+  CharonTestConfig config;
   VistalinkRpcInvokerFactory vistalinkRpcInvokerFactory;
 
   @Test
@@ -32,7 +32,7 @@ public class VistalinkRpcInvokerTest {
         .as(
             "Set system property 'test.rpcinvoker' or environment variable 'TEST_RPCINVOKER' to true to enable.")
         .isTrue();
-    config = VistalinkTestConfig.fromSystemProperties();
+    config = CharonTestConfig.fromSystemProperties();
     vistalinkRpcInvokerFactory =
         new VistalinkRpcInvokerFactory(new MacroProcessorFactory(List.of(new DfnMacro())));
     var rpcPrincipal =
@@ -60,7 +60,7 @@ public class VistalinkRpcInvokerTest {
 
   @Value
   @Builder
-  static class VistalinkTestConfig {
+  static class CharonTestConfig {
     String accessCode;
     String verifyCode;
     String divisionIen;
@@ -70,7 +70,7 @@ public class VistalinkRpcInvokerTest {
     String rpc;
 
     @SneakyThrows
-    static VistalinkTestConfig fromSystemProperties() {
+    static CharonTestConfig fromSystemProperties() {
       String host = propertyOrDie("host");
 
       String defaultRpc =
@@ -81,7 +81,7 @@ public class VistalinkRpcInvokerTest {
                       .context("XOBV VISTALINK TESTER")
                       .build());
 
-      return VistalinkTestConfig.builder()
+      return CharonTestConfig.builder()
           .accessCode(propertyOrDie("access-code"))
           .verifyCode(propertyOrDie("verify-code"))
           .divisionIen(propertyOrDie("division-ien"))

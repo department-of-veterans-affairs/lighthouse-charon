@@ -19,12 +19,12 @@ public class TestClients {
   }
 
   ExpectedResponse rpcRequest(String path, RpcRequest body) {
-    return TestClients.vistalink().post(headers(), path, body);
+    return TestClients.charon().post(headers(), path, body);
   }
 
-  TestClient vistalink() {
+  TestClient charon() {
     return BasicTestClient.builder()
-        .service(SystemDefinitions.get().vistalink())
+        .service(SystemDefinitions.get().charon())
         .mapper(JacksonConfig::createMapper)
         .contentType("application/json")
         .build();
