@@ -1,7 +1,7 @@
 package gov.va.api.lighthouse.charon.tests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
@@ -27,7 +27,7 @@ public class PingIT {
   @SneakyThrows
   void requestRpcNoArguments() {
     var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistaAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable(), "Vista is unavailable.");
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
