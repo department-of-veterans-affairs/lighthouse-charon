@@ -106,5 +106,5 @@ checkForUnsetValues charon $PROFILE
 
 
 cat > $REPO/charon/config/vistalink-$PROFILE.properties <<EOF
-vm=localhost:8000:605
+673=localhost:18673:673:America/New_York
 EOF
