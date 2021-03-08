@@ -21,10 +21,30 @@ public class SystemDefinitions {
         return local();
       case QA:
         return qa();
+      case STAGING:
+        return staging();
+      case PROD:
+        return production();
+      case STAGING_LAB:
+        return stagingLab();
+      case LAB:
+        return lab();
       default:
         throw new IllegalArgumentException(
             "Unsupported sentinel environment: " + Environment.get());
     }
+  }
+
+  private static SystemDefinition lab() {
+    String url = "https://blue.lab.lighthouse.va.gov";
+    return SystemDefinition.builder()
+        .charon(serviceDefinition("charon", url, 443, "/charon/"))
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
+        .testRpcs(rpcs())
+        .testRpcPrincipal(rpcPrincipal())
+        .testTargets(rpcTargets())
+        .isVistaAvailable(isVistaAvailable())
+        .build();
   }
 
   private static SystemDefinition local() {
@@ -37,7 +57,19 @@ public class SystemDefinitions {
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .testTargets(rpcTargets())
-        .isVistaAvailable(BooleanUtils.toBoolean(System.getProperty("test.charon", "false")))
+        .isVistaAvailable(isVistaAvailable())
+        .build();
+  }
+
+  private static SystemDefinition production() {
+    String url = "https://blue.production.lighthouse.va.gov";
+    return SystemDefinition.builder()
+        .charon(serviceDefinition("charon", url, 443, "/charon/"))
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
+        .testRpcs(rpcs())
+        .testRpcPrincipal(rpcPrincipal())
+        .testTargets(rpcTargets())
+        .isVistaAvailable(isVistaAvailable())
         .build();
   }
 
@@ -49,7 +81,7 @@ public class SystemDefinitions {
         .testRpcs(rpcs())
         .testRpcPrincipal(rpcPrincipal())
         .testTargets(rpcTargets())
-        .isVistaAvailable(true)
+        .isVistaAvailable(isVistaAvailable())
         .build();
   }
 
@@ -92,6 +124,34 @@ public class SystemDefinitions {
         .apiPath(SentinelProperties.optionApiPath(name, apiPath))
         .accessToken(() -> Optional.empty())
         .build();
+  }
+
+  private static SystemDefinition staging() {
+    String url = "https://blue.staging.lighthouse.va.gov";
+    return SystemDefinition.builder()
+        .charon(serviceDefinition("charon", url, 443, "/charon/"))
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
+        .testRpcs(rpcs())
+        .testRpcPrincipal(rpcPrincipal())
+        .testTargets(rpcTargets())
+        .isVistaAvailable(isVistaAvailable())
+        .build();
+  }
+
+  private static SystemDefinition stagingLab() {
+    String url = "https://blue.staging-lab.lighthouse.va.gov";
+    return SystemDefinition.builder()
+        .charon(serviceDefinition("charon", url, 443, "/charon/"))
+        .clientKey(Optional.ofNullable(System.getProperty("client-key")))
+        .testRpcs(rpcs())
+        .testRpcPrincipal(rpcPrincipal())
+        .testTargets(rpcTargets())
+        .isVistaAvailable(isVistaAvailable())
+        .build();
+  }
+
+  private boolean isVistaAvailable() {
+    return BooleanUtils.toBoolean(System.getProperty("vista.is-available", "false"));
   }
 
   private RpcPrincipal rpcPrincipal() {
