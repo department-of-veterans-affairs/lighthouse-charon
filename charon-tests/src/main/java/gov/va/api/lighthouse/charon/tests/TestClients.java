@@ -11,6 +11,14 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TestClients {
+  TestClient charon() {
+    return BasicTestClient.builder()
+        .service(SystemDefinitions.get().charon())
+        .mapper(JacksonConfig::createMapper)
+        .contentType("application/json")
+        .build();
+  }
+
   Map<String, String> headers() {
     Map<String, String> headers = new HashMap<>();
     headers.put("Content-Type", "application/json");
@@ -20,13 +28,5 @@ public class TestClients {
 
   ExpectedResponse rpcRequest(String path, RpcRequest body) {
     return TestClients.charon().post(headers(), path, body);
-  }
-
-  TestClient charon() {
-    return BasicTestClient.builder()
-        .service(SystemDefinitions.get().charon())
-        .mapper(JacksonConfig::createMapper)
-        .contentType("application/json")
-        .build();
   }
 }
