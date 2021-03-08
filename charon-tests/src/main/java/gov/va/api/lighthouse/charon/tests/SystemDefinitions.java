@@ -156,8 +156,8 @@ public class SystemDefinitions {
 
   private RpcPrincipal rpcPrincipal() {
     return RpcPrincipal.builder()
-        .accessCode(System.getProperty("vista.access-code", "not-set"))
-        .verifyCode(System.getProperty("vista.verify-code", "not-set"))
+        .accessCode(System.getProperty("vista.standard-user.access-code", "not-set"))
+        .verifyCode(System.getProperty("vista.standard-user.verify-code", "not-set"))
         .build();
   }
 }

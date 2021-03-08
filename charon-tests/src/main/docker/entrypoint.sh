@@ -22,8 +22,8 @@ main() {
   addToSystemProperties "sentinel" "${SENTINEL_ENV}"
   addToSystemProperties "sentinel.charon.url" "${CHARON_URL}"
   addToSystemProperties "client-key" "${CLIENT_KEY}"
-  addToSystemProperties "vista.access-code" "${VISTA_ACCESS_CODE}"
-  addToSystemProperties "vista.verify-code" "${VISTA_VERIFY_CODE}"
+  addToSystemProperties "vista.standard-user.access-code" "${VISTA_ACCESS_CODE}"
+  addToSystemProperties "vista.standard-user.verify-code" "${VISTA_VERIFY_CODE}"
   addToSystemProperties "vista.is-available" "${VISTA_AVAILABLE}"
 
   java-tests \
