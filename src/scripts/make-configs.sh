@@ -99,12 +99,12 @@ comment() {
   cat >> $target
 }
 
-makeConfig vistalink $PROFILE
-addValue vistalink $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
-configValue vistalink $PROFILE vistalink.rpc.client-keys "disabled"
-checkForUnsetValues vistalink $PROFILE
+makeConfig charon $PROFILE
+addValue charon $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
+configValue charon $PROFILE charon.rpc.client-keys "disabled"
+checkForUnsetValues charon $PROFILE
 
 
-cat > $REPO/vistalink/config/vistalink-$PROFILE.properties <<EOF
+cat > $REPO/charon/config/vistalink-$PROFILE.properties <<EOF
 vm=localhost:8000:605
 EOF

@@ -4,27 +4,27 @@
 start
 :Search for coverage by patient;
 
-|Insurance API|
+|Vista-Fhir-Query|
 :Convert request to RPC query;
 
-|Vistalink API|
+|Charon API|
 :Look up VistA instances for patient;
 
 |MPI|
 :""GetCorrespondingIDs"";
 
-|Vistalink API|
+|Charon API|
 while (For each VistA instance) is (vista)
   :Invoke RPC;
   |VistA|
   :Return RPC results;
-  |Vistalink API|
+  |Charon API|
   :Store intermediate result;
 endwhile (done)
 :Combine results from each RPC;
 
-|Insurance API|
-:Translate results to Coverage response;
+|Vista-Fhir-Query|
+:Translate results to Fhir response;
 :Return response;
 
 |App|

@@ -1,0 +1,8 @@
+package gov.va.api.lighthouse.charon.service.controller;
+
+import gov.va.med.vistalink.rpc.RpcRequest;
+import gov.va.med.vistalink.rpc.RpcResponse;
+
+public interface MacroExecutionContext {
+  RpcResponse invoke(RpcRequest request);
+}

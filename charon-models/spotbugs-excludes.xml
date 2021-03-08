@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclusions can be defined here and should include a comment on why the finding can be ignored -->
+    <!--
+    Ignore Lombok-generated code.
+  -->
+    <Match>
+        <Or>
+            <Class name="gov.va.api.lighthouse.charon.models.vprgetpatientdata.Vitals"/>
+            <Class name="gov.va.api.lighthouse.charon.models.vprgetpatientdata.Labs"/>
+        </Or>
+        <Or>
+            <Method name="equals"/>
+            <Method name="hashCode"/>
+        </Or>
+    </Match>
+</FindBugsFilter>

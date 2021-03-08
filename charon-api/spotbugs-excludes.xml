@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Exclusions can be defined here and should include a comment on why the finding can be ignored -->
+  <!-- [ERROR] Redundant nullcheck of this$results, which is known to be non-null in RpcResponse.equals(Object) [RpcResponse] Redundant null check at RpcResponse.java:[line 10] RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE -->
+  <!--
+  Lombok generated code.
+  -->
+  <Match>
+    <Or>
+      <Class name="gov.va.api.lighthouse.charon.api.RpcResponse"/>
+      <Class name="gov.va.api.lighthouse.charon.api.RpcVistaTargets"/>
+    </Or>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
+  </Match>
+</FindBugsFilter>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Exclusions can be defined here and should include a comment on why the finding can be ignored -->
+  <!-- TODO: REMOVE temporary ignore for skeleton commit -->
+  <Match>
+    <Or>
+      <Class name="gov.va.api.lighthouse.charon.service.controller.ParallelRpcExecutor"/>
+      <Class name="gov.va.api.lighthouse.charon.service.controller.RpcController"/>
+      <Class name="gov.va.api.lighthouse.charon.service.controller.VistalinkRpcInvokerFactory"/>
+    </Or>
+    <Bug pattern="URF_UNREAD_FIELD"/>
+  </Match>
+  <!-- To support local testing, we allow the vistalink.properties file to be overwritten by user input -->
+  <Match>
+    <Class name="gov.va.api.lighthouse.charon.service.config.VistalinkPropertiesConfig"/>
+    <Bug pattern="PATH_TRAVERSAL_IN"/>
+  </Match>
+</FindBugsFilter>
