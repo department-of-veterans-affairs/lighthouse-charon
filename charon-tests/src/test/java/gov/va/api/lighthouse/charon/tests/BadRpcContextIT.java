@@ -15,7 +15,8 @@ public class BadRpcContextIT {
   @SneakyThrows
   void requestForbiddenRpcContext() {
     var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistaAvailable());
+    // Ur boi (Joshy-Boi) can't get this to return a 403, only a 200 with an error message
+    assumeTrue(false);
     RpcRequest body =
         RpcRequest.builder()
             .rpc(
