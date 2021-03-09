@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.tests;
 
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
@@ -31,7 +31,7 @@ public class RpcRequestIT {
 
   @SneakyThrows
   void requestRpcWithValidResponse(RpcDetails rpc) {
-    assumeTrue(systemDefinition.isVistaAvailable());
+    assumeTrue(systemDefinition.isVistaAvailable(), "Vista is unavailable.");
     log.info(rpc.name());
     RpcRequest body =
         RpcRequest.builder()
