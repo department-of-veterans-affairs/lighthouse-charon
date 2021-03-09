@@ -12,6 +12,7 @@ import gov.va.med.vistalink.rpc.RpcResponse;
 import java.io.StringReader;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.BiFunction;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import lombok.Builder;
@@ -22,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ToString(onlyExplicitlyIncluded = true)
 public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
-
   private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
   private final ConnectionDetails connectionDetails;
@@ -35,27 +35,23 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   VistalinkRpcInvoker(
       RpcPrincipal rpcPrincipal,
       ConnectionDetails connectionDetails,
-      MacroProcessorFactory macroProcessorFactory) {
+      MacroProcessorFactory macroProcessorFactory,
+      BiFunction<RpcPrincipal, ConnectionDetails, VistalinkSession> optionalSessionSelection) {
     this.connectionDetails = connectionDetails;
     this.macroProcessorFactory = macroProcessorFactory;
-    this.session = chooseSession(rpcPrincipal);
+    /*
+     * This is extensible to allow testing of the rest of this class. Under normal circumstances,
+     * you do not need to specify this.
+     */
+    if (optionalSessionSelection == null) {
+      optionalSessionSelection = VistalinkRpcInvoker::chooseSession;
+    }
+    this.session = optionalSessionSelection.apply(rpcPrincipal, connectionDetails);
   }
 
-  @SneakyThrows
-  private static JAXBContext createJaxbContext() {
-    return JAXBContext.newInstance(VistalinkXmlResponse.class);
-  }
-
-  /** Create a response object by parsing the raw data. */
-  @SneakyThrows
-  public static VistalinkXmlResponse parse(RpcResponse rpcResponse) {
-    Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
-    return (VistalinkXmlResponse)
-        unmarshaller.unmarshal(new StringReader(rpcResponse.getRawResponse()));
-  }
-
-  private VistalinkSession chooseSession(RpcPrincipal rpcPrincipal) {
-    //noinspection EnhancedSwitchMigration
+  static VistalinkSession chooseSession(
+      RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
+    // noinspection EnhancedSwitchMigration
     switch (rpcPrincipal.type()) {
       case STANDARD_USER:
         return StandardUserVistalinkSession.builder()
@@ -74,6 +70,19 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
         throw new IllegalArgumentException(
             "Unsupported RPC principal type: " + rpcPrincipal.type());
     }
+  }
+
+  @SneakyThrows
+  static JAXBContext createJaxbContext() {
+    return JAXBContext.newInstance(VistalinkXmlResponse.class);
+  }
+
+  /** Create a response object by parsing the raw data. */
+  @SneakyThrows
+  public static VistalinkXmlResponse parse(RpcResponse rpcResponse) {
+    Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
+    return (VistalinkXmlResponse)
+        unmarshaller.unmarshal(new StringReader(rpcResponse.getRawResponse()));
   }
 
   @Override

@@ -10,7 +10,13 @@ import gov.va.api.lighthouse.mpi.MpiConfig;
 import java.util.List;
 import java.util.function.Function;
 import org.assertj.core.api.Assertions;
-import org.hl7.v3.*;
+import org.hl7.v3.II;
+import org.hl7.v3.PRPAIN201310UV02;
+import org.hl7.v3.PRPAIN201310UV02MFMIMT700711UV01ControlActProcess;
+import org.hl7.v3.PRPAIN201310UV02MFMIMT700711UV01RegistrationEvent;
+import org.hl7.v3.PRPAIN201310UV02MFMIMT700711UV01Subject1;
+import org.hl7.v3.PRPAIN201310UV02MFMIMT700711UV01Subject2;
+import org.hl7.v3.PRPAMT201304UV02Patient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -166,5 +172,11 @@ public class MpiVistaNameResolverTest {
                     .port(1337)
                     .divisionIen("0")
                     .build()));
+  }
+
+  @Test
+  void targetsForPatientReturnsEmptyListWhenNoPatientIsSpecified() {
+    var resolver = new MpiVistaNameResolver(properties, config);
+    assertThat(resolver.resolve(RpcVistaTargets.builder().build())).isEmpty();
   }
 }
