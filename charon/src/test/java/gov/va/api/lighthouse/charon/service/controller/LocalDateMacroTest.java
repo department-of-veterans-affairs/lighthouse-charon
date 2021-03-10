@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.charon.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.when;
 
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import org.junit.jupiter.api.Test;
@@ -13,18 +14,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class LocalDateMacroTest {
   @Mock MacroExecutionContext ctx;
 
-  ConnectionDetails connectionDetails =
-      ConnectionDetails.builder().timezone("America/Chicago").build();
-
   @Test
   void evaluateParsesGoodDates() {
-    assertThat(new LocalDateMacro().evaluate(ctx, connectionDetails, "2021-02-22T13:28:00Z"))
+    when(ctx.connectionDetails())
+        .thenReturn(ConnectionDetails.builder().timezone("America/Chicago").build());
+    assertThat(new LocalDateMacro().evaluate(ctx, "2021-02-22T13:28:00Z"))
         .isEqualTo("3210222.0728");
   }
 
   @Test
   void evaluateThrowsDateTimeParseException() {
     assertThatExceptionOfType(LocalDateMacro.LocalDateMacroParseFailure.class)
-        .isThrownBy(() -> new LocalDateMacro().evaluate(ctx, connectionDetails, "123"));
+        .isThrownBy(() -> new LocalDateMacro().evaluate(ctx, "123"));
   }
 }

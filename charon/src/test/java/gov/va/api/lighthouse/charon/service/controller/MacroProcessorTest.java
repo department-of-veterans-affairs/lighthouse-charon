@@ -55,10 +55,7 @@ public class MacroProcessorTest {
                 List.of(
                     new Macro() {
                       @Override
-                      public String evaluate(
-                          MacroExecutionContext ctx,
-                          ConnectionDetails connectionDetails,
-                          String value) {
+                      public String evaluate(MacroExecutionContext ctx, String value) {
                         throw new BoomBoom();
                       }
 

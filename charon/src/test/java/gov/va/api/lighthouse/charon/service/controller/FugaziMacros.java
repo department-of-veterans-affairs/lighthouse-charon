@@ -1,6 +1,5 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
-import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 
@@ -13,8 +12,7 @@ class FugaziMacros {
   @EqualsAndHashCode
   public static class AppendXMacro implements Macro {
     @Override
-    public String evaluate(
-        MacroExecutionContext ctx, ConnectionDetails connectionDetails, String value) {
+    public String evaluate(MacroExecutionContext ctx, String value) {
       return value + "x";
     }
 
@@ -27,8 +25,7 @@ class FugaziMacros {
   @EqualsAndHashCode
   public static class ToUpperCaseMacro implements Macro {
     @Override
-    public String evaluate(
-        MacroExecutionContext ctx, ConnectionDetails connectionDetails, String value) {
+    public String evaluate(MacroExecutionContext ctx, String value) {
       return value.toUpperCase();
     }
 

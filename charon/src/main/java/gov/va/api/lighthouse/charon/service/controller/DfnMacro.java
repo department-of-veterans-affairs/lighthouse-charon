@@ -1,6 +1,5 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
-import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,7 @@ public class DfnMacro implements Macro {
 
   @SneakyThrows
   @Override
-  public String evaluate(MacroExecutionContext ctx, ConnectionDetails details, String value) {
+  public String evaluate(MacroExecutionContext ctx, String value) {
     var vistalinkRequest = RpcRequestFactory.getRpcRequest();
     vistalinkRequest.setRpcContext("VAFCTF RPC CALLS");
     vistalinkRequest.setUseProprietaryMessageFormat(true);

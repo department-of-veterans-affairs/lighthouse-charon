@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ToString(onlyExplicitlyIncluded = true)
 public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
-
   private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
   private static final AtomicInteger LOGIN_CONTEXT_ID = new AtomicInteger(0);
@@ -88,6 +87,10 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
     }
   }
 
+  public ConnectionDetails connectionDetails() {
+    return connectionDetails;
+  }
+
   private VistaLinkConnection createConnection() {
     return kernelPrincipal.getAuthenticatedConnection();
   }
@@ -123,7 +126,6 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
             };
           }
         };
-
     return new LoginContext(
         LOGIN_CONTEXT_ID.incrementAndGet() + ":" + connectionDetails.host(),
         null,

@@ -31,7 +31,6 @@ public class MacroProcessor {
           var subst =
               macro.evaluate(
                   macroExecutionContext,
-                  connectionDetails,
                   value.substring(macro.name().length() + 3, value.length() - 2));
           log.info("Macro {}: {} = {}", macro.name(), value, subst);
           return subst;
