@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcResponse;
 import org.junit.jupiter.api.Test;
@@ -17,13 +18,15 @@ public class DfnMacroTest {
 
   @Mock MacroExecutionContext executionContext;
 
+  ConnectionDetails connectionDetails = ConnectionDetails.builder().build();
+
   @Test
   void evaluateReturnValueForUnknownIcn() {
     var dfn = new DfnMacro();
     RpcResponse response = new FugaziRpcResponse("-1^ICN NOT IN DATABASE");
     when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
     assertThatExceptionOfType(DfnMacro.IcnNotFound.class)
-        .isThrownBy(() -> dfn.evaluate(executionContext, "badicn"));
+        .isThrownBy(() -> dfn.evaluate(executionContext, connectionDetails, "badicn"));
   }
 
   @Test
@@ -31,7 +34,7 @@ public class DfnMacroTest {
     var dfn = new DfnMacro();
     RpcResponse response = new FugaziRpcResponse("mydfn");
     when(executionContext.invoke(any(RpcRequest.class))).thenReturn(response);
-    assertThat(dfn.evaluate(executionContext, "myicn")).isEqualTo("mydfn");
+    assertThat(dfn.evaluate(executionContext, connectionDetails, "myicn")).isEqualTo("mydfn");
   }
 
   static class FugaziRpcResponse extends RpcResponse {

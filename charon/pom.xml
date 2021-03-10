@@ -41,6 +41,11 @@
     </dependency>
     <dependency>
       <groupId>gov.va.api.lighthouse</groupId>
+      <artifactId>charon-models</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>gov.va.api.lighthouse</groupId>
       <artifactId>talos</artifactId>
       <version>${talos.version}</version>
     </dependency>

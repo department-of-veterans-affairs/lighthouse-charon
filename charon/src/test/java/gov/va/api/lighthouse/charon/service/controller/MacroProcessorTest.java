@@ -4,6 +4,7 @@ import static gov.va.api.lighthouse.charon.api.RpcDetails.Parameter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,10 @@ public class MacroProcessorTest {
                 List.of(
                     new Macro() {
                       @Override
-                      public String evaluate(MacroExecutionContext ctx, String value) {
+                      public String evaluate(
+                          MacroExecutionContext ctx,
+                          ConnectionDetails connectionDetails,
+                          String value) {
                         throw new BoomBoom();
                       }
 
@@ -64,6 +68,7 @@ public class MacroProcessorTest {
                       }
                     }))
             .macroExecutionContext(executionContext)
+            .connectionDetails(ConnectionDetails.builder().build())
             .build();
     assertThatExceptionOfType(BoomBoom.class)
         .isThrownBy(() -> macroProcessor.evaluate("${boom()}"));
@@ -75,6 +80,7 @@ public class MacroProcessorTest {
     return MacroProcessor.builder()
         .macros(FugaziMacros.testMacros())
         .macroExecutionContext(executionContext)
+        .connectionDetails(ConnectionDetails.builder().build())
         .build();
   }
 
