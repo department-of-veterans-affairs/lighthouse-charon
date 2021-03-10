@@ -3,7 +3,6 @@ package gov.va.api.lighthouse.charon.service.controller;
 import static java.util.stream.Collectors.toList;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails.Parameter;
-import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,8 +19,6 @@ public class MacroProcessor {
   @NonNull List<Macro> macros;
 
   @NonNull MacroExecutionContext macroExecutionContext;
-
-  @NonNull ConnectionDetails connectionDetails;
 
   /** Iterates over macro list, applies the one that is found in the syntax. */
   public String evaluate(String value) {

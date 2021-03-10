@@ -162,7 +162,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
       if (rpcDetails.version().isPresent()) {
         vistalinkRequest.setRpcVersion(rpcDetails.version().get());
       }
-      MacroProcessor macroProcessor = macroProcessorFactory.create(this, connectionDetails);
+      MacroProcessor macroProcessor = macroProcessorFactory.create(this);
       for (int i = 0; i < rpcDetails.parameters().size(); i++) {
         var parameter = rpcDetails.parameters().get(i);
         var value = macroProcessor.evaluate(parameter);
