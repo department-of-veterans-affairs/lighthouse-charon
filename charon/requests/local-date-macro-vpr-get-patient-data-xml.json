@@ -1,0 +1,22 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "forPatient":"ignored-for-now"
+  },
+  "rpc": {
+    "name":"VPR GET PATIENT DATA",
+    "context":"VPR APPLICATION PROXY",
+    "parameters": [
+      {"string":";195607"},
+      {"string":"demographics;vitals"},
+      {"string":"${local-fileman-date(2021-02-22T13:28:00Z)"},
+      {"string":""},
+      {"string":""},
+      {"string":""},
+      {"array": []}
+    ]
+  }
+}
