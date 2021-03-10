@@ -40,8 +40,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
 
   private final RpcPrincipal rpcPrincipal;
 
-  @Getter
-  private final ConnectionDetails connectionDetails;
+  @Getter private final ConnectionDetails connectionDetails;
 
   private final CallbackHandler handler;
 
