@@ -26,6 +26,7 @@ import javax.security.auth.login.LoginException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
 
   private final RpcPrincipal rpcPrincipal;
 
+  @Getter
   private final ConnectionDetails connectionDetails;
 
   private final CallbackHandler handler;
@@ -85,10 +87,6 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
     } catch (LoginException e) {
       log.warn("{} Failed to logout", this, e);
     }
-  }
-
-  public ConnectionDetails connectionDetails() {
-    return connectionDetails;
   }
 
   private VistaLinkConnection createConnection() {
