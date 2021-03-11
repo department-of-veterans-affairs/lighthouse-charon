@@ -151,7 +151,11 @@ public class SystemDefinitions {
   }
 
   private boolean isVistaAvailable() {
-    return BooleanUtils.toBoolean(System.getProperty("vista.is-available", "false"));
+    var value = System.getProperty("vista.is-available");
+    if (value == null) {
+      value = System.getenv("VISTA_IS_AVAILABLE");
+    }
+    return BooleanUtils.toBoolean(value);
   }
 
   private RpcPrincipal rpcPrincipal() {
