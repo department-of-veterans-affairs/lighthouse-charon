@@ -4,6 +4,7 @@ import static gov.va.api.lighthouse.charon.api.RpcDetails.Parameter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,12 @@ public class MacroProcessorTest {
   @Test
   void checkMacroProcessorEvaluatesNullParameter() {
     assertThat(macroProcessor().evaluate((Parameter) null)).isNull();
+  }
+
+  @Test
+  void emptyParametersThrowException() {
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> macroProcessor().evaluate(new Parameter()));
   }
 
   @Test
@@ -90,5 +97,8 @@ public class MacroProcessorTest {
         .containsExactlyInAnyOrderEntriesOf(Map.of(" ", "{touppercase(abc)}"));
   }
 
-  private static class BoomBoom extends RuntimeException {}
+  private static class BoomBoom extends RuntimeException {
+
+    @Serial private static final long serialVersionUID = -6781608248147715026L;
+  }
 }

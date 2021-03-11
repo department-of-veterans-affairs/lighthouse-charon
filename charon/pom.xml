@@ -9,12 +9,11 @@
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>charon</artifactId>
-  <version>3.0.4-SNAPSHOT</version>
+  <version>3.0.6-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
     <docker.imageName>lighthouse-${project.artifactId}</docker.imageName>
-    <!-- TODO: CAN COVERAGE REACH .95 ??? -->
-    <jacoco.coverage>0.65</jacoco.coverage>
+    <jacoco.coverage>0.68</jacoco.coverage>
     <javax.resource-api.version>1.7.1</javax.resource-api.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
     <jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>

@@ -5,24 +5,14 @@ import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcMetadata;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
-import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import gov.va.med.vistalink.rpc.NoRpcContextFaultException;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import gov.va.med.vistalink.rpc.RpcResponse;
-import gov.va.med.vistalink.security.CallbackHandlerUnitTest;
-import gov.va.med.vistalink.security.VistaKernelPrincipalImpl;
 import java.io.StringReader;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.AppConfigurationEntry;
-import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
-import javax.security.auth.login.Configuration;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
+import java.util.function.BiFunction;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import lombok.Builder;
@@ -36,19 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
-  private static final AtomicInteger LOGIN_CONTEXT_ID = new AtomicInteger(0);
-
-  private final RpcPrincipal rpcPrincipal;
-
   @Getter private final ConnectionDetails connectionDetails;
 
-  private final CallbackHandler handler;
-
-  private final LoginContext loginContext;
-
-  private final VistaKernelPrincipalImpl kernelPrincipal;
-
-  private final VistaLinkConnection connection;
+  private final VistalinkSession session;
 
   private final MacroProcessorFactory macroProcessorFactory;
 
@@ -56,18 +36,45 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   VistalinkRpcInvoker(
       RpcPrincipal rpcPrincipal,
       ConnectionDetails connectionDetails,
-      MacroProcessorFactory macroProcessorFactory) {
-    this.rpcPrincipal = rpcPrincipal;
+      MacroProcessorFactory macroProcessorFactory,
+      BiFunction<RpcPrincipal, ConnectionDetails, VistalinkSession> optionalSessionSelection) {
     this.connectionDetails = connectionDetails;
     this.macroProcessorFactory = macroProcessorFactory;
-    handler = createLoginCallbackHandler();
-    loginContext = createLoginContext();
-    kernelPrincipal = createVistaKernelPrincipal();
-    connection = createConnection();
+    /*
+     * This is extensible to allow testing of the rest of this class. Under normal circumstances,
+     * you do not need to specify this.
+     */
+    if (optionalSessionSelection == null) {
+      optionalSessionSelection = VistalinkRpcInvoker::chooseSession;
+    }
+    this.session = optionalSessionSelection.apply(rpcPrincipal, connectionDetails);
+  }
+
+  static VistalinkSession chooseSession(
+      RpcPrincipal rpcPrincipal, ConnectionDetails connectionDetails) {
+    // noinspection EnhancedSwitchMigration
+    switch (rpcPrincipal.type()) {
+      case STANDARD_USER:
+        return StandardUserVistalinkSession.builder()
+            .connectionDetails(connectionDetails)
+            .accessCode(rpcPrincipal.accessCode())
+            .verifyCode(rpcPrincipal.verifyCode())
+            .build();
+      case APPLICATION_PROXY_USER:
+        return ApplicationProxyUserVistalinkSession.builder()
+            .connectionDetails(connectionDetails)
+            .accessCode(rpcPrincipal.accessCode())
+            .verifyCode(rpcPrincipal.verifyCode())
+            .applicationProxyUser(rpcPrincipal.applicationProxyUser())
+            .build();
+      default:
+        throw new IllegalArgumentException(
+            "Unsupported RPC principal type: " + rpcPrincipal.type());
+    }
   }
 
   @SneakyThrows
-  private static JAXBContext createJaxbContext() {
+  static JAXBContext createJaxbContext() {
     return JAXBContext.newInstance(VistalinkXmlResponse.class);
   }
 
@@ -81,60 +88,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
 
   @Override
   public void close() {
-    try {
-      loginContext.logout();
-    } catch (LoginException e) {
-      log.warn("{} Failed to logout", this, e);
-    }
-  }
-
-  private VistaLinkConnection createConnection() {
-    return kernelPrincipal.getAuthenticatedConnection();
-  }
-
-  private CallbackHandler createLoginCallbackHandler() {
-    /*
-     * There are only two CallbackHandlers that will work. This one, and one for Swing applications.
-     * All of the internals for working with Vistalink callbacks are _package_ protected so we
-     * cannot create our own, e.g. CallbackChangeVc. Despite the "UnitTest" name, decompiled code
-     * reveals that this handler is simply update the VC callback objects with access code, verify
-     * code, and division IEN as appropriate. I do not see any "unit test" behavior in the handler.
-     * It would have been better named "UnattendedCallbackHandler".
-     */
-    return new CallbackHandlerUnitTest(
-        rpcPrincipal.accessCode(), rpcPrincipal.verifyCode(), connectionDetails.divisionIen());
-  }
-
-  @SneakyThrows
-  private LoginContext createLoginContext() {
-    Configuration jaasConfiguration =
-        new Configuration() {
-          @Override
-          public AppConfigurationEntry[] getAppConfigurationEntry(String name) {
-            return new AppConfigurationEntry[] {
-              new AppConfigurationEntry(
-                  "gov.va.med.vistalink.security.VistaLoginModule",
-                  LoginModuleControlFlag.REQUISITE,
-                  Map.of(
-                      "gov.va.med.vistalink.security.ServerAddressKey",
-                      connectionDetails.host(),
-                      "gov.va.med.vistalink.security.ServerPortKey",
-                      String.valueOf(connectionDetails.port())))
-            };
-          }
-        };
-    return new LoginContext(
-        LOGIN_CONTEXT_ID.incrementAndGet() + ":" + connectionDetails.host(),
-        null,
-        handler,
-        jaasConfiguration);
-  }
-
-  @SneakyThrows
-  private VistaKernelPrincipalImpl createVistaKernelPrincipal() {
-    log.info("{} Logging in", this);
-    loginContext.login();
-    return VistaKernelPrincipalImpl.getKernelPrincipal(loginContext.getSubject());
+    session.close();
   }
 
   /** Invoke an RPC with raw types. */
@@ -143,7 +97,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   public RpcResponse invoke(RpcRequest request) {
     synchronized (VistalinkRpcInvoker.class) {
       log.info("{} Executing RPC {}", this, request.getRpcName());
-      return connection.executeRPC(request);
+      return session.connection().executeRPC(request);
     }
   }
 
