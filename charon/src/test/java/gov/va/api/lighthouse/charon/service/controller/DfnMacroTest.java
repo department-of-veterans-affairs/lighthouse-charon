@@ -34,6 +34,11 @@ public class DfnMacroTest {
     assertThat(dfn.evaluate(executionContext, "myicn")).isEqualTo("mydfn");
   }
 
+  @Test
+  void nameIsDfn() {
+    assertThat(new DfnMacro().name()).isEqualTo("dfn");
+  }
+
   static class FugaziRpcResponse extends RpcResponse {
     FugaziRpcResponse(String value) {
       super(null, null, null, null, value, null);
