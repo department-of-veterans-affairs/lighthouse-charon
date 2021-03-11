@@ -20,6 +20,11 @@ public class LocalDateMacroTest {
         .thenReturn(ConnectionDetails.builder().timezone("America/Chicago").build());
     assertThat(new LocalDateMacro().evaluate(ctx, "2021-02-22T13:28:00Z"))
         .isEqualTo("3210222.0728");
+
+    when(ctx.connectionDetails())
+            .thenReturn(ConnectionDetails.builder().timezone("America/Phoenix").build());
+    assertThat(new LocalDateMacro().evaluate(ctx, "2021-02-22T13:28:00Z"))
+            .isEqualTo("3210222.0628");
   }
 
   @Test
