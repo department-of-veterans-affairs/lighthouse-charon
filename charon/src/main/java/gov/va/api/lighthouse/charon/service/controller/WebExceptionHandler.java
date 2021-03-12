@@ -3,12 +3,12 @@ package gov.va.api.lighthouse.charon.service.controller;
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.LoginFailure;
 import gov.va.api.lighthouse.charon.service.controller.VistaLinkExceptions.NameResolutionException;
 import gov.va.api.lighthouse.charon.service.controller.VistaLinkExceptions.UnknownPatient;
 import gov.va.api.lighthouse.charon.service.controller.VistaLinkExceptions.UnknownVista;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +48,11 @@ public class WebExceptionHandler {
     return failedResponseFor("RPC is not registered to the chosen RPC context.");
   }
 
-  @ExceptionHandler({LoginException.class})
+  @ExceptionHandler({LoginFailure.class})
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public RpcResponse handleFailedLogin(Exception e, HttpServletRequest request) {
     log.error("Login failed", e);
-    return failedResponseFor("Failed to login.");
+    return failedResponseFor(e.getMessage());
   }
 
   @ExceptionHandler({NameResolutionException.class})

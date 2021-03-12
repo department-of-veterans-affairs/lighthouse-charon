@@ -5,6 +5,7 @@ import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import javax.security.auth.login.LoginException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -68,8 +68,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
   private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
     var cause = exception.getCause();
     log.error("Call failed.", exception);
-    if (cause instanceof LoginException
-        || cause instanceof UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException) {
+    if (cause instanceof UnrecoverableVistalinkException) {
       throw cause;
     }
     return failed(vista, "exception: " + exception.getMessage());
@@ -97,14 +96,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
     } catch (ExecutionException e) {
       /* Conditionally rethrow the ExecutionException cause. */
       return handleExecutionException(vista, e);
-    } catch (TimeoutException e) {
-      /*
-       * Rethrow critical errors and let application exception handling produce the appropriate
-       * response.
-       */
-      log.error("Request failed: ", e);
-      throw e;
-    } catch (InterruptedException e) {
+    } catch (TimeoutException | InterruptedException e) {
       /* Suppress exception and return a failed response. */
       log.error("Failed to get result from {}", vista, e);
       return failed(vista, "exception: " + e.getMessage());

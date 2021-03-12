@@ -11,6 +11,8 @@ import gov.va.api.lighthouse.charon.api.RpcDetails.Parameter;
 import gov.va.api.lighthouse.charon.api.RpcMetadata;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.charon.service.controller.FugaziMacros.AppendXMacro;
+import gov.va.api.lighthouse.charon.service.controller.FugaziMacros.ToUpperCaseMacro;
 import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.BadRpcContext;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import gov.va.med.vistalink.adapter.record.VistaLinkFaultException;
@@ -61,11 +63,14 @@ public class VistalinkRpcInvokerFactoryTest {
 
   @Test
   void createReturnsAnRpcInvokerFactory() {
-    assertThat(
-            new VistalinkRpcInvokerFactory(
-                new MacroProcessorFactory(
-                    List.of(new FugaziMacros.AppendXMacro(), new FugaziMacros.ToUpperCaseMacro()))))
-        .isInstanceOf(RpcInvokerFactory.class);
+    VistalinkRpcInvokerFactory f =
+        new VistalinkRpcInvokerFactory(
+            new MacroProcessorFactory(List.of(new AppendXMacro(), new ToUpperCaseMacro())));
+    RpcInvoker in =
+        f.create(
+            RpcPrincipal.standardUserBuilder().accessCode("a").verifyCode("v").build(),
+            connectionDetails());
+    assertThat(in.vista()).isEqualTo(connectionDetails().name());
   }
 
   RpcResponse fugaziRpcResponse(String payloadValue) throws JAXBException {

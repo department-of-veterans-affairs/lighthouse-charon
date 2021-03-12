@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails;
@@ -11,6 +12,7 @@ import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.LoginFailure;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,5 +135,26 @@ class ParallelRpcExecutorTest {
     when(invoker3.invoke(r.rpc())).thenReturn(r3);
     assertThat(executor.execute(r))
         .isEqualTo(RpcResponse.builder().status(Status.OK).results(List.of(r1, r2, r3)).build());
+  }
+
+  @Test
+  void unrecoverableExceptionFromInvokersArePropagated() {
+    var r = _request();
+    ConnectionDetails c1 = _connectionDetail(1);
+    ConnectionDetails c2 = _connectionDetail(2);
+    ConnectionDetails c3 = _connectionDetail(3);
+    when(resolver.resolve(r.target())).thenReturn(List.of(c1, c2, c3));
+    when(factory.create(_request().principal(), c1)).thenReturn(invoker1);
+    when(factory.create(_request().principal(), c2)).thenReturn(invoker2);
+    when(factory.create(_request().principal(), c3)).thenReturn(invoker3);
+    RpcInvocationResult r1 = _result(1);
+    RpcInvocationResult r2 = _result(2, "Failed to get result: RuntimeException: FUGAZI");
+    RpcInvocationResult r3 = _result(3);
+    r2.response(null);
+    when(invoker2.vista()).thenReturn("v2");
+    when(invoker1.invoke(r.rpc())).thenReturn(r1);
+    when(invoker2.invoke(r.rpc())).thenThrow(new LoginFailure("FUGAZI"));
+    when(invoker3.invoke(r.rpc())).thenReturn(r3);
+    assertThatExceptionOfType(LoginFailure.class).isThrownBy(() -> executor.execute(r));
   }
 }

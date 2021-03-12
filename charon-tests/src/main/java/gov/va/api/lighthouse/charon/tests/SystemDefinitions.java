@@ -8,6 +8,7 @@ import gov.va.api.lighthouse.charon.api.RpcDetails.Parameter;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.BooleanUtils;
@@ -151,13 +152,22 @@ public class SystemDefinitions {
   }
 
   private boolean isVistaAvailable() {
-    return BooleanUtils.toBoolean(System.getProperty("vista.is-available", "false"));
+    return BooleanUtils.toBoolean(systemPropertyOrEnvVar("vista.is-available", "false"));
   }
 
   private RpcPrincipal rpcPrincipal() {
     return RpcPrincipal.builder()
-        .accessCode(System.getProperty("vista.standard-user.access-code", "not-set"))
-        .verifyCode(System.getProperty("vista.standard-user.verify-code", "not-set"))
+        .accessCode(systemPropertyOrEnvVar("vista.standard-user.access-code", "not-set"))
+        .verifyCode(systemPropertyOrEnvVar("vista.standard-user.verify-code", "not-set"))
         .build();
+  }
+
+  private String systemPropertyOrEnvVar(String property, String defaultValue) {
+    var value = System.getProperty(property);
+    if (value == null) {
+      value =
+          System.getenv(property.replace('.', '_').replace('-', '_').toUpperCase(Locale.ENGLISH));
+    }
+    return value == null ? defaultValue : value;
   }
 }

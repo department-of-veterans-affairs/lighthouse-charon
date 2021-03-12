@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static gov.va.api.lighthouse.charon.service.controller.CharonVistaLinkManagedConnection.socketTimeout;
+
 import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcMetadata;
@@ -95,10 +97,12 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   @Override
   @SneakyThrows
   public RpcResponse invoke(RpcRequest request) {
-    synchronized (VistalinkRpcInvoker.class) {
-      log.info("{} Executing RPC {}", this, request.getRpcName());
-      return session.connection().executeRPC(request);
-    }
+    log.info(
+        "Connecting to {} as type {}",
+        connectionDetails.name(),
+        session.getClass().getSimpleName());
+    log.info("{} Executing RPC {}", this, request.getRpcName());
+    return session.connection().executeRPC(request);
   }
 
   @Override
@@ -119,6 +123,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
         var value = macroProcessor.evaluate(parameter);
         vistalinkRequest.getParams().setParam(i + 1, parameter.type(), value);
       }
+      vistalinkRequest.setTimeOut(socketTimeout() + 4);
       RpcResponse vistalinkResponse = invoke(vistalinkRequest);
       log.info("{} Response {} chars", this, vistalinkResponse.getRawResponse().length());
       VistalinkXmlResponse xmlResponse = parse(vistalinkResponse);

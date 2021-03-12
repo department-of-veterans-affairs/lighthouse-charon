@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import java.io.Serial;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
@@ -8,6 +9,8 @@ public class VistaLinkExceptions {
 
   @Getter
   public static class NameResolutionException extends VistaLinkException {
+
+    @Serial private static final long serialVersionUID = 8280519539296791178L;
 
     private final String publicErrorCode;
 
@@ -19,18 +22,27 @@ public class VistaLinkExceptions {
   }
 
   public static class UnknownPatient extends NameResolutionException {
+
+    @Serial private static final long serialVersionUID = 4542527678706542746L;
+
     public UnknownPatient(Enum<?> publicErrorCode, String message) {
       super(publicErrorCode, message, null);
     }
   }
 
   public static final class UnknownVista extends VistaLinkException {
+
+    @Serial private static final long serialVersionUID = 8519965629992550013L;
+
     public UnknownVista(String names) {
       super(names);
     }
   }
 
   public static class VistaLinkException extends RuntimeException {
+
+    @Serial private static final long serialVersionUID = 3791939028343499833L;
+
     public VistaLinkException(String message) {
       super(message);
     }
