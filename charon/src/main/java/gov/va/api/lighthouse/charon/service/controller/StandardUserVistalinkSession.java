@@ -4,6 +4,8 @@ import static gov.va.api.lighthouse.charon.service.controller.CharonVistaLinkMan
 import static gov.va.api.lighthouse.charon.service.controller.VistalinkSession.connectionIdentifier;
 
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.LoginFailure;
+import gov.va.med.exception.FoundationsException;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnectionSpecImpl;
 import gov.va.med.vistalink.adapter.spi.EMAdapterEnvironment;
@@ -12,7 +14,10 @@ import gov.va.med.vistalink.adapter.spi.VistaLinkJ2SEConnSpec;
 import gov.va.med.vistalink.adapter.spi.VistaLinkManagedConnection;
 import gov.va.med.vistalink.security.m.KernelSecurityHandshake;
 import gov.va.med.vistalink.security.m.KernelSecurityHandshakeManaged;
+import gov.va.med.vistalink.security.m.SecurityDataLogonResponse;
+import gov.va.med.vistalink.security.m.SecurityResponse;
 import gov.va.med.vistalink.security.m.SecurityResponseFactory;
+import gov.va.med.vistalink.security.m.SecurityVO;
 import javax.resource.spi.ConnectionRequestInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -113,17 +118,34 @@ public class StandardUserVistalinkSession implements VistalinkSession {
   private VistaLinkConnection createConnectionAndLogon() {
     log.info("Opening session for {}", connectionIdentifier(connectionDetails));
 
-    KernelSecurityHandshakeManaged.doSetupAndGetIntroText(
-        managedConnection(), securityResponseFactory, false, true, "");
+    try {
 
-    VistaLinkConnectionSpecImpl connectionSpec =
-        new VistaLinkJ2SEConnSpec(connectionDetails().divisionIen());
-    ConnectionRequestInfo connectionRequest = new VistaLinkConnectionRequestInfo(connectionSpec);
-    VistaLinkConnection connection =
-        (VistaLinkConnection) managedConnection().getConnection(null, connectionRequest);
+      log.info("Doing security set up handshake");
+      SecurityResponse securityResponse =
+          KernelSecurityHandshakeManaged.doSetupAndGetIntroText(
+              managedConnection(), securityResponseFactory, false, true, "");
+      if (securityResponse.getResultType() != SecurityVO.RESULT_SUCCESS) {
+        throw new LoginFailure(String.format("A/V set up failed for %s", connectionDetails.name()));
+      }
 
-    KernelSecurityHandshake.doAVLogon(
-        connection, securityResponseFactory, accessCode(), verifyCode(), false);
+      log.info("Creating connection");
+      VistaLinkConnectionSpecImpl connectionSpec =
+          new VistaLinkJ2SEConnSpec(connectionDetails().divisionIen());
+      ConnectionRequestInfo connectionRequest = new VistaLinkConnectionRequestInfo(connectionSpec);
+
+      VistaLinkConnection connection =
+          (VistaLinkConnection) managedConnection().getConnection(null, connectionRequest);
+
+      log.info("Doing security logon");
+      SecurityDataLogonResponse logonResponse =
+          KernelSecurityHandshake.doAVLogon(
+              connection, securityResponseFactory, accessCode(), verifyCode(), false);
+      if (logonResponse.getResultType() != SecurityVO.RESULT_SUCCESS) {
+        throw new LoginFailure(String.format("A/V logon failed for %s", connectionDetails.name()));
+      }
+    } catch (FoundationsException e) {
+      throw new LoginFailure(String.format("A/V logon failed for %s", connectionDetails.name()));
+    }
 
     return connection;
   }

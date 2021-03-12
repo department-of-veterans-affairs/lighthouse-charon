@@ -17,10 +17,10 @@ import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.LoginFailure;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
-import javax.security.auth.login.LoginException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,7 +50,7 @@ public class WebExceptionHandlerTest {
         arguments(
             HttpStatus.BAD_REQUEST, Status.FAILED, new HttpMessageConversionException("FUGAZI")),
         arguments(HttpStatus.BAD_REQUEST, Status.FAILED, new InvalidRequest("FUGAZI")),
-        arguments(HttpStatus.UNAUTHORIZED, Status.FAILED, new LoginException("FUGAZI")),
+        arguments(HttpStatus.UNAUTHORIZED, Status.FAILED, new LoginFailure("FUGAZI")),
         arguments(HttpStatus.REQUEST_TIMEOUT, Status.FAILED, new TimeoutException("FUGAZI")),
         arguments(
             HttpStatus.BAD_REQUEST, Status.FAILED, new VistaLinkExceptions.UnknownVista("FUGAZI")),

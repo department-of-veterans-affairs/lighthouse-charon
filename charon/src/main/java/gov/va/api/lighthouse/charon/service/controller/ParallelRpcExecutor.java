@@ -5,6 +5,7 @@ import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import javax.security.auth.login.LoginException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -68,8 +68,7 @@ public class ParallelRpcExecutor implements RpcExecutor {
   private RpcInvocationResult handleExecutionException(String vista, ExecutionException exception) {
     var cause = exception.getCause();
     log.error("Call failed.", exception);
-    if (cause instanceof LoginException
-        || cause instanceof UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException) {
+    if (cause instanceof UnrecoverableVistalinkException) {
       throw cause;
     }
     return failed(vista, "exception: " + exception.getMessage());
