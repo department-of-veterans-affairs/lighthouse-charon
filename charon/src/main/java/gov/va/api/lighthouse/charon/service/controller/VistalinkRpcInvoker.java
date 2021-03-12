@@ -18,6 +18,7 @@ import java.util.function.BiFunction;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
   private static final JAXBContext JAXB_CONTEXT = createJaxbContext();
 
-  private final ConnectionDetails connectionDetails;
+  @Getter private final ConnectionDetails connectionDetails;
 
   private final VistalinkSession session;
 

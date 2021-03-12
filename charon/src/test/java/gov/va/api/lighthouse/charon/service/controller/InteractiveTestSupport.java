@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.exception.FoundationsException;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
+import gov.va.med.vistalink.rpc.RpcResponse;
 import java.util.List;
 
 class InteractiveTestSupport {
@@ -25,7 +26,17 @@ class InteractiveTestSupport {
   }
 
   static MacroExecutionContext nullMacroExecutionContext() {
-    return request -> null;
+    return new MacroExecutionContext() {
+      @Override
+      public ConnectionDetails connectionDetails() {
+        return null;
+      }
+
+      @Override
+      public RpcResponse invoke(RpcRequest request) {
+        return null;
+      }
+    };
   }
 
   static String requirePropertyValue(String name) {

@@ -12,6 +12,7 @@ public class MacroProcessorFactory {
 
   private final @NonNull List<Macro> macros;
 
+  /** Create a macro processor factory from a context and connectionDetails. */
   public MacroProcessor create(MacroExecutionContext ctx) {
     return MacroProcessor.builder().macros(macros).macroExecutionContext(ctx).build();
   }

@@ -3,6 +3,8 @@ package gov.va.api.lighthouse.charon.service.config;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.io.FileInputStream;
+import java.time.ZoneId;
+import java.time.zone.ZoneRulesException;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -25,6 +27,14 @@ public class VistalinkPropertiesConfig {
     var parts = value.split(":", -1);
     if (parts.length != 4) {
       throw badValue(name, value, "incorrect number of parts");
+    }
+    try {
+      ZoneId.of(parts[3]);
+    } catch (ZoneRulesException e) {
+      throw badValue(
+          name,
+          value,
+          "vistalink.properties: vista-connection string is configured with a bad timezone");
     }
     try {
       return ConnectionDetails.builder()
