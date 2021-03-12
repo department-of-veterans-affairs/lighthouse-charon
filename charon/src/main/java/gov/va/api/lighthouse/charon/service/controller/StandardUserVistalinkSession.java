@@ -1,5 +1,8 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static gov.va.api.lighthouse.charon.service.controller.CharonVistaLinkManagedConnection.socketTimeout;
+import static gov.va.api.lighthouse.charon.service.controller.VistalinkSession.connectionIdentifier;
+
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnectionSpecImpl;
@@ -46,6 +49,7 @@ public class StandardUserVistalinkSession implements VistalinkSession {
     closeConnection();
     closeManagedConnection();
     closeConnectionFactory();
+    log.info("Session closed for {}", connectionIdentifier(connectionDetails));
   }
 
   @SneakyThrows
@@ -79,6 +83,11 @@ public class StandardUserVistalinkSession implements VistalinkSession {
     } catch (Exception e) {
       log.warn("Failed to clean up managed connection ({})", hashCode(), e);
     }
+    try {
+      managedConnection.destroy();
+    } catch (Exception e) {
+      log.warn("Failed to destroy managed connection ({})", hashCode(), e);
+    }
     managedConnection = null;
   }
 
@@ -102,6 +111,8 @@ public class StandardUserVistalinkSession implements VistalinkSession {
 
   @SneakyThrows
   private VistaLinkConnection createConnectionAndLogon() {
+    log.info("Opening session for {}", connectionIdentifier(connectionDetails));
+
     KernelSecurityHandshakeManaged.doSetupAndGetIntroText(
         managedConnection(), securityResponseFactory, false, true, "");
 
@@ -120,7 +131,10 @@ public class StandardUserVistalinkSession implements VistalinkSession {
   @SneakyThrows
   private VistaLinkManagedConnection managedConnection() {
     if (managedConnection == null) {
-      managedConnection = new CharonVistaLinkManagedConnection(connectionFactory(), hashCode());
+      managedConnection =
+          new CharonVistaLinkManagedConnection(
+              connectionFactory(), connectionIdentifier(connectionDetails));
+      managedConnection.setSocketTimeOut(socketTimeout() + 5);
     }
     return managedConnection;
   }

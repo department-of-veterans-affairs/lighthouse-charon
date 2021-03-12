@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static gov.va.api.lighthouse.charon.service.controller.VistalinkSession.connectionIdentifier;
+
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.adapter.cci.VistaLinkAppProxyConnectionSpec;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
@@ -78,6 +80,11 @@ public class ApplicationProxyUserVistalinkSession implements VistalinkSession {
     } catch (Exception e) {
       log.warn("Failed to clean up managed connection ({})", hashCode(), e);
     }
+    try {
+      managedConnection.destroy();
+    } catch (Exception e) {
+      log.warn("Failed to destroy managed connection ({})", hashCode(), e);
+    }
     managedConnection = null;
   }
 
@@ -116,7 +123,9 @@ public class ApplicationProxyUserVistalinkSession implements VistalinkSession {
   @SneakyThrows
   private VistaLinkManagedConnection managedConnection() {
     if (managedConnection == null) {
-      managedConnection = new CharonVistaLinkManagedConnection(connectionFactory(), hashCode());
+      managedConnection =
+          new CharonVistaLinkManagedConnection(
+              connectionFactory(), connectionIdentifier(connectionDetails));
     }
     return managedConnection;
   }
