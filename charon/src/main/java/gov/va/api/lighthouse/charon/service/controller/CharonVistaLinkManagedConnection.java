@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
  */
 public class CharonVistaLinkManagedConnection extends VistaLinkManagedConnection {
 
+  /** Create a new instance with Charon specific timeouts. */
   @SneakyThrows
   public CharonVistaLinkManagedConnection(
       VistaLinkManagedConnectionFactory mcf, long distinguishedIdentifier)

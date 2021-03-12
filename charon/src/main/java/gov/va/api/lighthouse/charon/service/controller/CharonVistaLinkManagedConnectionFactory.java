@@ -15,7 +15,7 @@ public class CharonVistaLinkManagedConnectionFactory extends VistaLinkManagedCon
 
   @Override
   public long getSocketTimeOut() {
-    return socketTimeout() + 3;
+    return socketTimeout() + 3L;
   }
 
   @Override
