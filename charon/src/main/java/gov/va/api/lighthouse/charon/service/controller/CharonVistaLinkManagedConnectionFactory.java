@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static gov.va.api.lighthouse.charon.service.controller.CharonVistaLinkManagedConnection.socketTimeout;
+
 import gov.va.med.vistalink.adapter.spi.VistaLinkManagedConnectionFactory;
 import java.io.Serial;
 
@@ -10,6 +12,11 @@ import java.io.Serial;
 public class CharonVistaLinkManagedConnectionFactory extends VistaLinkManagedConnectionFactory {
 
   @Serial private static final long serialVersionUID = 7622503603723838369L;
+
+  @Override
+  public long getSocketTimeOut() {
+    return socketTimeout() + 3L;
+  }
 
   @Override
   public void setPrimaryStation(String primaryStation) {
