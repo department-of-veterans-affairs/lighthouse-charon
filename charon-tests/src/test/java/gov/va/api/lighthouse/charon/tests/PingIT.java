@@ -1,10 +1,12 @@
 package gov.va.api.lighthouse.charon.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
+import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,7 @@ public class PingIT {
         TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
             .expect(200)
             .expectValid(RpcResponse.class);
+    assertThat(response.status()).isEqualTo(Status.OK);
     log.info(response.toString());
   }
 }

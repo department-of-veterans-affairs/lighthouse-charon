@@ -136,6 +136,10 @@ public class StandardUserVistalinkSession implements VistalinkSession {
       VistaLinkConnection connection =
           (VistaLinkConnection) managedConnection().getConnection(null, connectionRequest);
 
+      if (connection == null) {
+        throw new LoginFailure("failed create connection");
+      }
+
       log.info("Doing security logon");
       SecurityDataLogonResponse logonResponse =
           KernelSecurityHandshake.doAVLogon(
@@ -143,11 +147,11 @@ public class StandardUserVistalinkSession implements VistalinkSession {
       if (logonResponse.getResultType() != SecurityVO.RESULT_SUCCESS) {
         throw new LoginFailure(String.format("A/V logon failed for %s", connectionDetails.name()));
       }
+
+      return connection;
     } catch (FoundationsException e) {
       throw new LoginFailure(String.format("A/V logon failed for %s", connectionDetails.name()));
     }
-
-    return connection;
   }
 
   @SneakyThrows
