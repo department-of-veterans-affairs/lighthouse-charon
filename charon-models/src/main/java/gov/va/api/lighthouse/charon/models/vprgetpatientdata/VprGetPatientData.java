@@ -32,7 +32,7 @@ public class VprGetPatientData
     implements TypeSafeRpc<VprGetPatientData.Request, VprGetPatientData.Response> {
   private static final String RPC_NAME = "VPR GET PATIENT DATA";
 
-  private static final String RPC_CONTEXT = "VPR APPLICATION PROXY";
+  private static final String RPC_CONTEXT = "LHS RPC CONTEXT";
 
   /** Serialize the RPC results to a response object. */
   @Override
