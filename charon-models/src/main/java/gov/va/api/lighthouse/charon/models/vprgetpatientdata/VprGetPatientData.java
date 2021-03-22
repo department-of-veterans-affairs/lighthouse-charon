@@ -32,7 +32,7 @@ public class VprGetPatientData
     implements TypeSafeRpc<VprGetPatientData.Request, VprGetPatientData.Response> {
   private static final String RPC_NAME = "VPR GET PATIENT DATA";
 
-  private static final String RPC_CONTEXT = "LHS RPC CONTEXT";
+  private static final String DEFAULT_RPC_CONTEXT = "VPR APPLICATION PROXY";
 
   /** Serialize the RPC results to a response object. */
   @Override
@@ -81,6 +81,8 @@ public class VprGetPatientData
    */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
+    private Optional<String> context;
+
     @NonNull private PatientId dfn;
 
     private Set<Domains> type;
@@ -99,7 +101,7 @@ public class VprGetPatientData
     @Override
     public RpcDetails asDetails() {
       return RpcDetails.builder()
-          .context(RPC_CONTEXT)
+          .context(context().orElse(DEFAULT_RPC_CONTEXT))
           .name(RPC_NAME)
           .parameters(
               List.of(
@@ -117,6 +119,14 @@ public class VprGetPatientData
                   RpcDetails.Parameter.builder().string(id().orElse("")).build(),
                   RpcDetails.Parameter.builder().array(filter()).build()))
           .build();
+    }
+
+    /** Lazy Initializer. */
+    Optional<String> context() {
+      if (context == null) {
+        context = Optional.empty();
+      }
+      return context;
     }
 
     /** Lazy getter. */

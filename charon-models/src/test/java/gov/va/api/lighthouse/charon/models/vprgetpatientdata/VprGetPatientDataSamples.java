@@ -16,7 +16,7 @@ public class VprGetPatientDataSamples {
   public static class Request {
     public RpcDetails details() {
       return RpcDetails.builder()
-          .context("LHS RPC CONTEXT")
+          .context("VPR APPLICATION PROXY")
           .name("VPR GET PATIENT DATA")
           .parameters(
               List.of(
