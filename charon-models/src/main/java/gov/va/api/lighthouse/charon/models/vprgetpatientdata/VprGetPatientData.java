@@ -177,9 +177,15 @@ public class VprGetPatientData
       return type;
     }
 
+    @Override
+    public void updateContext(Optional<String> context) {
+      this.context = context;
+    }
+
     @Value
     public static class PatientId {
       String dfn;
+
       String icn;
 
       /** You must specify dfn or icn, or both. */

@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(staticName = "create")
 public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestPing.Response> {
-
   private static final String RPC_NAME = "XOBV TEST PING";
 
   private static final String DEFAULT_RPC_CONTEXT = "XOBV VISTALINK TESTER";
@@ -31,6 +30,7 @@ public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestP
         .build();
   }
 
+  @Data
   @Builder
   public static class Request implements TypeSafeRpcRequest {
     private Optional<String> context;
@@ -50,6 +50,11 @@ public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestP
         context = Optional.empty();
       }
       return context;
+    }
+
+    @Override
+    public void updateContext(Optional<String> context) {
+      this.context = context;
     }
   }
 

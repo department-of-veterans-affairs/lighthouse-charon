@@ -17,6 +17,10 @@ public class XobvTestPingTest {
             RpcDetails.builder().name("XOBV TEST PING").context("XOBV VISTALINK TESTER").build());
     assertThat(XobvTestPing.Request.builder().context(Optional.of("CONTEXT")).build().asDetails())
         .isEqualTo(RpcDetails.builder().name("XOBV TEST PING").context("CONTEXT").build());
+    var sample = XobvTestPing.Request.builder().build();
+    sample.updateContext(Optional.of("CONTEXT"));
+    assertThat(sample.asDetails())
+        .isEqualTo(RpcDetails.builder().name("XOBV TEST PING").context("CONTEXT").build());
   }
 
   @Test
