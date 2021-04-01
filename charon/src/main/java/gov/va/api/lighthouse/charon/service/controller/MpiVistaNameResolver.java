@@ -46,7 +46,7 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     this.properties = properties;
     this.mpiConfig = mpiConfig;
     log.info("Accessing MPI at {}", mpiConfig.getUrl());
-    log.info("Presenting as {}", mpiConfig().getKeyAlias());
+    log.info("Presenting as {}", mpiConfig.getKeyAlias());
   }
 
   /** Lazy Getter. */
