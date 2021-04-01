@@ -66,11 +66,11 @@ public class MacroProcessor {
     if (parameter.isNamedArray()) {
       return evaluate(parameter.namedArray());
     }
-    var type = "unknown";
+    String type;
     try {
       type = parameter.type();
-    } catch (Exception e) {
-      // ignore
+    } catch (IllegalStateException e) {
+      type = "unknown";
     }
     throw new IllegalArgumentException("Cannot evaluate type: " + type);
   }
