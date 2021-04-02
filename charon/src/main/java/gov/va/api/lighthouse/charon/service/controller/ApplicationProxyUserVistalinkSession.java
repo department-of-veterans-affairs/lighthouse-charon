@@ -11,6 +11,7 @@ import gov.va.med.vistalink.adapter.spi.VistaLinkConnectionRequestInfo;
 import gov.va.med.vistalink.adapter.spi.VistaLinkManagedConnection;
 import gov.va.med.vistalink.security.m.KernelSecurityHandshake;
 import gov.va.med.vistalink.security.m.SecurityResponseFactory;
+import javax.resource.ResourceException;
 import javax.resource.spi.ConnectionRequestInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,7 +62,7 @@ public class ApplicationProxyUserVistalinkSession implements VistalinkSession {
     }
     try {
       connection.close();
-    } catch (Exception e) {
+    } catch (ResourceException e) {
       log.warn("Failed to closeconnection ({})", hashCode(), e);
     }
     connection = null;
@@ -77,12 +78,12 @@ public class ApplicationProxyUserVistalinkSession implements VistalinkSession {
     }
     try {
       managedConnection.cleanup();
-    } catch (Exception e) {
+    } catch (ResourceException e) {
       log.warn("Failed to clean up managed connection ({})", hashCode(), e);
     }
     try {
       managedConnection.destroy();
-    } catch (Exception e) {
+    } catch (ResourceException e) {
       log.warn("Failed to destroy managed connection ({})", hashCode(), e);
     }
     managedConnection = null;
