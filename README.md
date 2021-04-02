@@ -18,7 +18,8 @@ This approach
 - Hides patient to vista mapping complexity.
     - Business-level services must know RPC details, but do not need to know which Vista instances specifically. They
       can simply say, "all Vistas for this patient".
-    - Connection details (host, port, etc.) are encapsulated in one location.
+    - Connection details (host, port, etc.) are encapsulated in one location, but still allows specific details
+      to be optionally specified.
 
 Note:
 
