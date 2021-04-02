@@ -11,10 +11,8 @@ import gov.va.api.lighthouse.charon.service.controller.VistaLinkExceptions.Unkno
 import gov.va.api.lighthouse.mpi.MpiConfig;
 import gov.va.api.lighthouse.mpi.PatientIdentifierSegment;
 import gov.va.api.lighthouse.mpi.SoapMasterPatientIndexClient;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,16 +63,11 @@ public class MpiVistaNameResolver implements VistaNameResolver {
 
   @Override
   public List<ConnectionDetails> resolve(RpcVistaTargets rpcVistaTargets) {
-    Set<String> vistas = new HashSet<>();
-    properties.checkKnownNames(rpcVistaTargets.include());
-    properties.checkKnownNames(rpcVistaTargets.exclude());
-    vistas.addAll(rpcVistaTargets.include());
-    vistas.addAll(targetsForPatient(rpcVistaTargets));
-    vistas.removeAll(rpcVistaTargets.exclude());
-    var knownVistas = properties.names();
-    vistas.removeIf(s -> !knownVistas.contains(s));
-    log.info("Known Vistas: {}", knownVistas);
-    return properties().vistas().stream().filter(c -> vistas.contains(c.name())).collect(toList());
+    return NameResolution.builder()
+        .properties(properties())
+        .additionalCandidates(this::targetsForPatient)
+        .build()
+        .resolve(rpcVistaTargets);
   }
 
   private List<String> targetsForPatient(RpcVistaTargets rpcVistaTargets) {
