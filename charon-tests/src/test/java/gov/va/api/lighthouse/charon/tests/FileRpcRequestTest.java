@@ -6,14 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
-import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
-import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.charon.service.controller.AllVistaNameResolver;
 import gov.va.api.lighthouse.charon.service.controller.DfnMacro;
 import gov.va.api.lighthouse.charon.service.controller.LocalDateMacro;
 import gov.va.api.lighthouse.charon.service.controller.MacroProcessorFactory;
-import gov.va.api.lighthouse.charon.service.controller.NameResolution;
 import gov.va.api.lighthouse.charon.service.controller.ParallelRpcExecutor;
 import gov.va.api.lighthouse.charon.service.controller.VistalinkRpcInvokerFactory;
 import java.io.File;
@@ -26,14 +23,6 @@ import org.junit.jupiter.api.Test;
 public class FileRpcRequestTest {
 
   private final ObjectMapper mapper = JacksonConfig.createMapper();
-
-  private List<ConnectionDetails> connectionDetails(RpcVistaTargets target) {
-    return NameResolution.builder()
-        .properties(VistalinkProperties.builder().build())
-        .additionalCandidates(r -> List.of())
-        .build()
-        .resolve(target);
-  }
 
   @Test
   @SneakyThrows

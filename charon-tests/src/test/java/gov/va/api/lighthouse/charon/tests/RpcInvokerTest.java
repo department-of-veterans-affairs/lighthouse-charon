@@ -48,10 +48,6 @@ public class RpcInvokerTest {
     log.info("RESULT\n---\n{}\n---", result.response());
   }
 
-  boolean isEnabled() {
-    return TestOptions.isEnabled("test.rpcinvoker", false);
-  }
-
   @Value
   @Builder
   static class CharonTestConfig {
