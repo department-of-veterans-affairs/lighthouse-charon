@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+#
+# This utility invokes the FileRpcRequestTest using the latest
+# test Docker image.
+#
+# The request file must be fully formed and only supports fully defined
+# include targets (host:port:divisionIen:timezone), e.g.
+#
+#  "target": {
+#    "include": [ "host.docker.internal:18673:673:America/New_York" ]
+#  },
+#
+#
+
+
+if [ -z "${1:-}" ]; then echo "USAGE: $0 <request.json>"; exit 1; fi
+
+FILE=$1
+FILE=$(cd $(dirname $FILE); echo $(pwd)/$(basename $FILE))
+
+docker run \
+  --rm \
+  -it \
+  -e CLIENT_KEY=not-used \
+  -e K8S_ENVIRONMENT=not-used \
+  -e K8S_LOAD_BALANCER=not-used \
+  -e VISTA_ACCESS_CODE=not-used \
+  -e VISTA_VERIFY_CODE=not-used \
+  -v $FILE:/request.json \
+  vasdvp/lighthouse-charon-tests:latest \
+  run \
+  --module-name charon-tests \
+  --test-pattern '.*FileRpcRequestTest' \
+  -Dtest.file-rpc-request=true \
+  | sed '1,/RESPONSE START/d;/RESPONSE END/,$d'
