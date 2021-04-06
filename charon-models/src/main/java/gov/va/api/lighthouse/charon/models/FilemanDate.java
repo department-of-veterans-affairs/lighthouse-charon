@@ -65,9 +65,8 @@ public class FilemanDate {
   }
 
   private static class DateTimeFormatter {
-
     public static final ThreadLocal<DecimalFormat> zeroPaddedDecimalThreadLocal =
-        ThreadLocal.withInitial(FilemanDate::zeroPaddedDecimal);
+        ThreadLocal.withInitial(() -> zeroPaddedDecimal());
 
     public String format(ZonedDateTime zdt) {
       StringBuilder result = new StringBuilder(14);
