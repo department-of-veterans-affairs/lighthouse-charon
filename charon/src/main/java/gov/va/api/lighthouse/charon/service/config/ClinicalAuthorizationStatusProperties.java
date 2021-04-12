@@ -22,6 +22,7 @@ public class ClinicalAuthorizationStatusProperties {
   String accessCode;
   String verifyCode;
   String applicationProxyUser;
+  String defaultMenuOption;
 
   /** Get an RpcPrincipal for using the clinical authorization vpc. */
   public RpcPrincipal principal() {
