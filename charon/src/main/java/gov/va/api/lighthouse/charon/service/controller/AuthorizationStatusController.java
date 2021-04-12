@@ -1,12 +1,15 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
-import gov.va.api.lighthouse.charon.api.RpcDetails;
-import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
+import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
+import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAccess;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,54 +41,63 @@ public class AuthorizationStatusController {
     if (menuOption == null) {
       menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
     }
-    List<RpcInvocationResult> results =
-        rpcExecutor.execute(lhsCheckOptionAccess(site, duz, menuOption)).results();
-    return parseLhsCheckOptionAccessResponse(results);
+    RpcResponse response =
+        rpcExecutor.execute(
+            RpcRequest.builder()
+                .rpc(
+                    LhsCheckOptionAccess.Request.builder()
+                        .duz(duz)
+                        .menuOption(menuOption)
+                        .build()
+                        .asDetails())
+                .target(RpcVistaTargets.builder().include(List.of(site)).build())
+                .principal(clinicalAuthorizationStatusProperties.principal())
+                .build());
+    LhsCheckOptionAccess.Response typeSafeResult =
+        LhsCheckOptionAccess.create().fromResults(response.results());
+    return parseLhsCheckOptionAccessResponse(typeSafeResult.resultsByStation(), site);
   }
 
-  private RpcRequest lhsCheckOptionAccess(String site, String duz, String menuOption) {
-    return RpcRequest.builder()
-        .rpc(
-            RpcDetails.builder()
-                .name("LHS CHECK OPTION ACCESS")
-                .context("LHS RPC CONTEXT")
-                .parameters(
-                    List.of(
-                        RpcDetails.Parameter.builder().string(duz).build(),
-                        RpcDetails.Parameter.builder().string(menuOption).build()))
-                .build())
-        .target(RpcVistaTargets.builder().include(List.of(site)).build())
-        .principal(clinicalAuthorizationStatusProperties.principal())
-        .build();
-  }
-
-  private ResponseEntity<ClinicalAuthorizationResponse> parseLhsCheckOptionAccessResponse(
-      List<RpcInvocationResult> results) {
+  ResponseEntity<ClinicalAuthorizationResponse> parseLhsCheckOptionAccessResponse(
+      Map<String, String> results, String site) {
     if (results.size() != 1) {
-      return ResponseEntity.status(500)
-          .body(
-              ClinicalAuthorizationResponse.builder()
-                  .status("Multiple site responses found.")
-                  .build());
+      return ClinicalAuthorizationResponse.builder()
+          .status(
+              String.format(
+                  "Multiple response sites found. Only expecting one response. Found: %s",
+                  results.values()))
+          .build()
+          .response(500);
+    }
+    if (!results.containsKey(site)) {
+      return ClinicalAuthorizationResponse.builder()
+          .status(
+              String.format(
+                  "Mismatched station id in response. Found: %s, Expected: %s",
+                  results.values(), site))
+          .build()
+          .response(500);
     }
     /*
      * Get the first piece of an authorization response string that is in the format 12345^987654.
      * We want the piece left of the ^ to make a decision off of.
      */
-    if (StringUtils.isBlank(results.get(0).response())) {
-      return ResponseEntity.status(500)
-          .body(ClinicalAuthorizationResponse.builder().status("Blank response.").build());
+    if (StringUtils.isBlank(results.get(site))) {
+      return ClinicalAuthorizationResponse.builder()
+          .status("Blank response.")
+          .build()
+          .response(500);
     }
-    String authorizationString = results.get(0).response().split("[\\^]", -1)[0];
+    String authorizationString = results.get(site).split("[\\^]", -1)[0];
     int authorizationStatusPiece;
     try {
       authorizationStatusPiece = Integer.parseInt(authorizationString);
     } catch (NumberFormatException e) {
-      return ResponseEntity.status(500)
-          .body(
-              ClinicalAuthorizationResponse.builder()
-                  .status("Cannot parse authorization response. " + authorizationString)
-                  .build());
+      return ClinicalAuthorizationResponse.builder()
+          .status("Cannot parse authorization response. " + authorizationString)
+          .value(authorizationString)
+          .build()
+          .response(500);
     }
     /*
      * ; -1:no such user in the New Person File ; -2: User terminated or has no access code ; -3: no
@@ -94,26 +106,34 @@ public class AuthorizationStatusController {
      * <p>Positive cases are access allowed.
      */
     if (authorizationStatusPiece == -1) {
-      return ResponseEntity.status(401)
-          .body(
-              ClinicalAuthorizationResponse.builder()
-                  .status("unauthorized")
-                  .rawAuthorizationResponse(authorizationString)
-                  .build());
+      return ClinicalAuthorizationResponse.builder()
+          .status("unauthorized")
+          .value(authorizationString)
+          .build()
+          .response(401);
     }
     if (authorizationStatusPiece > 0) {
-      return ResponseEntity.status(200)
-          .body(
-              ClinicalAuthorizationResponse.builder()
-                  .status("ok")
-                  .rawAuthorizationResponse(authorizationString)
-                  .build());
+      return ClinicalAuthorizationResponse.builder()
+          .status("ok")
+          .value(authorizationString)
+          .build()
+          .response(200);
     }
-    return ResponseEntity.status(403)
-        .body(
-            ClinicalAuthorizationResponse.builder()
-                .status("ok")
-                .rawAuthorizationResponse(authorizationString)
-                .build());
+    return ClinicalAuthorizationResponse.builder()
+        .status("forbidden")
+        .value(authorizationString)
+        .build()
+        .response(403);
+  }
+
+  @Value
+  @Builder
+  public static class ClinicalAuthorizationResponse {
+    String status;
+    String value;
+
+    ResponseEntity<ClinicalAuthorizationResponse> response(int httpCode) {
+      return ResponseEntity.status(httpCode).body(this);
+    }
   }
 }
