@@ -9,6 +9,7 @@ import gov.va.api.lighthouse.charon.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpcResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,17 +35,26 @@ public class LhsCheckOptionAccess
   public static class Request implements TypeSafeRpcRequest {
     String duz;
     String menuOption;
+    Optional<String> context;
 
     @Override
     public RpcDetails asDetails() {
       return RpcDetails.builder()
-          .context(RPC_CONTEXT)
+          .context(context().orElse(RPC_CONTEXT))
           .name(RPC_NAME)
           .parameters(
               List.of(
                   RpcDetails.Parameter.builder().string(duz).build(),
                   RpcDetails.Parameter.builder().string(menuOption).build()))
           .build();
+    }
+
+    /** Lazy Initializer. */
+    Optional<String> context() {
+      if (context == null) {
+        context = Optional.empty();
+      }
+      return context;
     }
   }
 

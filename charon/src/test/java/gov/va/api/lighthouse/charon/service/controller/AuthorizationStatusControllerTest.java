@@ -46,20 +46,19 @@ public class AuthorizationStatusControllerTest {
             Map.of("1000", "-WORDS^9999"),
             "1000",
             500,
-            expectedBodyOf("Cannot parse authorization response. -WORDS", "-WORDS")),
+            expectedBodyOf("Cannot parse authorization response.", "-WORDS")),
         Arguments.of(
             Map.of("1000", "WRONG SITE"),
             "2000",
             500,
-            expectedBodyOf(
-                "Mismatched station id in response. Found: [WRONG SITE], Expected: 2000", null)),
+            expectedBodyOf("Mismatched station id in response.", "WRONG SITE")),
         Arguments.of(
             Map.of("1000", "WRONG SITE", "2000", "RIGHT SITE"),
             "2000",
             500,
             expectedBodyOf(
-                "Multiple response sites found. Only expecting one response. Found: [RIGHT SITE, WRONG SITE]",
-                null)));
+                "Multiple response sites found. Only expecting one response.",
+                "RIGHT SITE, WRONG SITE")));
   }
 
   @Test
@@ -94,7 +93,45 @@ public class AuthorizationStatusControllerTest {
                             .metadata(RpcMetadata.builder().timezone("America/New_York").build())
                             .build()))
                 .build());
+    when(rpcExecutor.execute(
+            RpcRequest.builder()
+                .target(RpcVistaTargets.builder().include(List.of("SITE")).build())
+                .principal(
+                    RpcPrincipal.builder()
+                        .applicationProxyUser("apu5555")
+                        .accessCode("ac1234")
+                        .verifyCode("vc9876")
+                        .build())
+                .rpc(
+                    RpcDetails.builder()
+                        .name("LHS CHECK OPTION ACCESS")
+                        .context("LHS RPC CONTEXT")
+                        .parameters(
+                            List.of(
+                                RpcDetails.Parameter.builder().string("DUZ").build(),
+                                RpcDetails.Parameter.builder().string("whoDis").build()))
+                        .build())
+                .build()))
+        .thenReturn(
+            RpcResponse.builder()
+                .status(RpcResponse.Status.OK)
+                .results(
+                    List.of(
+                        RpcInvocationResult.builder()
+                            .response("1^1")
+                            .vista("SITE")
+                            .metadata(RpcMetadata.builder().timezone("America/New_York").build())
+                            .build()))
+                .build());
     assertThat(controller().clinicalAuthorization("SITE", "DUZ", "MENUOPTION"))
+        .isEqualTo(
+            ResponseEntity.status(200)
+                .body(
+                    AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
+                        .status("ok")
+                        .value("1")
+                        .build()));
+    assertThat(controller().clinicalAuthorization("SITE", "DUZ", null))
         .isEqualTo(
             ResponseEntity.status(200)
                 .body(

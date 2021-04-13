@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAc
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -62,29 +63,21 @@ public class AuthorizationStatusController {
       Map<String, String> results, String site) {
     if (results.size() != 1) {
       return ClinicalAuthorizationResponse.builder()
-          .status(
-              String.format(
-                  "Multiple response sites found. Only expecting one response. Found: %s",
-                  results.values()))
+          .status("Multiple response sites found. Only expecting one response.")
+          .value(results.values().stream().sorted().collect(Collectors.joining(", ")))
           .build()
           .response(500);
     }
     if (!results.containsKey(site)) {
       return ClinicalAuthorizationResponse.builder()
-          .status(
-              String.format(
-                  "Mismatched station id in response. Found: %s, Expected: %s",
-                  results.values(), site))
+          .status("Mismatched station id in response.")
+          .value(String.join(", ", results.values()))
           .build()
           .response(500);
     }
-    /*
-     * Get the first piece of an authorization response string that is in the format 12345^987654.
-     * We want the piece left of the ^ to make a decision off of.
-     */
     if (StringUtils.isBlank(results.get(site))) {
       return ClinicalAuthorizationResponse.builder()
-          .status("Blank response.")
+          .status("Blank response from vista.")
           .build()
           .response(500);
     }
@@ -94,16 +87,17 @@ public class AuthorizationStatusController {
       authorizationStatusPiece = Integer.parseInt(authorizationString);
     } catch (NumberFormatException e) {
       return ClinicalAuthorizationResponse.builder()
-          .status("Cannot parse authorization response. " + authorizationString)
+          .status("Cannot parse authorization response.")
           .value(authorizationString)
           .build()
           .response(500);
     }
     /*
-     * ; -1:no such user in the New Person File ; -2: User terminated or has no access code ; -3: no
-     * such option in the Option File ; 0: no access found in any menu tree the user owns
-     *
-     * <p>Positive cases are access allowed.
+     *  -1: no such user in the New Person File.
+     *  -2: User terminated or has no access code.
+     *  -3: no such option in the Option File.
+     *  0: no access found in any menu tree the user owns.
+     *  Positive cases are access allowed.
      */
     if (authorizationStatusPiece == -1) {
       return ClinicalAuthorizationResponse.builder()
