@@ -10,6 +10,9 @@ import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotBlank;
 
 @Configuration
 @EnableConfigurationProperties
@@ -19,11 +22,12 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Validated
 public class ClinicalAuthorizationStatusProperties {
-  @NonNull String accessCode;
-  @NonNull String verifyCode;
-  @NonNull String applicationProxyUser;
-  @NonNull String defaultMenuOption;
+  @NotBlank @NonNull private String accessCode;
+  @NotBlank @NonNull private String verifyCode;
+  @NotBlank @NonNull private String applicationProxyUser;
+  @NotBlank @NonNull private String defaultMenuOption;
 
   /** Get an RpcPrincipal for using the clinical authorization vpc. */
   public RpcPrincipal principal() {
