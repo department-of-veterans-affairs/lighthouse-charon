@@ -139,6 +139,14 @@ public class AuthorizationStatusControllerTest {
                         .status("ok")
                         .value("1")
                         .build()));
+    assertThat(controller().clinicalAuthorization("SITE", "DUZ", ""))
+            .isEqualTo(
+                    ResponseEntity.status(200)
+                            .body(
+                                    AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
+                                            .status("ok")
+                                            .value("1")
+                                            .build()));
   }
 
   AuthorizationStatusController controller() {

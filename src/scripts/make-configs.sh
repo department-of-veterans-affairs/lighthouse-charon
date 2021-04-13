@@ -13,7 +13,10 @@ Options
      --secrets-conf <file> The configuration file with secrets!
 
 Secrets Configuration
- - No secrets necessary at this time
+ - VISTA_APP_PROXY_USER
+ - VISTA_APP_PROXY_ACCESS_CODE
+ - VISTA_APP_PROXY_VERIFY_CODE
+
 
  These may optionally be provided
  - IDS_ENCODING_KEY
@@ -45,11 +48,14 @@ do
   shift;
 done
 
-# echo "Loading secrets: $SECRETS"
-# [ ! -f "$SECRETS" ] && usage "File not found: $SECRETS"
-# . $SECRETS
+echo "Loading secrets: $SECRETS"
+[ ! -f "$SECRETS" ] && usage "File not found: $SECRETS"
+. $SECRETS
 MISSING_SECRETS=false
-# no secrets to check
+MISSING_SECRETS=false
+[ -z "$VISTA_APP_PROXY_USER" ] && echo "Missing configuration: VISTA_APP_PROXY_USER" && MISSING_SECRETS=true
+[ -z "$VISTA_APP_PROXY_ACCESS_CODE" ] && echo "Missing configuration: VISTA_APP_PROXY_ACCESS_CODE" && MISSING_SECRETS=true
+[ -z "$VISTA_APP_PROXY_VERIFY_CODE" ] && echo "Missing configuration: VISTA_APP_PROXY_VERIFY_CODE" && MISSING_SECRETS=true
 [ $MISSING_SECRETS == true ] && usage "Missing configuration secrets, please update $SECRETS"
 
 makeConfig() {
@@ -102,8 +108,11 @@ comment() {
 makeConfig charon $PROFILE
 addValue charon $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
 configValue charon $PROFILE charon.rpc.client-keys "disabled"
-checkForUnsetValues charon $PROFILE
+addValue charon $PROFILE clinical-authorization-status.access-code $VISTA_APP_PROXY_ACCESS_CODE
+addValue charon $PROFILE clinical-authorization-status.verify-code $VISTA_APP_PROXY_VERIFY_CODE
+addValue charon $PROFILE clinical-authorization-status.application-proxy-user "$VISTA_APP_PROXY_USER"
 
+checkForUnsetValues charon $PROFILE
 
 cat > $REPO/charon/config/vistalink-$PROFILE.properties <<EOF
 673=localhost:18673:673:America/New_York

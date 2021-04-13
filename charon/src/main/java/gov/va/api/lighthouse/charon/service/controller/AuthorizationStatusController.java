@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotBlank;
+
 @Validated
 @RestController()
 @RequestMapping(
@@ -36,10 +38,10 @@ public class AuthorizationStatusController {
       value = {"/clinical"},
       params = {"site", "duz"})
   public ResponseEntity<ClinicalAuthorizationResponse> clinicalAuthorization(
-      @RequestParam(name = "site") String site,
-      @RequestParam(name = "duz") String duz,
+      @NotBlank @RequestParam(name = "site") String site,
+      @NotBlank @RequestParam(name = "duz") String duz,
       @RequestParam(name = "menu-option", required = false) String menuOption) {
-    if (menuOption == null) {
+    if (StringUtils.isBlank(menuOption)) {
       menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
     }
     RpcResponse response =
