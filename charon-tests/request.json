@@ -1,0 +1,23 @@
+{
+  "principal": {
+    "applicationProxyUser":"LHS,APPLICATION PROXY",
+    "accessCode":"123LIGHTHOUSE",
+    "verifyCode":"321LIGHTHOUSE*"
+  },
+  "target": {
+    "include": [ "host.docker.internal:18673:673:America/New_York" ]
+  },
+  "rpc": {
+    "name":"VPR GET PATIENT DATA",
+    "context":"LHS RPC CONTEXT",
+    "parameters": [
+      {"string":";195607"},
+      {"string":"demographics;vitals"},
+      {"string":""},
+      {"string":""},
+      {"string":""},
+      {"string":""},
+      {"array": []}
+    ]
+  }
+}

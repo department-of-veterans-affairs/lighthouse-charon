@@ -36,7 +36,7 @@ public class RpcRequestIT {
     RpcRequest body =
         RpcRequest.builder()
             .rpc(rpc)
-            .principal(systemDefinition.testRpcPrincipal())
+            .principal(systemDefinition.avCodePrincipal())
             .target(systemDefinition.testTargets())
             .build();
     var response =

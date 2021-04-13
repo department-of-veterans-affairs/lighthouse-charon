@@ -25,7 +25,7 @@ public class BadRpcContextIT {
                     .context("XOBV VISTALINK TESTER")
                     .name("VPR GET PATIENT DATA JSON")
                     .build())
-            .principal(systemDefinition.testRpcPrincipal())
+            .principal(systemDefinition.avCodePrincipal())
             .target(systemDefinition.testTargets())
             .build();
     log.info(body.toString());

@@ -42,8 +42,9 @@ public class SystemDefinitions {
         .charon(serviceDefinition("charon", url, 443, "/charon/"))
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
-        .testRpcPrincipal(rpcPrincipal())
+        .avCodePrincipal(avCodeRpcPrincipal())
         .testTargets(rpcTargets())
+        .vistaSite(systemPropertyOrEnvVar("vista.site", "673"))
         .isVistaAvailable(isVistaAvailable())
         .build();
   }
@@ -56,8 +57,9 @@ public class SystemDefinitions {
         .charon(serviceDefinition("charon", url, 8050, "/"))
         .clientKey(Optional.of(System.getProperty("client-key", "~shanktopus~")))
         .testRpcs(rpcs())
-        .testRpcPrincipal(rpcPrincipal())
+        .avCodePrincipal(avCodeRpcPrincipal())
         .testTargets(rpcTargets())
+        .vistaSite(systemPropertyOrEnvVar("vista.site", "673"))
         .isVistaAvailable(isVistaAvailable())
         .build();
   }
@@ -68,8 +70,9 @@ public class SystemDefinitions {
         .charon(serviceDefinition("charon", url, 443, "/charon/"))
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
-        .testRpcPrincipal(rpcPrincipal())
+        .avCodePrincipal(avCodeRpcPrincipal())
         .testTargets(rpcTargets())
+        .vistaSite(systemPropertyOrEnvVar("vista.site", "673"))
         .isVistaAvailable(isVistaAvailable())
         .build();
   }
@@ -80,8 +83,9 @@ public class SystemDefinitions {
         .charon(serviceDefinition("charon", url, 443, "/charon/"))
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
-        .testRpcPrincipal(rpcPrincipal())
+        .avCodePrincipal(avCodeRpcPrincipal())
         .testTargets(rpcTargets())
+        .vistaSite(systemPropertyOrEnvVar("vista.site", "673"))
         .isVistaAvailable(isVistaAvailable())
         .build();
   }
@@ -133,8 +137,9 @@ public class SystemDefinitions {
         .charon(serviceDefinition("charon", url, 443, "/charon/"))
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
-        .testRpcPrincipal(rpcPrincipal())
+        .avCodePrincipal(avCodeRpcPrincipal())
         .testTargets(rpcTargets())
+        .vistaSite(systemPropertyOrEnvVar("vista.site", "673"))
         .isVistaAvailable(isVistaAvailable())
         .build();
   }
@@ -145,21 +150,22 @@ public class SystemDefinitions {
         .charon(serviceDefinition("charon", url, 443, "/charon/"))
         .clientKey(Optional.ofNullable(System.getProperty("client-key")))
         .testRpcs(rpcs())
-        .testRpcPrincipal(rpcPrincipal())
+        .avCodePrincipal(avCodeRpcPrincipal())
         .testTargets(rpcTargets())
+        .vistaSite(systemPropertyOrEnvVar("vista.site", "673"))
         .isVistaAvailable(isVistaAvailable())
+        .build();
+  }
+
+  private RpcPrincipal avCodeRpcPrincipal() {
+    return RpcPrincipal.builder()
+        .accessCode(systemPropertyOrEnvVar("vista.standard-user.access-code", "not-set"))
+        .verifyCode(systemPropertyOrEnvVar("vista.standard-user.verify-code", "not-set"))
         .build();
   }
 
   private boolean isVistaAvailable() {
     return BooleanUtils.toBoolean(systemPropertyOrEnvVar("vista.is-available", "false"));
-  }
-
-  private RpcPrincipal rpcPrincipal() {
-    return RpcPrincipal.builder()
-        .accessCode(systemPropertyOrEnvVar("vista.standard-user.access-code", "not-set"))
-        .verifyCode(systemPropertyOrEnvVar("vista.standard-user.verify-code", "not-set"))
-        .build();
   }
 
   private String systemPropertyOrEnvVar(String property, String defaultValue) {

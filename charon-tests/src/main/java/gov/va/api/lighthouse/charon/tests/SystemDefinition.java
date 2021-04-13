@@ -15,6 +15,7 @@ public class SystemDefinition {
   @NotNull TestRpcs testRpcs;
   Optional<String> clientKey;
   boolean isVistaAvailable;
-  @NotNull RpcPrincipal testRpcPrincipal;
+  @NotNull RpcPrincipal avCodePrincipal;
   @NotNull RpcVistaTargets testTargets;
+  @NotNull String vistaSite;
 }
