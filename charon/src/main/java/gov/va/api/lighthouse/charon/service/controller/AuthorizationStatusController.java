@@ -65,14 +65,14 @@ public class AuthorizationStatusController {
       Map<String, String> results, String site) {
     if (results.size() != 1) {
       return ClinicalAuthorizationResponse.builder()
-          .status("Multiple response sites found. Only expecting one response.")
+          .status("Only expecting one result from site: " + site)
           .value(results.values().stream().sorted().collect(Collectors.joining(", ")))
           .build()
           .response(500);
     }
     if (!results.containsKey(site)) {
       return ClinicalAuthorizationResponse.builder()
-          .status("Mismatched station id in response.")
+          .status("Response missing for site: " + site)
           .value(String.join(", ", results.values()))
           .build()
           .response(500);
@@ -101,19 +101,19 @@ public class AuthorizationStatusController {
      *  0: no access found in any menu tree the user owns.
      *  Positive cases are access allowed.
      */
+    if (authorizationStatusPiece > 0) {
+      return ClinicalAuthorizationResponse.builder()
+              .status("ok")
+              .value(authorizationString)
+              .build()
+              .response(200);
+    }
     if (authorizationStatusPiece == -1) {
       return ClinicalAuthorizationResponse.builder()
           .status("unauthorized")
           .value(authorizationString)
           .build()
           .response(401);
-    }
-    if (authorizationStatusPiece > 0) {
-      return ClinicalAuthorizationResponse.builder()
-          .status("ok")
-          .value(authorizationString)
-          .build()
-          .response(200);
     }
     return ClinicalAuthorizationResponse.builder()
         .status("forbidden")
