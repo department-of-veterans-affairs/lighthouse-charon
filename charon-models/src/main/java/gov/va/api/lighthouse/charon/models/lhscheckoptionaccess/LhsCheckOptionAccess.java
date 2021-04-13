@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpc;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpcResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,10 +26,9 @@ public class LhsCheckOptionAccess
   public LhsCheckOptionAccess.Response fromResults(List<RpcInvocationResult> results) {
     return Response.builder()
         .resultsByStation(
-            Optional.of(
-                results.stream()
-                    .filter(result -> result.error().isEmpty())
-                    .collect(toMap(RpcInvocationResult::vista, RpcInvocationResult::response))))
+            results.stream()
+                .filter(result -> result.error().isEmpty())
+                .collect(toMap(RpcInvocationResult::vista, RpcInvocationResult::response)))
         .build();
   }
 
@@ -62,11 +62,11 @@ public class LhsCheckOptionAccess
   @Builder
   @Data
   public static class Response implements TypeSafeRpcResponse {
-    private Optional<Map<String, String>> resultsByStation;
+    private Map<String, String> resultsByStation;
 
-    Optional<Map<String, String>> getResultsByStation() {
+    Map<String, String> getResultsByStation() {
       if (resultsByStation == null) {
-        return Optional.empty();
+        return new HashMap<>();
       }
       return resultsByStation;
     }
