@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.service.config;
 
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +25,36 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class ClinicalAuthorizationStatusProperties {
   @NotBlank @NonNull private String accessCode;
+
   @NotBlank @NonNull private String verifyCode;
+
   @NotBlank @NonNull private String applicationProxyUser;
+
   @NotBlank @NonNull private String defaultMenuOption;
+
+  @AssertTrue(message = "clinical-authorization-status.access-code is unset")
+  @SuppressWarnings("unused")
+  private boolean isAccessCodeSet() {
+    return !accessCode.equals("unset");
+  }
+
+  @AssertTrue(message = "clinical-authorization-status.application-proxy-user is unset")
+  @SuppressWarnings("unused")
+  private boolean isApplicationProxyUserSet() {
+    return !applicationProxyUser.equals("unset");
+  }
+
+  @AssertTrue(message = "clinical-authorization-status.default-menu-option is unset")
+  @SuppressWarnings("unused")
+  private boolean isDefailtMenuOptionSet() {
+    return !defaultMenuOption.equals("unset");
+  }
+
+  @AssertTrue(message = "clinical-authorization-status.verify-code is unset")
+  @SuppressWarnings("unused")
+  private boolean isVerifyCodeSet() {
+    return !verifyCode.equals("unset");
+  }
 
   /** Get an RpcPrincipal for using the clinical authorization vpc. */
   public RpcPrincipal principal() {

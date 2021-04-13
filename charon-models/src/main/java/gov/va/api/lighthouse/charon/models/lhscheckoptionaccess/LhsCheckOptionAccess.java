@@ -66,7 +66,7 @@ public class LhsCheckOptionAccess
 
     Map<String, String> getResultsByStation() {
       if (resultsByStation == null) {
-        return new HashMap<>();
+        resultsByStation = new HashMap<>();
       }
       return resultsByStation;
     }
