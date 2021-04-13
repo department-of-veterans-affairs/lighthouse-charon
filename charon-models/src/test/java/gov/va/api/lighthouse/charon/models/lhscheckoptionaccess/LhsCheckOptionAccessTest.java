@@ -32,7 +32,7 @@ public class LhsCheckOptionAccessTest {
   @Test
   void fromResults() {
     assertThat(LhsCheckOptionAccess.create().fromResults(List.of()))
-        .isEqualTo(LhsCheckOptionAccess.Response.builder().resultsByStation(Map.of()).build());
+        .isEqualTo(LhsCheckOptionAccess.Response.builder().resultsByStation(Optional.empty()).build());
     assertThat(
             LhsCheckOptionAccess.create()
                 .fromResults(
@@ -44,7 +44,7 @@ public class LhsCheckOptionAccessTest {
                             .build())))
         .isEqualTo(
             LhsCheckOptionAccess.Response.builder()
-                .resultsByStation(Map.of("777", "1^111"))
+                .resultsByStation(Optional.of(Map.of("777", "1^111")))
                 .build());
   }
 }

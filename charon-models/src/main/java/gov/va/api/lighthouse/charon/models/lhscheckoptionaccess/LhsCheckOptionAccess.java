@@ -33,9 +33,9 @@ public class LhsCheckOptionAccess
 
   @Builder
   public static class Request implements TypeSafeRpcRequest {
-    String duz;
-    String menuOption;
-    Optional<String> context;
+    private String duz;
+    private String menuOption;
+    private Optional<String> context;
 
     @Override
     public RpcDetails asDetails() {
@@ -50,7 +50,7 @@ public class LhsCheckOptionAccess
     }
 
     /** Lazy Initializer. */
-    Optional<String> context() {
+    private Optional<String> context() {
       if (context == null) {
         context = Optional.empty();
       }
@@ -61,6 +61,14 @@ public class LhsCheckOptionAccess
   @Builder
   @Data
   public static class Response implements TypeSafeRpcResponse {
-    private Map<String, String> resultsByStation;
+    private Optional<Map<String, String>> resultsByStation;
+
+    Optional<Map<String, String>> getResultsByStation() {
+      if(resultsByStation == null) {
+        return Optional.empty();
+      }
+      return resultsByStation;
+    }
+
   }
 }

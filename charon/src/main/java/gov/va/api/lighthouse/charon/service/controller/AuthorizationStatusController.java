@@ -58,7 +58,7 @@ public class AuthorizationStatusController {
                 .build());
     LhsCheckOptionAccess.Response typeSafeResult =
         LhsCheckOptionAccess.create().fromResults(response.results());
-    return parseLhsCheckOptionAccessResponse(typeSafeResult.resultsByStation(), site);
+    return parseLhsCheckOptionAccessResponse(typeSafeResult.resultsByStation().orElseThrow(), site);
   }
 
   ResponseEntity<ClinicalAuthorizationResponse> parseLhsCheckOptionAccessResponse(
