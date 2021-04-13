@@ -11,8 +11,10 @@ import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,102 +53,36 @@ public class AuthorizationStatusControllerTest {
             Map.of("1000", "WRONG SITE"),
             "2000",
             500,
-            expectedBodyOf("Mismatched station id in response.", "WRONG SITE")),
+            expectedBodyOf("Response missing for site: 2000", "WRONG SITE")),
         Arguments.of(
             Map.of("1000", "WRONG SITE", "2000", "RIGHT SITE"),
             "2000",
             500,
-            expectedBodyOf(
-                "Multiple response sites found. Only expecting one response.",
-                "RIGHT SITE, WRONG SITE")));
+            expectedBodyOf("Only expecting one result from site: 2000", "RIGHT SITE, WRONG SITE")));
   }
 
   @Test
   void clinicalAuthorization() {
     when(rpcExecutor.execute(
-            RpcRequest.builder()
-                .target(RpcVistaTargets.builder().include(List.of("SITE")).build())
-                .principal(
-                    RpcPrincipal.builder()
-                        .applicationProxyUser("apu5555")
-                        .accessCode("ac1234")
-                        .verifyCode("vc9876")
-                        .build())
-                .rpc(
-                    RpcDetails.builder()
-                        .name("LHS CHECK OPTION ACCESS")
-                        .context("LHS RPC CONTEXT")
-                        .parameters(
-                            List.of(
-                                RpcDetails.Parameter.builder().string("DUZ").build(),
-                                RpcDetails.Parameter.builder().string("MENUOPTION").build()))
-                        .build())
-                .build()))
+            rpcRequest(
+                List.of("SITE"),
+                rpcPrincipal("apu5555", "ac1234", "vc9876"),
+                rpcDetails("LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "DUZ", "MENUOPTION"))))
         .thenReturn(
-            RpcResponse.builder()
-                .status(RpcResponse.Status.OK)
-                .results(
-                    List.of(
-                        RpcInvocationResult.builder()
-                            .response("1^1")
-                            .vista("SITE")
-                            .metadata(RpcMetadata.builder().timezone("America/New_York").build())
-                            .build()))
-                .build());
-    when(rpcExecutor.execute(
-            RpcRequest.builder()
-                .target(RpcVistaTargets.builder().include(List.of("SITE")).build())
-                .principal(
-                    RpcPrincipal.builder()
-                        .applicationProxyUser("apu5555")
-                        .accessCode("ac1234")
-                        .verifyCode("vc9876")
-                        .build())
-                .rpc(
-                    RpcDetails.builder()
-                        .name("LHS CHECK OPTION ACCESS")
-                        .context("LHS RPC CONTEXT")
-                        .parameters(
-                            List.of(
-                                RpcDetails.Parameter.builder().string("DUZ").build(),
-                                RpcDetails.Parameter.builder().string("whoDis").build()))
-                        .build())
-                .build()))
-        .thenReturn(
-            RpcResponse.builder()
-                .status(RpcResponse.Status.OK)
-                .results(
-                    List.of(
-                        RpcInvocationResult.builder()
-                            .response("1^1")
-                            .vista("SITE")
-                            .metadata(RpcMetadata.builder().timezone("America/New_York").build())
-                            .build()))
-                .build());
+            rpcResponse(RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "SITE"))));
     assertThat(controller().clinicalAuthorization("SITE", "DUZ", "MENUOPTION"))
-        .isEqualTo(
-            ResponseEntity.status(200)
-                .body(
-                    AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
-                        .status("ok")
-                        .value("1")
-                        .build()));
+        .isEqualTo(responseOf(200, "ok", "1"));
+    when(rpcExecutor.execute(
+            rpcRequest(
+                List.of("SITE"),
+                rpcPrincipal("apu5555", "ac1234", "vc9876"),
+                rpcDetails("LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "DUZ", "whoDis"))))
+        .thenReturn(
+            rpcResponse(RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "SITE"))));
     assertThat(controller().clinicalAuthorization("SITE", "DUZ", null))
-        .isEqualTo(
-            ResponseEntity.status(200)
-                .body(
-                    AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
-                        .status("ok")
-                        .value("1")
-                        .build()));
+        .isEqualTo(responseOf(200, "ok", "1"));
     assertThat(controller().clinicalAuthorization("SITE", "DUZ", ""))
-            .isEqualTo(
-                    ResponseEntity.status(200)
-                            .body(
-                                    AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
-                                            .status("ok")
-                                            .value("1")
-                                            .build()));
+        .isEqualTo(responseOf(200, "ok", "1"));
   }
 
   AuthorizationStatusController controller() {
@@ -160,6 +96,16 @@ public class AuthorizationStatusControllerTest {
     return new AuthorizationStatusController(rpcExecutor, properties);
   }
 
+  ResponseEntity<AuthorizationStatusController.ClinicalAuthorizationResponse> responseOf(
+      int httpCode, String status, String value) {
+    return ResponseEntity.status(httpCode)
+        .body(
+            AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
+                .status(status)
+                .value(value)
+                .build());
+  }
+
   @ParameterizedTest
   @MethodSource
   void responseParsing(
@@ -169,5 +115,44 @@ public class AuthorizationStatusControllerTest {
       AuthorizationStatusController.ClinicalAuthorizationResponse expectedBody) {
     assertThat(controller().parseLhsCheckOptionAccessResponse(results, site))
         .isEqualTo(ResponseEntity.status(expectedStatus).body(expectedBody));
+  }
+
+  RpcDetails rpcDetails(String name, String context, String... parameters) {
+    return RpcDetails.builder()
+        .name(name)
+        .context(context)
+        .parameters(
+            Arrays.stream(parameters)
+                .map(p -> RpcDetails.Parameter.builder().string(p).build())
+                .collect(Collectors.toList()))
+        .build();
+  }
+
+  RpcInvocationResult rpcInvocationResult(String responseValue, String site) {
+    return RpcInvocationResult.builder()
+        .response(responseValue)
+        .vista(site)
+        .metadata(RpcMetadata.builder().timezone("America/New_York").build())
+        .build();
+  }
+
+  RpcPrincipal rpcPrincipal(String applicationProxyUser, String accessCode, String verifyCode) {
+    return RpcPrincipal.builder()
+        .applicationProxyUser(applicationProxyUser)
+        .accessCode(accessCode)
+        .verifyCode(verifyCode)
+        .build();
+  }
+
+  RpcRequest rpcRequest(List<String> sites, RpcPrincipal principal, RpcDetails details) {
+    return RpcRequest.builder()
+        .target(RpcVistaTargets.builder().include(sites).build())
+        .principal(principal)
+        .rpc(details)
+        .build();
+  }
+
+  RpcResponse rpcResponse(RpcResponse.Status status, List<RpcInvocationResult> results) {
+    return RpcResponse.builder().status(status).results(results).build();
   }
 }

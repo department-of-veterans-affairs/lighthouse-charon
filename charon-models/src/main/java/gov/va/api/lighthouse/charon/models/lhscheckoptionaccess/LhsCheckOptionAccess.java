@@ -25,9 +25,10 @@ public class LhsCheckOptionAccess
   public LhsCheckOptionAccess.Response fromResults(List<RpcInvocationResult> results) {
     return Response.builder()
         .resultsByStation(
-            results.stream()
-                .filter(result -> result.error().isEmpty())
-                .collect(toMap(RpcInvocationResult::vista, RpcInvocationResult::response)))
+            Optional.of(
+                results.stream()
+                    .filter(result -> result.error().isEmpty())
+                    .collect(toMap(RpcInvocationResult::vista, RpcInvocationResult::response))))
         .build();
   }
 
@@ -64,11 +65,10 @@ public class LhsCheckOptionAccess
     private Optional<Map<String, String>> resultsByStation;
 
     Optional<Map<String, String>> getResultsByStation() {
-      if(resultsByStation == null) {
+      if (resultsByStation == null) {
         return Optional.empty();
       }
       return resultsByStation;
     }
-
   }
 }

@@ -8,6 +8,7 @@ import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusPr
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.NotBlank;
 
 @Validated
 @RestController()
@@ -64,35 +63,24 @@ public class AuthorizationStatusController {
   ResponseEntity<ClinicalAuthorizationResponse> parseLhsCheckOptionAccessResponse(
       Map<String, String> results, String site) {
     if (results.size() != 1) {
-      return ClinicalAuthorizationResponse.builder()
-          .status("Only expecting one result from site: " + site)
-          .value(results.values().stream().sorted().collect(Collectors.joining(", ")))
-          .build()
-          .response(500);
+      return responseOf(
+          "Only expecting one result from site: " + site,
+          results.values().stream().sorted().collect(Collectors.joining(", ")),
+          500);
     }
     if (!results.containsKey(site)) {
-      return ClinicalAuthorizationResponse.builder()
-          .status("Response missing for site: " + site)
-          .value(String.join(", ", results.values()))
-          .build()
-          .response(500);
+      return responseOf(
+          "Response missing for site: " + site, String.join(", ", results.values()), 500);
     }
     if (StringUtils.isBlank(results.get(site))) {
-      return ClinicalAuthorizationResponse.builder()
-          .status("Blank response from vista.")
-          .build()
-          .response(500);
+      return responseOf("Blank response from vista", null, 500);
     }
     String authorizationString = results.get(site).split("[\\^]", -1)[0];
     int authorizationStatusPiece;
     try {
       authorizationStatusPiece = Integer.parseInt(authorizationString);
     } catch (NumberFormatException e) {
-      return ClinicalAuthorizationResponse.builder()
-          .status("Cannot parse authorization response.")
-          .value(authorizationString)
-          .build()
-          .response(500);
+      return responseOf("Cannot parse authorization response.", authorizationString, 500);
     }
     /*
      *  -1: no such user in the New Person File.
@@ -102,30 +90,28 @@ public class AuthorizationStatusController {
      *  Positive cases are access allowed.
      */
     if (authorizationStatusPiece > 0) {
-      return ClinicalAuthorizationResponse.builder()
-              .status("ok")
-              .value(authorizationString)
-              .build()
-              .response(200);
+      return responseOf("ok", authorizationString, 200);
     }
     if (authorizationStatusPiece == -1) {
-      return ClinicalAuthorizationResponse.builder()
-          .status("unauthorized")
-          .value(authorizationString)
-          .build()
-          .response(401);
+      return responseOf("unauthorized", authorizationString, 401);
     }
+    return responseOf("forbidden", authorizationString, 403);
+  }
+
+  private ResponseEntity<ClinicalAuthorizationResponse> responseOf(
+      String status, String value, int httpCode) {
     return ClinicalAuthorizationResponse.builder()
-        .status("forbidden")
-        .value(authorizationString)
+        .status(status)
+        .value(value)
         .build()
-        .response(403);
+        .response(httpCode);
   }
 
   @Value
   @Builder
   public static class ClinicalAuthorizationResponse {
     String status;
+
     String value;
 
     ResponseEntity<ClinicalAuthorizationResponse> response(int httpCode) {

@@ -32,7 +32,10 @@ public class LhsCheckOptionAccessTest {
   @Test
   void fromResults() {
     assertThat(LhsCheckOptionAccess.create().fromResults(List.of()))
-        .isEqualTo(LhsCheckOptionAccess.Response.builder().resultsByStation(Optional.empty()).build());
+        .isEqualTo(
+            LhsCheckOptionAccess.Response.builder()
+                .resultsByStation(Optional.of(Map.of()))
+                .build());
     assertThat(
             LhsCheckOptionAccess.create()
                 .fromResults(

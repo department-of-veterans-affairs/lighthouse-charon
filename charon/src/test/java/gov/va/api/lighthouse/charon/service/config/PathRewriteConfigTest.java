@@ -14,7 +14,11 @@ import org.springframework.boot.web.server.LocalServerPort;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "vistalink.configuration=src/test/resources/vistalink.properties",
-      "charon.rpc.client-keys=disabled"
+      "charon.rpc.client-keys=disabled",
+      "clinical-authorization-status.access-code=123",
+      "clinical-authorization-status.verify-code=987",
+      "clinical-authorization-status.application-proxy-user=supershank",
+      "clinical-authorization-status.default-menu-option=shank"
     })
 public class PathRewriteConfigTest {
   @Autowired TestRestTemplate restTemplate;

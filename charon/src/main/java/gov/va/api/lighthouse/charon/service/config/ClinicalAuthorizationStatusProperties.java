@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.service.config;
 
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotBlank;
 
 @Configuration
 @EnableConfigurationProperties
