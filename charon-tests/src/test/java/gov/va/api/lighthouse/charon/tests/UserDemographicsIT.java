@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -41,11 +40,5 @@ public class UserDemographicsIT {
     headers.remove("accessCode");
     headers.remove("verifyCode");
     TestClients.charon().get(headers, requestPath, SystemDefinitions.get().vistaSite()).expect(400);
-  }
-
-  @Test
-  void userDemographicsRequiresAccessVerifyCodes() {
-
-    TestClients.headers();
   }
 }
