@@ -93,7 +93,10 @@ public class AuthorizationStatusControllerTest {
             .applicationProxyUser("apu5555")
             .defaultMenuOption("whoDis")
             .build();
-    return new AuthorizationStatusController(rpcExecutor, properties);
+    return new AuthorizationStatusController(
+        rpcExecutor,
+        properties,
+        new AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsDisabled());
   }
 
   ResponseEntity<AuthorizationStatusController.ClinicalAuthorizationResponse> responseOf(

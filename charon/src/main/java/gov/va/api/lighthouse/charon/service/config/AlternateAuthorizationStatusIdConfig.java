@@ -32,7 +32,7 @@ public class AlternateAuthorizationStatusIdConfig {
     Map<AuthorizationId, AuthorizationId> publicToPrivateAuthorizationIds = new HashMap<>();
     for (Map.Entry<String, String> entry : rawIds.entrySet()) {
       AuthorizationId publicId = AuthorizationId.of(entry.getKey());
-      AuthorizationId privateId = AuthorizationId.of(entry.getValue())  ;
+      AuthorizationId privateId = AuthorizationId.of(entry.getValue());
       publicToPrivateAuthorizationIds.put(publicId, privateId);
     }
     return publicToPrivateAuthorizationIds;
