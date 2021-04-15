@@ -1,40 +1,32 @@
 package gov.va.api.lighthouse.charon.tests;
 
-import static org.junit.Assume.assumeTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static gov.va.api.lighthouse.charon.tests.TestOptions.assumeVistaIsAvailable;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-@Slf4j
 public class BadRpcContextIT {
   @Test
   @SneakyThrows
   void requestForbiddenRpcContext() {
-    fail();
-    var systemDefinition = SystemDefinitions.get();
-    // Ur boi (Joshy-Boi) can't get this to return a 403, only a 200 with an error message
-    assumeTrue(false);
+    assumeVistaIsAvailable();
+
     RpcRequest body =
         RpcRequest.builder()
             .rpc(
-                // Build a request where context does not match name
                 RpcDetails.builder()
-                    .context("XOBV VISTALINK TESTER")
+                    .context("NOPE CONTEXT")
                     .name("VPR GET PATIENT DATA JSON")
                     .build())
-            .principal(systemDefinition.testRpcPrincipal())
-            .target(systemDefinition.testTargets())
+            .principal(SystemDefinitions.get().testRpcPrincipal())
+            .target(SystemDefinitions.get().testTargets())
             .build();
-    log.info(body.toString());
     var response =
-        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
+        TestClients.rpcRequest(SystemDefinitions.get().charon().apiPath() + "rpc", body)
             .expect(403)
             .expectValid(RpcResponse.class);
-    log.info(response.toString());
   }
 }
