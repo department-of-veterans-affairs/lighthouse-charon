@@ -158,7 +158,7 @@ public class SystemDefinitions {
   }
 
   private RpcPrincipal avCodeRpcPrincipal() {
-    return RpcPrincipal.builder()
+    return RpcPrincipal.standardUserBuilder()
         .accessCode(systemPropertyOrEnvVar("vista.standard-user.access-code", "not-set"))
         .verifyCode(systemPropertyOrEnvVar("vista.standard-user.verify-code", "not-set"))
         .build();
