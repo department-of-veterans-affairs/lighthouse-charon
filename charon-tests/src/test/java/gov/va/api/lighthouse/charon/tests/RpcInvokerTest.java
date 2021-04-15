@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.tests;
 
-import static org.assertj.core.api.Assumptions.assumeThat;
+import static gov.va.api.lighthouse.charon.tests.TestOptions.assumeEnabled;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.lighthouse.charon.api.RpcDetails;
@@ -8,6 +8,7 @@ import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.charon.service.controller.DfnMacro;
+import gov.va.api.lighthouse.charon.service.controller.LocalDateMacro;
 import gov.va.api.lighthouse.charon.service.controller.MacroProcessorFactory;
 import gov.va.api.lighthouse.charon.service.controller.VistalinkRpcInvokerFactory;
 import java.util.List;
@@ -16,7 +17,6 @@ import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.BooleanUtils;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
@@ -28,13 +28,11 @@ public class RpcInvokerTest {
   @Test
   @SneakyThrows
   void invoke() {
-    assumeThat(isEnabled())
-        .as(
-            "Set system property 'test.rpcinvoker' or environment variable 'TEST_RPCINVOKER' to true to enable.")
-        .isTrue();
+    assumeEnabled("test.rpcinvoker");
     config = CharonTestConfig.fromSystemProperties();
     vistalinkRpcInvokerFactory =
-        new VistalinkRpcInvokerFactory(new MacroProcessorFactory(List.of(new DfnMacro())));
+        new VistalinkRpcInvokerFactory(
+            new MacroProcessorFactory(List.of(new DfnMacro(), new LocalDateMacro())));
     var rpcPrincipal =
         RpcPrincipal.builder().accessCode(config.accessCode).verifyCode(config.verifyCode).build();
     var connectionDetails =
@@ -48,14 +46,6 @@ public class RpcInvokerTest {
     var rpc = JacksonConfig.createMapper().readValue(config.rpc, RpcDetails.class);
     RpcInvocationResult result = vistalinkRpcInvoker.invoke(rpc);
     log.info("RESULT\n---\n{}\n---", result.response());
-  }
-
-  boolean isEnabled() {
-    String enabled = System.getProperty("test.rpcinvoker");
-    if (enabled == null || enabled.isBlank()) {
-      enabled = System.getenv("TEST_RPCINVOKER");
-    }
-    return BooleanUtils.toBoolean(enabled);
   }
 
   @Value
