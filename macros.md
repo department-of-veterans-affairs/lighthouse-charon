@@ -50,6 +50,10 @@ Not Good
 
 Replace a ICN value with VistA site specific DFN value for a patient ICN.
 
+### `${local-fileman-date(ISO-8601)}`
+
+Replace a ISO-8601 date value with a localized fileman date for a targeted Vista site
+
 ## What's under the hood?
 
 - `MacroProcessorFactory` is autowired with `Macro`instances

@@ -1,0 +1,13 @@
+{
+  "principal": {
+    "accessCode":"$VISTA_ACCESS_CODE",
+    "verifyCode":"$VISTA_VERIFY_CODE"
+  },
+  "target": {
+    "include":[ "673", "localhost:18673:999:America/New_York" ]
+  },
+  "rpc": {
+    "name":"XOBV TEST PING",
+    "context":"XOBV VISTALINK TESTER"
+  }
+}
