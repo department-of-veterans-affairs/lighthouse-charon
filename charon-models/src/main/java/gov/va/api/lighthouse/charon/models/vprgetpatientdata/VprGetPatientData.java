@@ -109,8 +109,8 @@ public class VprGetPatientData
                   RpcDetails.Parameter.builder()
                       .string(
                           type().stream()
-                              .filter(m -> Objects.nonNull(m))
-                              .map(e -> e.name())
+                              .filter(Objects::nonNull)
+                              .map(Enum::name)
                               .collect(Collectors.joining(";")))
                       .build(),
                   RpcDetails.Parameter.builder().string(start().orElse("")).build(),
