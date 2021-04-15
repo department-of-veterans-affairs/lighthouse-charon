@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.tests;
 
 import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
@@ -14,6 +15,7 @@ public class BadRpcContextIT {
   @Test
   @SneakyThrows
   void requestForbiddenRpcContext() {
+    fail();
     var systemDefinition = SystemDefinitions.get();
     // Ur boi (Joshy-Boi) can't get this to return a 403, only a 200 with an error message
     assumeTrue(false);
