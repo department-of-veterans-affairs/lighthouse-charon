@@ -105,12 +105,22 @@ comment() {
   cat >> $target
 }
 
+ALT_IDS=(
+  1337@666:1@673
+  666@666:1@673
+  1@666:1@673
+)
+
+altIds() { echo "$(IFS=",";echo "${ALT_IDS[*]}")"; }
+
 makeConfig charon $PROFILE
 addValue charon $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
 configValue charon $PROFILE charon.rpc.client-keys "disabled"
 configValue charon $PROFILE clinical-authorization-status.access-code "$VISTA_APP_PROXY_ACCESS_CODE"
 configValue charon $PROFILE clinical-authorization-status.verify-code "$VISTA_APP_PROXY_VERIFY_CODE"
 configValue charon $PROFILE clinical-authorization-status.application-proxy-user "$VISTA_APP_PROXY_USER"
+addValue charon $PROFILE alternate-authorization-status-ids.enabled true
+addValue charon $PROFILE alternate-authorization-status-ids.ids "$(altIds)"
 
 checkForUnsetValues charon $PROFILE
 
