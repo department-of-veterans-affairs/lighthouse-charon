@@ -65,7 +65,8 @@ public class FilemanDate {
   }
 
   private static class DateTimeFormatter {
-    private final DecimalFormat numbers = zeroPaddedDecimal();
+    public static final ThreadLocal<DecimalFormat> zeroPaddedDecimalThreadLocal =
+        ThreadLocal.withInitial(() -> zeroPaddedDecimal());
 
     public String format(ZonedDateTime zdt) {
       StringBuilder result = new StringBuilder(14);
@@ -107,7 +108,7 @@ public class FilemanDate {
     }
 
     private String zeroPaddedNumber(int value) {
-      return numbers.format(value);
+      return zeroPaddedDecimalThreadLocal.get().format(value);
     }
   }
 
