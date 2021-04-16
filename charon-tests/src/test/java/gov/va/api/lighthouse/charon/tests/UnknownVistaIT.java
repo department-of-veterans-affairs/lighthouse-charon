@@ -20,7 +20,7 @@ public class UnknownVistaIT {
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
-            .principal(systemDefinition.testRpcPrincipal())
+            .principal(systemDefinition.avCodePrincipal())
             .target(RpcVistaTargets.builder().include(List.of("who dis")).build())
             .build();
     var response =
