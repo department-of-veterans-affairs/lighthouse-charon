@@ -33,7 +33,7 @@ public class PingIT {
     RpcRequest body =
         RpcRequest.builder()
             .rpc(systemDefinition.testRpcs().pingRpc())
-            .principal(systemDefinition.testRpcPrincipal())
+            .principal(systemDefinition.avCodePrincipal())
             .target(systemDefinition.testTargets())
             .build();
     var response =

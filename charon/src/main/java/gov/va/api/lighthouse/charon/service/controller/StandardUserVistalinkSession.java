@@ -2,9 +2,11 @@ package gov.va.api.lighthouse.charon.service.controller;
 
 import static gov.va.api.lighthouse.charon.service.controller.CharonVistaLinkManagedConnection.socketTimeout;
 import static gov.va.api.lighthouse.charon.service.controller.VistalinkSession.connectionIdentifier;
+import static java.util.stream.Collectors.toMap;
 
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.LoginFailure;
+import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException;
 import gov.va.med.exception.FoundationsException;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnectionSpecImpl;
@@ -18,7 +20,9 @@ import gov.va.med.vistalink.security.m.SecurityDataLogonResponse;
 import gov.va.med.vistalink.security.m.SecurityResponse;
 import gov.va.med.vistalink.security.m.SecurityResponseFactory;
 import gov.va.med.vistalink.security.m.SecurityVO;
+import java.util.Map;
 import javax.resource.spi.ConnectionRequestInfo;
+import javax.xml.parsers.ParserConfigurationException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -163,5 +167,28 @@ public class StandardUserVistalinkSession implements VistalinkSession {
       managedConnection.setSocketTimeOut(socketTimeout() + 5);
     }
     return managedConnection;
+  }
+
+  /**
+   * Return a mapping of user demographic information. The user demographics is defined as an
+   * untyped hashtable. However, internally it's String to String and has very ugly key names that
+   * include one of two prefixes. "KEY_NAME_" or "KEY_". See
+   * gov.va.med.vistalink.security.m.VistaKernelPrincipal for specific keys. This function will
+   * strip away the prefix and return something that is a little more friendly.
+   */
+  public Map<String, String> userDemographics() {
+    try {
+      Map<?, ?> properties =
+          KernelSecurityHandshake.doGetUserDemographics(connection(), securityResponseFactory)
+              .getSecurityVOUserDemographics()
+              .getUserDemographicsHashtable();
+      return properties.entrySet().stream()
+          .collect(
+              toMap(
+                  e -> String.valueOf(e.getKey()).replace("KEY_NAME_", "").replace("KEY_", ""),
+                  e -> String.valueOf(e.getValue())));
+    } catch (ParserConfigurationException | FoundationsException e) {
+      throw new UnrecoverableVistalinkException("Failed to load user demographics", e);
+    }
   }
 }

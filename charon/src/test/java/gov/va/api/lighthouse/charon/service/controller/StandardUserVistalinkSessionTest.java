@@ -58,7 +58,7 @@ class StandardUserVistalinkSessionTest {
 
     RpcPrincipal principal = principal();
 
-    VistalinkSession session =
+    StandardUserVistalinkSession session =
         StandardUserVistalinkSession.builder()
             .connectionDetails(localTampaConnectionDetails())
             .accessCode(principal.accessCode())
@@ -70,5 +70,9 @@ class StandardUserVistalinkSessionTest {
     log.info("{}", response.getRawResponse());
     session.close();
     assertThat(response.getRawResponse()).containsIgnoringCase("ping successful");
+
+    var demo = session.userDemographics();
+    log.info("{}", demo);
+    assertThat(demo).containsKey("DUZ");
   }
 }
