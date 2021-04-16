@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.tests;
 
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Locale;
 import org.apache.commons.lang3.BooleanUtils;
@@ -16,6 +17,10 @@ public class TestOptions {
             "Set system property '%s' or environment variable '%s' to 'true' to enable.",
             systemProperty, asEnvVariable(systemProperty))
         .isTrue();
+  }
+
+  public static void assumeVistaIsAvailable() {
+    assumeTrue(SystemDefinitions.get().isVistaAvailable(), "Vista is unavailable.");
   }
 
   public static boolean isEnabled(String systemProperty, boolean defaultValue) {

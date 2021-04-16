@@ -8,6 +8,8 @@ import gov.va.api.lighthouse.charon.api.RpcMetadata;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.rpc.NoRpcContextFaultException;
+import gov.va.med.vistalink.rpc.RpcNotInContextFaultException;
+import gov.va.med.vistalink.rpc.RpcNotOkForProxyUseException;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import gov.va.med.vistalink.rpc.RpcResponse;
@@ -132,7 +134,9 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
           .metadata(RpcMetadata.builder().timezone(connectionDetails.timezone()).build())
           .response(xmlResponse.getResponse().getValue())
           .build();
-    } catch (NoRpcContextFaultException e) {
+    } catch (NoRpcContextFaultException
+        | RpcNotInContextFaultException
+        | RpcNotOkForProxyUseException e) {
       throw new UnrecoverableVistalinkExceptions.BadRpcContext(rpcDetails.context(), e);
     } finally {
       log.info(

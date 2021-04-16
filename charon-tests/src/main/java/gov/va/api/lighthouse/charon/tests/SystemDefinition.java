@@ -3,6 +3,7 @@ package gov.va.api.lighthouse.charon.tests;
 import gov.va.api.health.sentinel.ServiceDefinition;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
+import gov.va.api.lighthouse.charon.tests.SystemDefinitions.SiteDuzPair;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -15,6 +16,8 @@ public class SystemDefinition {
   @NotNull TestRpcs testRpcs;
   Optional<String> clientKey;
   boolean isVistaAvailable;
-  @NotNull RpcPrincipal testRpcPrincipal;
+  @NotNull RpcPrincipal avCodePrincipal;
   @NotNull RpcVistaTargets testTargets;
+  @NotNull SiteDuzPair authorizedClinicalUser;
+  @NotNull String vistaSite;
 }

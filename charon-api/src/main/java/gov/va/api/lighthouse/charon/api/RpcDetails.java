@@ -76,7 +76,7 @@ public class RpcDetails {
     }
 
     /** Verify that only parameter field is set. */
-    public void checkOnlyOneSet() {
+    private void checkOnlyOneSet() {
       int count = 0;
       if (isRef()) {
         count++;

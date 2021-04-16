@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.tests;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static gov.va.api.lighthouse.charon.tests.TestOptions.assumeVistaIsAvailable;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
@@ -12,35 +12,33 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class RpcRequestIT {
 
-  private static SystemDefinition systemDefinition = SystemDefinitions.get();
-
   @Test
   void requestRpcWithGlobalArrayArgument() {
-    requestRpcWithValidResponse(systemDefinition.testRpcs().globalArrayRequestRpc());
+    requestRpcWithValidResponse(SystemDefinitions.get().testRpcs().globalArrayRequestRpc());
   }
 
   @Test
   void requestRpcWithLocalArrayArgument() {
-    requestRpcWithValidResponse(systemDefinition.testRpcs().localArrayRequestRpc());
+    requestRpcWithValidResponse(SystemDefinitions.get().testRpcs().localArrayRequestRpc());
   }
 
   @Test
   void requestRpcWithStringArgument() {
-    requestRpcWithValidResponse(systemDefinition.testRpcs().stringRequestRpc());
+    requestRpcWithValidResponse(SystemDefinitions.get().testRpcs().stringRequestRpc());
   }
 
   @SneakyThrows
   void requestRpcWithValidResponse(RpcDetails rpc) {
-    assumeTrue(systemDefinition.isVistaAvailable(), "Vista is unavailable.");
+    assumeVistaIsAvailable();
     log.info(rpc.name());
     RpcRequest body =
         RpcRequest.builder()
             .rpc(rpc)
-            .principal(systemDefinition.testRpcPrincipal())
-            .target(systemDefinition.testTargets())
+            .principal(SystemDefinitions.get().avCodePrincipal())
+            .target(SystemDefinitions.get().testTargets())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
+        TestClients.rpcRequest(SystemDefinitions.get().charon().apiPath() + "rpc", body)
             .expect(200)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

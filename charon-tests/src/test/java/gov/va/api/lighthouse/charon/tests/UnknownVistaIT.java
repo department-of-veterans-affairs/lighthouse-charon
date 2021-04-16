@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.tests;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static gov.va.api.lighthouse.charon.tests.TestOptions.assumeVistaIsAvailable;
 
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
@@ -15,16 +15,15 @@ public class UnknownVistaIT {
   @Test
   @SneakyThrows
   void requestUnkonwnVistaWith400() {
-    var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistaAvailable(), "Vista is unavailable.");
+    assumeVistaIsAvailable();
     RpcRequest body =
         RpcRequest.builder()
-            .rpc(systemDefinition.testRpcs().pingRpc())
-            .principal(systemDefinition.testRpcPrincipal())
+            .rpc(SystemDefinitions.get().testRpcs().pingRpc())
+            .principal(SystemDefinitions.get().avCodePrincipal())
             .target(RpcVistaTargets.builder().include(List.of("who dis")).build())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
+        TestClients.rpcRequest(SystemDefinitions.get().charon().apiPath() + "rpc", body)
             .expect(400)
             .expectValid(RpcResponse.class);
     log.info(response.toString());

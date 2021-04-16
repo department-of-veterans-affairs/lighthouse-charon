@@ -1,8 +1,8 @@
 package gov.va.api.lighthouse.charon.tests;
 
+import static gov.va.api.lighthouse.charon.tests.TestOptions.assumeVistaIsAvailable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
@@ -28,16 +28,15 @@ public class PingIT {
   @Test
   @SneakyThrows
   void requestRpcNoArguments() {
-    var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistaAvailable(), "Vista is unavailable.");
+    assumeVistaIsAvailable();
     RpcRequest body =
         RpcRequest.builder()
-            .rpc(systemDefinition.testRpcs().pingRpc())
-            .principal(systemDefinition.testRpcPrincipal())
-            .target(systemDefinition.testTargets())
+            .rpc(SystemDefinitions.get().testRpcs().pingRpc())
+            .principal(SystemDefinitions.get().avCodePrincipal())
+            .target(SystemDefinitions.get().testTargets())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
+        TestClients.rpcRequest(SystemDefinitions.get().charon().apiPath() + "rpc", body)
             .expect(200)
             .expectValid(RpcResponse.class);
     assertThat(response.status()).isEqualTo(Status.OK);
