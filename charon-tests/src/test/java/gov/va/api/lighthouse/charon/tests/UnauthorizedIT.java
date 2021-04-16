@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.tests;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static gov.va.api.lighthouse.charon.tests.TestOptions.assumeVistaIsAvailable;
 
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
@@ -15,20 +15,19 @@ public class UnauthorizedIT {
   @Test
   @SneakyThrows
   void requestFailedLoginResponseWith401() {
-    var systemDefinition = SystemDefinitions.get();
-    assumeTrue(systemDefinition.isVistaAvailable(), "Vista is unavailable.");
+    assumeVistaIsAvailable();
     RpcRequest body =
         RpcRequest.builder()
-            .rpc(systemDefinition.testRpcs().pingRpc())
+            .rpc(SystemDefinitions.get().testRpcs().pingRpc())
             .principal(
                 RpcPrincipal.builder()
                     .accessCode("I'm sorry Dave")
                     .verifyCode("I'm afraid I can't do that")
                     .build())
-            .target(systemDefinition.testTargets())
+            .target(SystemDefinitions.get().testTargets())
             .build();
     var response =
-        TestClients.rpcRequest(systemDefinition.charon().apiPath() + "rpc", body)
+        TestClients.rpcRequest(SystemDefinitions.get().charon().apiPath() + "rpc", body)
             .expect(401)
             .expectValid(RpcResponse.class);
     log.info(response.toString());
