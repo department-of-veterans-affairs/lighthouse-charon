@@ -23,6 +23,11 @@ public class NameResolution {
   @Getter private final VistalinkProperties properties;
   private final Function<RpcVistaTargets, Collection<String>> additionalCandidates;
 
+  /** A function that adds nothing. */
+  public static Function<RpcVistaTargets, Collection<String>> noAdditionalCandidates() {
+    return t -> List.of();
+  }
+
   /**
    * Resolve the targets by applying the following rules.
    * <li>Include values are checked to see if they are names or specifications. Names are validated

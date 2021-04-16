@@ -21,7 +21,7 @@ public class BadRpcContextIT {
                     .context("NOPE CONTEXT")
                     .name("VPR GET PATIENT DATA JSON")
                     .build())
-            .principal(SystemDefinitions.get().testRpcPrincipal())
+            .principal(SystemDefinitions.get().avCodePrincipal())
             .target(SystemDefinitions.get().testTargets())
             .build();
     var response =
