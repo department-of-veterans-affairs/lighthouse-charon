@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.service.config;
 
-import java.util.Map;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +23,9 @@ public class AlternateAuthorizationStatusIdProperties {
   /** If enabled, the AlternateAuthorizationStatusIdMajig will inspect incoming ids to swap. */
   private boolean enabled;
 
-  /** Id mappings, Map of Public Id pair -> Alternate Id pair. Ex. "duz123@444 : duz987:222". */
-  private Map<String, String> id;
+  /**
+   * Id mappings, Map of Public Id pair -> Alternate Id pair in ${duz}@${site}:${altDuz}@${altSite}.
+   * Ex. "duz123@444:duz987:222".
+   */
+  private List<String> ids;
 }

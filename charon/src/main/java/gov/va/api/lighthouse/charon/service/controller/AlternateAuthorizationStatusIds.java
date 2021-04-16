@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
@@ -12,40 +13,23 @@ public interface AlternateAuthorizationStatusIds {
    */
   AuthorizationId toPrivateId(AuthorizationId authorizationId);
 
-  @Value
-  @Builder
-  class AuthorizationId {
-    String duz;
-    String site;
+  class AlternateAuthorizationStatusIdsDisabled implements AlternateAuthorizationStatusIds {
 
-    public static AuthorizationId of(String rawId) {
-      String[] rawIdPieces = rawId.split("@", -1);
-      if (rawIdPieces.length != 2) {
-        throw new IllegalArgumentException(
-            "Alternate Authorization ID cannot be parsed. "
-                + "Authorization IDs Should be of format duz123@123");
-      }
-      return AuthorizationId.builder().duz(rawIdPieces[0]).site(rawIdPieces[1]).build();
+    @Override
+    public AuthorizationId toPrivateId(AuthorizationId authorizationId) {
+      return authorizationId;
     }
   }
 
   @Builder
   @Value
-  class MappedAlternateAuthorizationStatusIds implements AlternateAuthorizationStatusIds {
+  class AlternateAuthorizationStatusIdsEnabled implements AlternateAuthorizationStatusIds {
 
     Map<AuthorizationId, AuthorizationId> publicToPrivateIds;
 
     @Override
     public AuthorizationId toPrivateId(AuthorizationId publicId) {
       return publicToPrivateIds.getOrDefault(publicId, publicId);
-    }
-  }
-
-  class AlternateAuthorizationStatusIdsDisabled implements AlternateAuthorizationStatusIds {
-
-    @Override
-    public AuthorizationId toPrivateId(AuthorizationId authorizationId) {
-      return authorizationId;
     }
   }
 }

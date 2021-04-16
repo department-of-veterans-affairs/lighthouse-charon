@@ -1,11 +1,10 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
-import static gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AuthorizationId;
-
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAccess;
+import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import java.util.List;
 import java.util.Map;
