@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.charon.service.config;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +29,11 @@ public class AlternateAuthorizationStatusIdProperties {
    * Ex. "duz123@444:duz987:222".
    */
   private List<String> ids;
+
+  public List<String> getIds() {
+    if (ids == null) {
+      ids = new ArrayList<>();
+    }
+    return ids;
+  }
 }
