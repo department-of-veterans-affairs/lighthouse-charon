@@ -12,14 +12,14 @@ the Charon API will discover relevant VistA sites for a patient.
 This approach
 
 - Hides the EJB connection details and knowledge to a single application.
-    - Business-level applications just use REST.
-    - EJB is communication is difficult to mock for testing or lab use.
-    - Easier to ensure EJB and JAAS practices are done correctly since they are done in only one place.
+  - Business-level applications just use REST.
+  - EJB is communication is difficult to mock for testing or lab use.
+  - Easier to ensure EJB and JAAS practices are done correctly since they are done in only one place.
 - Hides patient to vista mapping complexity.
-    - Business-level services must know RPC details, but do not need to know which Vista instances specifically. They
-      can simply say, "all Vistas for this patient".
-    - Connection details (host, port, etc.) are encapsulated in one location, but still allows specific details
-      to be optionally specified.
+  - Business-level services must know RPC details, but do not need to know which Vista instances specifically. They can
+    simply say, "all Vistas for this patient".
+  - Connection details (host, port, etc.) are encapsulated in one location, but still allows specific details to be
+    optionally specified.
 
 Note:
 
@@ -50,8 +50,9 @@ data from MPI to determine which VistA instances are likely to contain meaningfu
 ```
 {
   principal: {
-    apiKey: ABC123,
-    verificationKey: XYZ987,
+    applicationProxyUser: SOME APP PROXY, .. Optional application proxy user
+    accessCode: ABC123, .................... Access code
+    verifyCode: XYZ987, .................... Verify code
   }
   target: { ................................ One of forPatient or include must be specified. You may specify both.
     forPatient: 1234567890V123456,  ........ Determine appropriate VistA instances for the patient
@@ -141,6 +142,11 @@ invoking `GET ${charon-url}/rpc/connections`
 }
 ```
 
+## Authorization status support
+
+Charon supports a special API for some authorization use cases. See [Authorization Status](authorization-status.md) for
+details.
+
 ## Testing considerations
 
 VistaLink EJB technology is very difficult to mock when compared to REST or SOAP or other HTTP-based communication. Mock
@@ -151,7 +157,20 @@ have canned responses based on RPC requests.
 
 ## Manually testing RPCs.
 
-The Charon API provides a test image that can be used for ad-hoc testing of RPCs.
+The Charon API provides a test image that can be used for ad-hoc testing of RPCs. There are two Docker-based techniques
+
+#### `charon-tests/test-request-file`
+
+- Recommended technique
+- Specify Charon RPC request as a file
+- Supports all Charon authentication mechanism
+- But, requires Vista targets to be specifed as `include: [ coordinates ]`.
+
+#### Manually running `VistalinkRpcInvokerTest`
+
+- Supports Access/Verify code based authentication
+- Request can specified using environment variables
+- But, has awkward environments
 
 ```
 docker run --rm --env-file vista.env vasdvp/lighthouse-charon-tests:latest run --module-name charon-tests --test-pattern '.*VistalinkRpcInvokerTest'

@@ -12,8 +12,6 @@ public class ClinicalAuthorizationStatusIT {
         TestClients.charon()
             .service()
             .requestSpecification()
-            .log()
-            .all()
             .queryParam("site", site)
             .queryParam("duz", duz)
             .get("/authorization-status/clinical"));

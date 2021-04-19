@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.when;
 
 import gov.va.api.lighthouse.charon.api.RpcDetails;
@@ -10,7 +11,10 @@ import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
+import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
+import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsDisabled;
+import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsEnabled;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -39,22 +43,22 @@ public class AuthorizationStatusControllerTest {
 
   private static Stream<Arguments> responseParsing() {
     return Stream.of(
-        Arguments.of(Map.of("1000", "1^9999"), "1000", 200, expectedBodyOf("ok", "1")),
-        Arguments.of(Map.of("1000", "2^8888^9999^"), "1000", 200, expectedBodyOf("ok", "2")),
-        Arguments.of(Map.of("1000", "-1^9999"), "1000", 401, expectedBodyOf("unauthorized", "-1")),
-        Arguments.of(
+        arguments(Map.of("1000", "1^9999"), "1000", 200, expectedBodyOf("ok", "1")),
+        arguments(Map.of("1000", "2^8888^9999^"), "1000", 200, expectedBodyOf("ok", "2")),
+        arguments(Map.of("1000", "-1^9999"), "1000", 401, expectedBodyOf("unauthorized", "-1")),
+        arguments(
             Map.of("1000", "-9001^8888^9999^"), "1000", 403, expectedBodyOf("forbidden", "-9001")),
-        Arguments.of(
+        arguments(
             Map.of("1000", "-WORDS^9999"),
             "1000",
             500,
             expectedBodyOf("Cannot parse authorization response.", "-WORDS")),
-        Arguments.of(
+        arguments(
             Map.of("1000", "WRONG SITE"),
             "2000",
             500,
             expectedBodyOf("Response missing for site: 2000", "WRONG SITE")),
-        Arguments.of(
+        arguments(
             Map.of("1000", "WRONG SITE", "2000", "RIGHT SITE"),
             "2000",
             500,
@@ -85,7 +89,41 @@ public class AuthorizationStatusControllerTest {
         .isEqualTo(responseOf(200, "ok", "1"));
   }
 
+  @Test
+  void clinicalAuthorizationWithAlternateIds() {
+    when(rpcExecutor.execute(
+            rpcRequest(
+                List.of("privateSite1"),
+                rpcPrincipal("apu5555", "ac1234", "vc9876"),
+                rpcDetails(
+                    "LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "privateDuz1", "MENUOPTION"))))
+        .thenReturn(
+            rpcResponse(
+                RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "privateSite1"))));
+    assertThat(
+            controllerWithAlternateIds()
+                .clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION"))
+        .isEqualTo(responseOf(200, "ok", "1"));
+
+    when(rpcExecutor.execute(
+            rpcRequest(
+                List.of("privateSite2"),
+                rpcPrincipal("apu5555", "ac1234", "vc9876"),
+                rpcDetails("LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "privateDuz2", "whoDis"))))
+        .thenReturn(
+            rpcResponse(
+                RpcResponse.Status.OK, List.of(rpcInvocationResult("2^11", "privateSite2"))));
+    assertThat(
+            controllerWithAlternateIds().clinicalAuthorization("publicSite2", "publicDuz2", null))
+        .isEqualTo(responseOf(200, "ok", "2"));
+  }
+
   AuthorizationStatusController controller() {
+    return controller(new AlternateAuthorizationStatusIdsDisabled());
+  }
+
+  private AuthorizationStatusController controller(
+      AlternateAuthorizationStatusIds alternateAuthorizationStatusIds) {
     ClinicalAuthorizationStatusProperties properties =
         ClinicalAuthorizationStatusProperties.builder()
             .accessCode("ac1234")
@@ -93,7 +131,18 @@ public class AuthorizationStatusControllerTest {
             .applicationProxyUser("apu5555")
             .defaultMenuOption("whoDis")
             .build();
-    return new AuthorizationStatusController(rpcExecutor, properties);
+    return new AuthorizationStatusController(
+        rpcExecutor, properties, alternateAuthorizationStatusIds);
+  }
+
+  AuthorizationStatusController controllerWithAlternateIds() {
+    return controller(
+        new AlternateAuthorizationStatusIdsEnabled(
+            Map.of(
+                AuthorizationId.of("publicDuz1@publicSite1"),
+                    AuthorizationId.of("privateDuz1@privateSite1"),
+                AuthorizationId.of("publicDuz2@publicSite2"),
+                    AuthorizationId.of("privateDuz2@privateSite2"))));
   }
 
   ResponseEntity<AuthorizationStatusController.ClinicalAuthorizationResponse> responseOf(
