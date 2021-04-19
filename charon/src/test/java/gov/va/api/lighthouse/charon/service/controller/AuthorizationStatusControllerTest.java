@@ -98,8 +98,11 @@ public class AuthorizationStatusControllerTest {
                 rpcDetails(
                     "LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "privateDuz1", "MENUOPTION"))))
         .thenReturn(
-            rpcResponse(RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "SITE"))));
-    assertThat(controller().clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION"))
+            rpcResponse(
+                RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "privateSite1"))));
+    assertThat(
+            controllerWithAlternateIds()
+                .clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION"))
         .isEqualTo(responseOf(200, "ok", "1"));
 
     when(rpcExecutor.execute(
@@ -108,8 +111,10 @@ public class AuthorizationStatusControllerTest {
                 rpcPrincipal("apu5555", "ac1234", "vc9876"),
                 rpcDetails("LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "privateDuz2", "whoDis"))))
         .thenReturn(
-            rpcResponse(RpcResponse.Status.OK, List.of(rpcInvocationResult("2^11", "SITE"))));
-    assertThat(controller().clinicalAuthorization("publicSite2", "publicDuz2", null))
+            rpcResponse(
+                RpcResponse.Status.OK, List.of(rpcInvocationResult("2^11", "privateSite2"))));
+    assertThat(
+            controllerWithAlternateIds().clinicalAuthorization("publicSite2", "publicDuz2", null))
         .isEqualTo(responseOf(200, "ok", "2"));
   }
 

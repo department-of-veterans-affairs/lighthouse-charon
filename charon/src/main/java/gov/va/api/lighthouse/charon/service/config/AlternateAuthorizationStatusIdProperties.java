@@ -30,6 +30,7 @@ public class AlternateAuthorizationStatusIdProperties {
    */
   private List<String> ids;
 
+  /** Lazy initializer. */
   public List<String> getIds() {
     if (ids == null) {
       ids = new ArrayList<>();

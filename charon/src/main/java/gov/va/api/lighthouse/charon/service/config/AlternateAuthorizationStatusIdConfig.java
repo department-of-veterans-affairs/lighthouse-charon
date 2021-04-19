@@ -20,11 +20,12 @@ public class AlternateAuthorizationStatusIdConfig {
   AlternateAuthorizationStatusIds alternateAuthorizationStatusIds(
       @Autowired AlternateAuthorizationStatusIdProperties properties) {
     if (properties.isEnabled()) {
-      log.info("Alternate Authorization Status IDs are enabled.");
+      log.info("Alternate authorization status IDs are enabled");
       return AlternateAuthorizationStatusIdsEnabled.builder()
           .publicToPrivateIds(load(properties.getIds()))
           .build();
     }
+    log.info("Alternate authorization status IDs are disabled");
     return new AlternateAuthorizationStatusIdsDisabled();
   }
 
@@ -45,6 +46,7 @@ public class AlternateAuthorizationStatusIdConfig {
       String to = duzAtSiteColonDuzAtSite.substring(colon + 1);
       map.put(AuthorizationId.of(from), AuthorizationId.of(to));
     }
+    log.info("{} alternate IDs loaded", map.size());
     return map;
   }
 }

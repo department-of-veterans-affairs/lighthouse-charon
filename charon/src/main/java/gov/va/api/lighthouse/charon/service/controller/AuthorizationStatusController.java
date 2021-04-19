@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
@@ -13,7 +15,6 @@ import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +34,7 @@ public class AuthorizationStatusController {
 
   private final ClinicalAuthorizationStatusProperties clinicalAuthorizationStatusProperties;
 
-  private final AlternateAuthorizationStatusIds alternateAuthorizationStatusIds;
+  private final AlternateAuthorizationStatusIds alternateIds;
 
   /** Test a users clinical authorization status. Uses the LHS CHECK OPTION ACCESS VPC. */
   @GetMapping(
@@ -43,12 +44,11 @@ public class AuthorizationStatusController {
       @NotBlank @RequestParam(name = "site") String site,
       @NotBlank @RequestParam(name = "duz") String duz,
       @RequestParam(name = "menu-option", required = false) String menuOption) {
-    if (StringUtils.isBlank(menuOption)) {
+    if (isBlank(menuOption)) {
       menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
     }
     AuthorizationId authorizationId =
-        alternateAuthorizationStatusIds.toPrivateId(
-            AuthorizationId.builder().duz(duz).site(site).build());
+        alternateIds.toPrivateId(AuthorizationId.builder().duz(duz).site(site).build());
     RpcResponse response =
         rpcExecutor.execute(
             RpcRequest.builder()
@@ -63,7 +63,8 @@ public class AuthorizationStatusController {
                 .build());
     LhsCheckOptionAccess.Response typeSafeResult =
         LhsCheckOptionAccess.create().fromResults(response.results());
-    return parseLhsCheckOptionAccessResponse(typeSafeResult.resultsByStation(), site);
+    return parseLhsCheckOptionAccessResponse(
+        typeSafeResult.resultsByStation(), authorizationId.site());
   }
 
   ResponseEntity<ClinicalAuthorizationResponse> parseLhsCheckOptionAccessResponse(
@@ -78,7 +79,7 @@ public class AuthorizationStatusController {
       return responseOf(
           "Response missing for site: " + site, String.join(", ", results.values()), 500);
     }
-    if (StringUtils.isBlank(results.get(site))) {
+    if (isBlank(results.get(site))) {
       return responseOf("Blank response from vista", null, 500);
     }
     String authorizationString = results.get(site).split("[\\^]", -1)[0];
