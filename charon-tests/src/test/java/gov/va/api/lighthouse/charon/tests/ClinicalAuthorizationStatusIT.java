@@ -14,7 +14,7 @@ public class ClinicalAuthorizationStatusIT {
             .requestSpecification()
             .queryParam("site", site)
             .queryParam("duz", duz)
-            .get("/authorization-status/clinical"));
+            .get(SystemDefinitions.get().charon().apiPath() + "authorization-status/clinical"));
   }
 
   @Test
