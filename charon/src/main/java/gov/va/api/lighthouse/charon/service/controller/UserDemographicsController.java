@@ -37,7 +37,8 @@ public class UserDemographicsController {
   @GetMapping(path = "/{site}")
   @Operation(
       description =
-          "Return map of VistA kernel principal properties for a particular user, e.g. DUZ, NAME_GIVENFIRST, NAME_FAMILYLAST")
+          "Return map of VistA kernel principal properties for a particular user,"
+              + " e.g. DUZ, NAME_GIVENFIRST, NAME_FAMILYLAST")
   public Map<String, String> properties(
       @PathVariable(name = "site", required = true) String site,
       @Redact @NotBlank @RequestHeader(name = "accessCode", required = true) String accessCode,
