@@ -2,6 +2,8 @@ package gov.va.api.lighthouse.charon.api;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +13,7 @@ import lombok.NonNull;
 
 @Data
 @Builder
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class RpcPrincipal {
   /** Required for standard user, application proxy user. */
   @NotBlank @NonNull private String accessCode;

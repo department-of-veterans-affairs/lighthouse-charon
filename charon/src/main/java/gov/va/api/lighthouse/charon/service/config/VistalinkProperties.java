@@ -2,7 +2,10 @@ package gov.va.api.lighthouse.charon.service.config;
 
 import static java.util.stream.Collectors.toSet;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import gov.va.api.lighthouse.charon.service.controller.VistaLinkExceptions.UnknownVista;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,8 +15,10 @@ import lombok.Value;
 
 @Builder
 @Value
+@Schema
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class VistalinkProperties {
-  @Singular List<ConnectionDetails> vistas;
+  @Schema @Singular List<ConnectionDetails> vistas;
 
   /** Thrown a UnknownVista exception if any of the candidate names are unknown. */
   public void checkKnownNames(List<String> candidateNames) {

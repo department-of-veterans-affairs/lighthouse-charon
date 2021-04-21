@@ -2,12 +2,15 @@ package gov.va.api.lighthouse.charon.service.controller;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAccess;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -116,9 +119,18 @@ public class AuthorizationStatusController {
 
   @Value
   @Builder
+  @JsonAutoDetect(fieldVisibility = Visibility.ANY)
   public static class ClinicalAuthorizationResponse {
     String status;
 
+    @Schema(
+        description =
+            "Menu option access value: "
+                + "-1, no such user in the New Person File.\n"
+                + "-2: User terminated or has no access code.\n"
+                + "-3: no such option in the Option File.\n"
+                + " 0: no access found in any menu tree the user owns.\n"
+                + " Positive cases are access allowed. ")
     String value;
 
     ResponseEntity<ClinicalAuthorizationResponse> response(int httpCode) {

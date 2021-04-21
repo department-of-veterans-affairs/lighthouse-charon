@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.charon.service.controller.VistaLinkExceptions.NameResolutionException;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,10 @@ public class UserDemographicsController {
    * pair at a particular site.
    */
   @GetMapping(path = "/{site}")
+  @Operation(
+      description =
+          "Return map of VistA kernel principal properties for a particular user,"
+              + " e.g. DUZ, NAME_GIVENFIRST, NAME_FAMILYLAST")
   public Map<String, String> properties(
       @PathVariable(name = "site", required = true) String site,
       @Redact @NotBlank @RequestHeader(name = "accessCode", required = true) String accessCode,
