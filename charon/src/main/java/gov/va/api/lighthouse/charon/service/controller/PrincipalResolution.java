@@ -11,6 +11,7 @@ import lombok.NonNull;
 public class PrincipalResolution {
   @NonNull private final RpcRequest request;
 
+  /** Return the best credentials for the target. */
   public RpcPrincipal resolve(@NonNull ConnectionDetails target) {
     return request.siteSpecificPrincipals().getOrDefault(target.name(), request.principal());
   }

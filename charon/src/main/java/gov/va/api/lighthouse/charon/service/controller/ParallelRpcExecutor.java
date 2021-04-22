@@ -77,11 +77,14 @@ public class ParallelRpcExecutor implements RpcExecutor {
   private Map<String, Future<RpcInvocationResult>> invokeForEachTarget(
       RpcRequest request, List<ConnectionDetails> targets) {
     Map<String, Future<RpcInvocationResult>> futures = new HashMap<>(targets.size());
+    PrincipalResolution principals = PrincipalResolution.of(request);
     for (ConnectionDetails target : targets) {
       futures.put(
           target.name(),
           executor.submit(
-              () -> safelyInvoke(request, rpcInvokerFactory.create(request.principal(), target))));
+              () ->
+                  safelyInvoke(
+                      request, rpcInvokerFactory.create(principals.resolve(target), target))));
     }
     return futures;
   }

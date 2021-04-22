@@ -16,15 +16,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class PrincipalResolutionTest {
-
-  static Stream<Arguments> resolve() {
-    return Stream.of(
-        arguments(request(), target("a"), principal("default")),
-        arguments(request("b", "c"), target("a"), principal("default")),
-        arguments(request("b", "c"), target("b"), principal("b")),
-        arguments(request("b", "c"), target("c"), principal("c"))
-        //
-        );
+  static RpcPrincipal principal(String name) {
+    return RpcPrincipal.standardUserBuilder()
+        .accessCode("ac-" + name)
+        .verifyCode("vc-" + name)
+        .build();
   }
 
   static RpcRequest request(String... specific) {
@@ -37,11 +33,12 @@ class PrincipalResolutionTest {
         .build();
   }
 
-  static RpcPrincipal principal(String name) {
-    return RpcPrincipal.standardUserBuilder()
-        .accessCode("ac-" + name)
-        .verifyCode("vc-" + name)
-        .build();
+  static Stream<Arguments> resolve() {
+    return Stream.of(
+        arguments(request(), target("a"), principal("default")),
+        arguments(request("b", "c"), target("a"), principal("default")),
+        arguments(request("b", "c"), target("b"), principal("b")),
+        arguments(request("b", "c"), target("c"), principal("c")));
   }
 
   static ConnectionDetails target(String name) {

@@ -50,6 +50,14 @@ class ParallelRpcExecutorTest {
     executor = new ParallelRpcExecutor(factory, resolver);
   }
 
+  private RpcPrincipal _principal(int n) {
+    return RpcPrincipal.applicationProxyUserBuilder()
+        .applicationProxyUser("APP PROXY " + n)
+        .accessCode("ac" + n)
+        .verifyCode("vc" + n)
+        .build();
+  }
+
   private RpcRequest _request() {
     return RpcRequest.builder()
         .principal(RpcPrincipal.builder().accessCode("a").verifyCode("b").build())
@@ -128,6 +136,29 @@ class ParallelRpcExecutorTest {
     when(factory.create(_request().principal(), c1)).thenReturn(invoker1);
     when(factory.create(_request().principal(), c2)).thenReturn(invoker2);
     when(factory.create(_request().principal(), c3)).thenReturn(invoker3);
+    RpcInvocationResult r1 = _result(1);
+    RpcInvocationResult r2 = _result(2);
+    RpcInvocationResult r3 = _result(3);
+    when(invoker1.invoke(r.rpc())).thenReturn(r1);
+    when(invoker2.invoke(r.rpc())).thenReturn(r2);
+    when(invoker3.invoke(r.rpc())).thenReturn(r3);
+    assertThat(executor.execute(r))
+        .isEqualTo(RpcResponse.builder().status(Status.OK).results(List.of(r1, r2, r3)).build());
+  }
+
+  @Test
+  void siteSpecificPrincipalIsUsedWhenAvailable() {
+    ConnectionDetails c1 = _connectionDetail(1);
+    ConnectionDetails c2 = _connectionDetail(2);
+    ConnectionDetails c3 = _connectionDetail(3);
+    var r = _request();
+    r.siteSpecificPrincipals().put(c1.name(), _principal(1));
+    r.siteSpecificPrincipals().put(c2.name(), _principal(2));
+    // site 3 will use default
+    when(resolver.resolve(r.target())).thenReturn(List.of(c1, c2, c3));
+    when(factory.create(_principal(1), c1)).thenReturn(invoker1);
+    when(factory.create(_principal(2), c2)).thenReturn(invoker2);
+    when(factory.create(r.principal(), c3)).thenReturn(invoker3);
     RpcInvocationResult r1 = _result(1);
     RpcInvocationResult r2 = _result(2);
     RpcInvocationResult r3 = _result(3);
