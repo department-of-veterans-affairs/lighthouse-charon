@@ -19,7 +19,7 @@ public class RpcRequest {
   @NotNull @Valid private RpcVistaTargets target;
 
   /** Lazy initializer. */
-  public Map<String, @Valid RpcPrincipal> siteSpecificPrincipals() {
+  public Map<String, RpcPrincipal> siteSpecificPrincipals() {
     if (siteSpecificPrincipals == null) {
       siteSpecificPrincipals = new HashMap<>();
     }
