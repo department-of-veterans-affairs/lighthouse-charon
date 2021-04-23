@@ -37,7 +37,7 @@ cat $TEMPLATE | envsubst > $POST_ME
 if [ "${LOG_REQUEST:-false}" == true ]
 then
   echo "REQUEST:"
-  cat $POST_ME |  jq '.|.principal.accessCode="REDACTED"|.principal.verifyCode="REDACTED"'
+  cat $POST_ME |  jq '.' | sed -e 's/"\(access\|verify\)Code":.*/"\1Code": "REDACTED"/'
 fi
 
 curl \

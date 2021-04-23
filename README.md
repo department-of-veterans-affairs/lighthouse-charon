@@ -50,9 +50,14 @@ data from MPI to determine which VistA instances are likely to contain meaningfu
 ```
 {
   principal: {
-    applicationProxyUser: SOME APP PROXY, .. Optional application proxy user
+    applicationProxyUser: SOME APP PROXY, .. (Optional) Application proxy user
     accessCode: ABC123, .................... Access code
     verifyCode: XYZ987, .................... Verify code
+  }
+  siteSpecificPrincipals: { ................ (Optional) map of principals to be used for a specific site.
+    ${site}: { <principal> },
+    ${site}: { <principal> },
+    ...
   }
   target: { ................................ One of forPatient or include must be specified. You may specify both.
     forPatient: 1234567890V123456,  ........ Determine appropriate VistA instances for the patient
@@ -72,6 +77,26 @@ data from MPI to determine which VistA instances are likely to contain meaningfu
 }
 ```
 
+- `siteSpecificPrincipals` can be used to override the principals to be used at a specific site. The default `principal`
+  will be used for each site unless a specific entry is provided. For example, consider a request that is made
+  against `605`, `673`, and `488`. If the `siteSpecificPrincipals` is provided with an entry for `605`. The
+  default `principal` would be used for `673` and `488`, but site specific principal would be used for `605`. This
+  capability is intented to support situations where users are in transition at specific sites. For example, users are
+  in the process of being created or their credentials are being changed at different sites.
+  ```
+  {
+  "principal": {
+    "accessCode": "ABCD"
+    "verifyCode": "XYZ"
+  },
+  "siteSpecificPrincipals": {
+    "605": {
+      "applicationProxyUser": "AWE SOME PROXY",
+      "accessCode": "1234"
+      "verifyCode": "5678"
+    }
+  },
+  ```
 - Vista `coordinates` are specified as `host:port:divisionIen:timezoneId`. For
   example, `10.11.12.123:18123:456:America/New_York`. See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   for time zone IDs.
