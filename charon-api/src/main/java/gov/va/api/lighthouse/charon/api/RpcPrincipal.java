@@ -4,7 +4,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -28,11 +30,14 @@ public class RpcPrincipal {
     this.verifyCode = verifyCode;
   }
 
+  @JsonCreator
   @Builder(
       builderMethodName = "applicationProxyUserBuilder",
       builderClassName = "ApplicationProxyUserBuilder")
   private RpcPrincipal(
-      @NonNull String accessCode, @NonNull String verifyCode, String applicationProxyUser) {
+      @JsonProperty("accessCode") @NonNull String accessCode,
+      @JsonProperty("verifyCode") @NonNull String verifyCode,
+      @JsonProperty("applicationProxyUser") String applicationProxyUser) {
     this.accessCode = accessCode;
     this.verifyCode = verifyCode;
     this.applicationProxyUser = applicationProxyUser;
