@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
@@ -154,6 +155,9 @@ public class RpcDetails {
 
   public static class ParameterValueDeserializer extends StdDeserializer<String> {
 
+    @Serial
+    private static final long serialVersionUID = 5543697039890338690L;
+
     public ParameterValueDeserializer() {
       super(String.class);
     }
@@ -166,6 +170,9 @@ public class RpcDetails {
   }
 
   public static class ParameterValueSerializer extends StdSerializer<String> {
+
+    @Serial
+    private static final long serialVersionUID = -4201150277421890777L;
 
     public ParameterValueSerializer() {
       super(String.class);

@@ -1,11 +1,14 @@
 package gov.va.api.lighthouse.charon.api;
 
 import static gov.va.api.lighthouse.charon.api.RoundTrip.assertRoundTrip;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import javax.validation.Validation;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -78,6 +81,15 @@ public class RpcRequestTest {
                         RpcDetails.Parameter.builder().namedArray(Map.of("d", "e")).build()))
                 .build())
         .build();
+  }
+
+  @Test
+  void principalWithContextOverrideIsInvalid() {
+    var validator = Validation.buildDefaultValidatorFactory().getValidator();
+    var request = v1();
+    assertThat(validator.validate(request)).isEmpty();
+    request.principal().contextOverride("NOPE");
+    assertThat(validator.validate(request)).isNotEmpty();
   }
 
   @ParameterizedTest
