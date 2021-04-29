@@ -1,6 +1,8 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
+import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
@@ -79,12 +81,14 @@ public class ParallelRpcExecutor implements RpcExecutor {
     Map<String, Future<RpcInvocationResult>> futures = new HashMap<>(targets.size());
     PrincipalResolution principals = PrincipalResolution.of(request);
     for (ConnectionDetails target : targets) {
+      RpcPrincipal principal = principals.resolve(target);
+      RpcDetails rpc =
+          principal.contextOverride() == null
+              ? request.rpc()
+              : request.rpc().toBuilder().context(principal.contextOverride()).build();
       futures.put(
           target.name(),
-          executor.submit(
-              () ->
-                  safelyInvoke(
-                      request, rpcInvokerFactory.create(principals.resolve(target), target))));
+          executor.submit(() -> safelyInvoke(rpc, rpcInvokerFactory.create(principal, target))));
     }
     return futures;
   }
@@ -106,18 +110,16 @@ public class ParallelRpcExecutor implements RpcExecutor {
     }
   }
 
-  private RpcInvocationResult safelyInvoke(RpcRequest request, RpcInvoker invoker)
+  private RpcInvocationResult safelyInvoke(RpcDetails rpc, RpcInvoker invoker)
       throws UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException {
-    log.info(
-        "Invoking {} / {} for {}", request.rpc().name(), request.rpc().context(), invoker.vista());
+    log.info("Invoking {} / {} for {}", rpc.name(), rpc.context(), invoker.vista());
     try {
-      return invoker.invoke(request.rpc());
+      return invoker.invoke(rpc);
     } catch (UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException e) {
-      log.error(
-          "Unrecoverable error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
+      log.error("Unrecoverable error while invoking {} for {}", rpc.name(), invoker.vista(), e);
       throw e;
     } catch (Exception e) {
-      log.error("Error while invoking {} for {}", request.rpc().name(), invoker.vista(), e);
+      log.error("Error while invoking {} for {}", rpc.name(), invoker.vista(), e);
       return failed(invoker.vista(), e.getClass().getSimpleName() + ": " + e.getMessage());
     } finally {
       invoker.close();
