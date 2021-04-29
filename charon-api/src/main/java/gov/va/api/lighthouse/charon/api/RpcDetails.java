@@ -155,8 +155,7 @@ public class RpcDetails {
 
   public static class ParameterValueDeserializer extends StdDeserializer<String> {
 
-    @Serial
-    private static final long serialVersionUID = 5543697039890338690L;
+    @Serial private static final long serialVersionUID = 5543697039890338690L;
 
     public ParameterValueDeserializer() {
       super(String.class);
@@ -171,8 +170,7 @@ public class RpcDetails {
 
   public static class ParameterValueSerializer extends StdSerializer<String> {
 
-    @Serial
-    private static final long serialVersionUID = -4201150277421890777L;
+    @Serial private static final long serialVersionUID = -4201150277421890777L;
 
     public ParameterValueSerializer() {
       super(String.class);
