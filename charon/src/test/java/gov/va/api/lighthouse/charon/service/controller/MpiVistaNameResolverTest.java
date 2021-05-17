@@ -175,6 +175,106 @@ public class MpiVistaNameResolverTest {
   }
 
   @Test
+  void resolveReturnsEmptyConnectionsWhenNoPatientsAreFound() {
+    PRPAIN201310UV02MFMIMT700711UV01ControlActProcess controlActProcess =
+        PRPAIN201310UV02MFMIMT700711UV01ControlActProcess.builder()
+            .subject(
+                List.of(
+                    PRPAIN201310UV02MFMIMT700711UV01Subject1.builder()
+                        .registrationEvent(
+                            PRPAIN201310UV02MFMIMT700711UV01RegistrationEvent.builder()
+                                .subject1(
+                                    PRPAIN201310UV02MFMIMT700711UV01Subject2.builder()
+                                        .patient(
+                                            PRPAMT201304UV02Patient.builder()
+                                                .id(
+                                                    List.of(
+                                                        II.iIBuilder()
+                                                            .extension(
+                                                                "100005750^PI^NOT_A_STATION^NOPE^N")
+                                                            .build()))
+                                                .build())
+                                        .build())
+                                .build())
+                        .build()))
+            .build();
+    Mockito.when(mockResponse.getControlActProcess()).thenReturn(controlActProcess);
+    Function<String, PRPAIN201310UV02> mockFunction =
+        (s) -> {
+          return mockResponse;
+        };
+    MpiVistaNameResolver resolver = new MpiVistaNameResolver(properties, config);
+    resolver.request1309(mockFunction);
+    var connections = resolver.resolve(RpcVistaTargets.builder().forPatient("1").build());
+    assertThat(connections).isEmpty();
+  }
+
+  @Test
+  void resolveReturnsExplicitlyIncludedPatientsOnlyWhenNoPatientsAreFound() {
+    PRPAIN201310UV02MFMIMT700711UV01ControlActProcess controlActProcess =
+        PRPAIN201310UV02MFMIMT700711UV01ControlActProcess.builder()
+            .subject(
+                List.of(
+                    PRPAIN201310UV02MFMIMT700711UV01Subject1.builder()
+                        .registrationEvent(
+                            PRPAIN201310UV02MFMIMT700711UV01RegistrationEvent.builder()
+                                .subject1(
+                                    PRPAIN201310UV02MFMIMT700711UV01Subject2.builder()
+                                        .patient(
+                                            PRPAMT201304UV02Patient.builder()
+                                                .id(
+                                                    List.of(
+                                                        II.iIBuilder()
+                                                            .extension(
+                                                                "100005750^PI^NOT_A_STATION^NOPE^N")
+                                                            .build()))
+                                                .build())
+                                        .build())
+                                .build())
+                        .build()))
+            .build();
+    Mockito.when(mockResponse.getControlActProcess()).thenReturn(controlActProcess);
+    Function<String, PRPAIN201310UV02> mockFunction =
+        (s) -> {
+          return mockResponse;
+        };
+
+    ConnectionDetails in1 =
+        ConnectionDetails.builder()
+            .divisionIen("0")
+            .host("fakehost")
+            .name("in1")
+            .port(1337)
+            .build();
+    ConnectionDetails in2 =
+        ConnectionDetails.builder()
+            .divisionIen("0")
+            .host("fakehost")
+            .name("in2")
+            .port(1337)
+            .build();
+    VistalinkProperties propertiesWithExtraStations =
+        VistalinkProperties.builder()
+            .vista(in1)
+            .vista(in2)
+            .vista(
+                ConnectionDetails.builder()
+                    .divisionIen("0")
+                    .host("fakehost")
+                    .name("notin")
+                    .port(1337)
+                    .build())
+            .build();
+
+    MpiVistaNameResolver resolver = new MpiVistaNameResolver(propertiesWithExtraStations, config);
+    resolver.request1309(mockFunction);
+    var connections =
+        resolver.resolve(
+            RpcVistaTargets.builder().forPatient("1").include(List.of("in1", "in2")).build());
+    assertThat(connections).containsExactlyInAnyOrder(in1, in2);
+  }
+
+  @Test
   void targetsForPatientReturnsEmptyListWhenNoPatientIsSpecified() {
     var resolver = new MpiVistaNameResolver(properties, config);
     assertThat(resolver.resolve(RpcVistaTargets.builder().build())).isEmpty();

@@ -79,11 +79,16 @@ public class MpiVistaNameResolver implements VistaNameResolver {
     log.info("Response: {}", response);
     List<PRPAIN201310UV02MFMIMT700711UV01Subject1> maybePatients =
         response.getControlActProcess().getSubject();
+
+    if (maybePatients.size() == 0) {
+      log.warn("Patient is not known to MPI");
+      return List.of();
+    }
     /*
      * With a national icn, we only expect 1 patient. If MPI returns more, we need to kill the
      * response to avoid leaking PII
      */
-    if (maybePatients.size() != 1) {
+    if (maybePatients.size() > 1) {
       throw new UnknownPatient(
           ErrorCodes.MRSP01, "Expected one patient in response, got " + maybePatients.size());
     }
