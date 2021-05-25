@@ -1,8 +1,8 @@
 {
    "principal":{
-      "applicationProxyUser":"$VISTA_APP_PROXY_USER",
-      "accessCode":"$VISTA_APP_PROXY_ACCESS_CODE",
-      "verifyCode":"$VISTA_APP_PROXY_VERIFY_CODE"
+      "applicationProxyUser":"IBLHS,APPLICATION PROXY",
+      "accessCode":"$VISTA_ACCESS_CODE",
+      "verifyCode":"$VISTA_VERIFY_CODE"
    },
    "target":{
       "include":[ "host.docker.internal:18673:673:America/New_York" ]
