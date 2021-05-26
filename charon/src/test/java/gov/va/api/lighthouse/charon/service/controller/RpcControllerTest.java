@@ -8,6 +8,7 @@ import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,8 +35,7 @@ class RpcControllerTest {
     Assertions.assertThat(controller().connections())
         .isEqualTo(
             VistalinkProperties.builder()
-                .vista(_connectionDetail(1))
-                .vista(_connectionDetail(2))
+                .vistas(List.of(_connectionDetail(1), _connectionDetail(2)))
                 .build());
   }
 
@@ -43,8 +43,7 @@ class RpcControllerTest {
     return new RpcController(
         executor,
         VistalinkProperties.builder()
-            .vista(_connectionDetail(1))
-            .vista(_connectionDetail(2))
+            .vistas(List.of(_connectionDetail(1), _connectionDetail(2)))
             .build());
   }
 

@@ -26,13 +26,14 @@ import org.mockito.MockitoAnnotations;
 public class MpiVistaNameResolverTest {
   VistalinkProperties properties =
       VistalinkProperties.builder()
-          .vista(
-              ConnectionDetails.builder()
-                  .divisionIen("0")
-                  .host("fakehost")
-                  .name("FAKESTATION")
-                  .port(1337)
-                  .build())
+          .vistas(
+              List.of(
+                  ConnectionDetails.builder()
+                      .divisionIen("0")
+                      .host("fakehost")
+                      .name("FAKESTATION")
+                      .port(1337)
+                      .build()))
           .build();
 
   @Mock PRPAIN201310UV02 mockResponse;
