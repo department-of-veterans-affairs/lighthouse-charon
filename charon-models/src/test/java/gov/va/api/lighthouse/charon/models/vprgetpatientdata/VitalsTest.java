@@ -55,8 +55,10 @@ public class VitalsTest {
   public void fromResultsDeserializeValidVprGetPatientDataResponse() {
     String invocationResponse =
         IOUtils.toString(getClass().getResourceAsStream("/SampleVitalsResult.xml"));
+    System.out.println("Invocation response is: " + invocationResponse);
     RpcInvocationResult invocationResult =
         RpcInvocationResult.builder().vista("673").response(invocationResponse).build();
+    System.out.println("Invocation result is: " + List.of(invocationResult));
     assertThat(VprGetPatientData.create().fromResults(List.of(invocationResult)))
         .isEqualTo(samples.response());
   }

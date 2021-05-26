@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
 @Data
 @Builder
@@ -15,7 +14,7 @@ import lombok.Singular;
 public class RpcResponse {
   private Status status;
   private Optional<String> message;
-  @Singular private List<RpcInvocationResult> results;
+  private List<RpcInvocationResult> results;
 
   /** Lazy getter. */
   public Optional<String> message() {

@@ -7,6 +7,8 @@ import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.UnrecoverableVistalinkException;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +19,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,17 +48,16 @@ public class ParallelRpcExecutor implements RpcExecutor {
     }
     response.status(Status.OK);
     Map<String, Future<RpcInvocationResult>> futureResults = invokeForEachTarget(request, targets);
-    targets.stream()
+    List<RpcInvocationResult> results = targets.stream()
         .map(ConnectionDetails::name)
         .map(vista -> resultOf(vista, futureResults.get(vista)))
-        .forEach(
-            result -> {
-              if (result.error().isPresent()) {
-                response.status(Status.FAILED);
-              }
-              response.result(result);
-            });
-    return response.build();
+        .peek(result -> {
+          if (result.error().isPresent()) {
+            response.status(Status.FAILED);
+          }})
+        .filter(result -> StringUtils.isNotBlank(result.response()))
+        .collect(Collectors.toList());
+    return response.results(results).build();
   }
 
   @SneakyThrows
