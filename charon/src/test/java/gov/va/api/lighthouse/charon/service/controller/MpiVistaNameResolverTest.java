@@ -256,15 +256,16 @@ public class MpiVistaNameResolverTest {
             .build();
     VistalinkProperties propertiesWithExtraStations =
         VistalinkProperties.builder()
-            .vista(in1)
-            .vista(in2)
-            .vista(
-                ConnectionDetails.builder()
-                    .divisionIen("0")
-                    .host("fakehost")
-                    .name("notin")
-                    .port(1337)
-                    .build())
+            .vistas(
+                List.of(
+                    in1,
+                    in2,
+                    ConnectionDetails.builder()
+                        .divisionIen("0")
+                        .host("fakehost")
+                        .name("notin")
+                        .port(1337)
+                        .build()))
             .build();
 
     MpiVistaNameResolver resolver = new MpiVistaNameResolver(propertiesWithExtraStations, config);
