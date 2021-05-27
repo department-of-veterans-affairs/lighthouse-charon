@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import org.springframework.stereotype.Component;
 
+/** Macro for processing ISO-8601 dates into fileman dates for use in vista. */
 @Component
 public class LocalDateMacro implements Macro {
 

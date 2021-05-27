@@ -57,21 +57,26 @@ Replace a ISO-8601 date value with a localized fileman date for a targeted Vista
 ## What's under the hood?
 
 - `MacroProcessorFactory` is autowired with `Macro`instances
-- `VistalinkRpcInvokerFactory` is autowired with a `MacroProcessorFactory`. It will pass this factory along as it creates `VistalinkRpcInvokers`
-- `VistalinkRpcInvoker` will use the factory to create a `MacroProcessor` based on a `MacroExecutionContext` that is specific to itself.
+- `VistalinkRpcInvokerFactory` is autowired with a `MacroProcessorFactory`. It will pass this factory along as it
+  creates `VistalinkRpcInvokers`
+- `VistalinkRpcInvoker` will use the factory to create a `MacroProcessor` based on a `MacroExecutionContext` that is
+  specific to itself.
 - `VistalinkRpcInvoker` will invoke the `MacroProcessor` to evaluate each value.
-  - If the value is a macro it is processed and a new value is returned.
-  - If the value is not a macro, it is returned unchanged.
+    - If the value is a macro it is processed and a new value is returned.
+    - If the value is not a macro, it is returned unchanged.
 
 #### The `MacroProcessor`
+
 - Looks for macro syntax in evaluated values.
 - Maps macros to their `Macro` implementation.
 - Invokes the `Macro.evaluate` and returns the results.
 
 #### The `MacroExecutionContext`
+
 - Provides a macro-free place to execute RPCs. This allows Macros to use RPCs during the evaluation process.
 
 ### The `Macro`
+
 - `Macro` implementations provide a `name` that is used in for the macro in RPC requests, e.g. `dfn`
 - Implementations may interact with RPCs through a provided execution context which allows low-level invocation.
-  - Connection, authentication, and error handling are performed by the `MacroExecutionContext` itself.
+    - Connection, authentication, and error handling are performed by the `MacroExecutionContext` itself.

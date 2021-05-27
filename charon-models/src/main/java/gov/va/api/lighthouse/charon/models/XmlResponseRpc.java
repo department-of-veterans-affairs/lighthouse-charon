@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
+/** Utility class for working with XmlResponses. */
 @UtilityClass
 public final class XmlResponseRpc {
 

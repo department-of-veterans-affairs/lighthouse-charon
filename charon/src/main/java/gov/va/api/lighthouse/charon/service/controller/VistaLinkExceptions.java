@@ -4,9 +4,11 @@ import java.io.Serial;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
+/** Container class for all Vistalink Exceptions. */
 @UtilityClass
 public class VistaLinkExceptions {
 
+  /** Name resolution. */
   @Getter
   public static class NameResolutionException extends VistaLinkException {
 
@@ -21,6 +23,7 @@ public class VistaLinkExceptions {
     }
   }
 
+  /** Unknown Patient. */
   public static class UnknownPatient extends NameResolutionException {
 
     @Serial private static final long serialVersionUID = 4542527678706542746L;
@@ -30,6 +33,7 @@ public class VistaLinkExceptions {
     }
   }
 
+  /** Unknown vista. */
   public static final class UnknownVista extends VistaLinkException {
 
     @Serial private static final long serialVersionUID = 8519965629992550013L;
@@ -39,6 +43,7 @@ public class VistaLinkExceptions {
     }
   }
 
+  /** Base Vistalink Exception. */
   public static class VistaLinkException extends RuntimeException {
 
     @Serial private static final long serialVersionUID = 3791939028343499833L;

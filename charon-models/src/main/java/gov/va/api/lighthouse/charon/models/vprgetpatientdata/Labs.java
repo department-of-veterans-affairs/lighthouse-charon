@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Container class for vista Labs models. */
 @Data
 @Builder
 @AllArgsConstructor
@@ -35,6 +36,7 @@ public class Labs {
     return labResults;
   }
 
+  /** Labs model. */
   @Data
   @Builder
   @AllArgsConstructor
@@ -98,6 +100,7 @@ public class Labs {
     }
   }
 
+  /** Lab's provider model. */
   @Data
   @Builder
   @AllArgsConstructor

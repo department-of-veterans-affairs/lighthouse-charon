@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** Load Vistalink Properties from file into a config for use. */
 @Configuration
 @NoArgsConstructor
 @Slf4j

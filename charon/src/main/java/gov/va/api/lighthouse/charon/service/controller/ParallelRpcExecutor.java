@@ -19,12 +19,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Uses RpcInvokers in parallel, making multiple requests across many different vista sites, if
+ * needed.
+ */
 @Component
 @AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
@@ -45,17 +50,18 @@ public class ParallelRpcExecutor implements RpcExecutor {
     }
     response.status(Status.OK);
     Map<String, Future<RpcInvocationResult>> futureResults = invokeForEachTarget(request, targets);
-    targets.stream()
-        .map(ConnectionDetails::name)
-        .map(vista -> resultOf(vista, futureResults.get(vista)))
-        .forEach(
-            result -> {
-              if (result.error().isPresent()) {
-                response.status(Status.FAILED);
-              }
-              response.result(result);
-            });
-    return response.build();
+    List<RpcInvocationResult> results =
+        targets.stream()
+            .map(ConnectionDetails::name)
+            .map(vista -> resultOf(vista, futureResults.get(vista)))
+            .peek(
+                result -> {
+                  if (result.error().isPresent()) {
+                    response.status(Status.FAILED);
+                  }
+                })
+            .collect(Collectors.toList());
+    return response.results(results).build();
   }
 
   @SneakyThrows

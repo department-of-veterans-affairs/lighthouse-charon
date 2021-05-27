@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+/** Contains principal information related to a rpc request. */
 @Data
 @Builder
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
@@ -76,6 +77,7 @@ public class RpcPrincipal {
     return LoginType.INVALID;
   }
 
+  /** All known LoginTypes. */
   public enum LoginType {
     STANDARD_USER,
     APPLICATION_PROXY_USER,

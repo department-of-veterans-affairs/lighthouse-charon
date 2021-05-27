@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlValue;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/** Model class for vistalink responses. */
 @XmlRootElement(name = "VistaLink")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
@@ -19,6 +20,7 @@ public class VistalinkXmlResponse {
   @XmlElement(name = "Response")
   Payload response;
 
+  /** Payload. */
   @XmlType
   @XmlAccessorType(XmlAccessType.FIELD)
   @Data

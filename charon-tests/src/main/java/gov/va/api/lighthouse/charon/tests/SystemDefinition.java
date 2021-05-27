@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 
+/** Defines all data needed for making test requests in an environment. */
 @Value
 @Builder
 public class SystemDefinition {

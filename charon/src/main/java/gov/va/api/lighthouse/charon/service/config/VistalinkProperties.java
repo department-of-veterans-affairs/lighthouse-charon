@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
-import lombok.Singular;
 import lombok.Value;
 
+/** Contains connection information about all known vista sites. */
 @Builder
 @Value
 @Schema
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class VistalinkProperties {
-  @Schema @Singular List<ConnectionDetails> vistas;
+  @Schema List<ConnectionDetails> vistas;
 
   /** Thrown a UnknownVista exception if any of the candidate names are unknown. */
   public void checkKnownNames(List<String> candidateNames) {

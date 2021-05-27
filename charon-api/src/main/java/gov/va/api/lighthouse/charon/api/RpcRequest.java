@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+/** Contains all information related to an RpcRequest. */
 @Data
 @Builder
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

@@ -12,6 +12,7 @@ import javax.validation.constraints.AssertTrue;
 import lombok.Builder;
 import lombok.Data;
 
+/** Contains input controlling the targets of an rpc request. */
 @Data
 @Builder
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

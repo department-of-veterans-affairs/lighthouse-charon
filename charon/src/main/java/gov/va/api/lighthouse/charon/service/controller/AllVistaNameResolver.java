@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+/** Name resolver for use with all known vista sites. */
 @Component
 @ConditionalOnProperty(name = "vistalink.resolver", havingValue = "all")
 @AllArgsConstructor(onConstructor_ = @Autowired)

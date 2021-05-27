@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** Configuration for enabling alternate-id swaps. */
 @Configuration
 @Slf4j
 public class AlternateAuthorizationStatusIdConfig {

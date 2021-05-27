@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Helper class for invoking the LhsCheckOptionAccess rpc. */
 @NoArgsConstructor(staticName = "create")
 public class LhsCheckOptionAccess
     implements TypeSafeRpc<LhsCheckOptionAccess.Request, LhsCheckOptionAccess.Response> {
@@ -32,6 +33,7 @@ public class LhsCheckOptionAccess
         .build();
   }
 
+  /** Type safe Request class for invoking LhsCheckOptionAccess rpc. */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
     private String duz;
@@ -59,6 +61,7 @@ public class LhsCheckOptionAccess
     }
   }
 
+  /** Type safe Response class for invoking LhsCheckOptionAccess rpc. */
   @Builder
   @Data
   public static class Response implements TypeSafeRpcResponse {

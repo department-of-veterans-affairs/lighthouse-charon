@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for authorization-status endpoint. Makes a request to the LHSCheckOptionAccess Rpc to
+ * determine if the request's access credentials are valid.
+ */
 @Validated
 @RestController()
 @RequestMapping(
@@ -117,6 +121,7 @@ public class AuthorizationStatusController {
         .response(httpCode);
   }
 
+  /** Response object for the clinical authorization endpoint. */
   @Value
   @Builder
   @JsonAutoDetect(fieldVisibility = Visibility.ANY)

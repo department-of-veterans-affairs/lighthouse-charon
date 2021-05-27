@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
+/** Contains all response data related to a request. */
 @Data
 @Builder
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class RpcResponse {
   private Status status;
   private Optional<String> message;
-  @Singular private List<RpcInvocationResult> results;
+  private List<RpcInvocationResult> results;
 
   /** Lazy getter. */
   public Optional<String> message() {
@@ -33,6 +33,7 @@ public class RpcResponse {
     return results;
   }
 
+  /** All known response states for a request. */
   public enum Status {
     OK,
     FAILED,

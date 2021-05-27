@@ -4,6 +4,7 @@ import gov.va.med.vistalink.rpc.RpcRequestFactory;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
+/** Macro for converting an ICN to a DFN. */
 @Component
 public class DfnMacro implements Macro {
 

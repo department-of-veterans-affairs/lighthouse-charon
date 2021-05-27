@@ -4,6 +4,7 @@ import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.rpc.RpcRequest;
 import gov.va.med.vistalink.rpc.RpcResponse;
 
+/** Interface that enables macro processing. */
 public interface MacroExecutionContext {
   ConnectionDetails connectionDetails();
 

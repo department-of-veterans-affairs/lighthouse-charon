@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 
+/** Helper class for invoking the VprGetPatientData rpc safely. */
 @NoArgsConstructor(staticName = "create")
 public class VprGetPatientData
     implements TypeSafeRpc<VprGetPatientData.Request, VprGetPatientData.Response> {
@@ -52,6 +53,7 @@ public class VprGetPatientData
         .build();
   }
 
+  /** All known VprGetPatientData domains. */
   public enum Domains {
     appointments,
     consults,
@@ -177,6 +179,7 @@ public class VprGetPatientData
       return type;
     }
 
+    /** Patient ID model. */
     @Value
     public static class PatientId {
       String dfn;
@@ -214,11 +217,13 @@ public class VprGetPatientData
     }
   }
 
+  /** Type Safe Response for VprGetPatientData. */
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
     private Map<String, Results> resultsByStation;
 
+    /** Results model of the response. */
     @AllArgsConstructor
     @Builder
     @Data

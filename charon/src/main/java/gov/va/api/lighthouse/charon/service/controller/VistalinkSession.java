@@ -4,6 +4,7 @@ import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
 import gov.va.med.vistalink.adapter.cci.VistaLinkConnection;
 import java.util.stream.Collectors;
 
+/** Get a connection session for interacting with vistalink. */
 public interface VistalinkSession extends AutoCloseable {
 
   /**

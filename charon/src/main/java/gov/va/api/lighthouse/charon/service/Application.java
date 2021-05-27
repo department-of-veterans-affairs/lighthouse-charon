@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/** Launch the spring boot app. */
 @SuppressWarnings("WeakerAccess")
 @SpringBootApplication
 @EnableScheduling

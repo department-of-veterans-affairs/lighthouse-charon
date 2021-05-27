@@ -29,6 +29,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+/** Toolkit for creating an authenticated Vistalink Session connection. */
 @Slf4j
 public class StandardUserVistalinkSession implements VistalinkSession {
 
