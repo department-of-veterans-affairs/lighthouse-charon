@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Models for blood pressure. */
 @AllArgsConstructor
 @Builder
 @Data
@@ -14,6 +15,7 @@ public class BloodPressure {
   BloodPressureMeasurement systolic;
   BloodPressureMeasurement diastolic;
 
+  /** Model for blood pressure measurements. */
   @AllArgsConstructor
   @Builder
   @Data

@@ -24,6 +24,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+/** Container class for specific rpc details that the RpcInvoker needs to make a vista request. */
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
@@ -44,6 +45,7 @@ public class RpcDetails {
     return version;
   }
 
+  /** Parameter object that handles safely invoking vista requests with parameters. */
   @Data
   @NoArgsConstructor
   @JsonAutoDetect(fieldVisibility = Visibility.ANY, isGetterVisibility = Visibility.NONE)
@@ -153,6 +155,7 @@ public class RpcDetails {
     }
   }
 
+  /** Deserializer for RpcDetail's safe parameters objects. */
   public static class ParameterValueDeserializer extends StdDeserializer<String> {
 
     @Serial private static final long serialVersionUID = 5543697039890338690L;
@@ -168,6 +171,7 @@ public class RpcDetails {
     }
   }
 
+  /** Serializer for RpcDetail's safe parameters objects. */
   public static class ParameterValueSerializer extends StdSerializer<String> {
 
     @Serial private static final long serialVersionUID = -4201150277421890777L;

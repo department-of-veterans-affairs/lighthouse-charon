@@ -26,6 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Uses RpcInvokers in parallel, making multiple requests across many different vista sites, if
+ * needed.
+ */
 @Component
 @AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j

@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 
+/** Contains results of an RPC request. */
 @Data
 @Builder
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

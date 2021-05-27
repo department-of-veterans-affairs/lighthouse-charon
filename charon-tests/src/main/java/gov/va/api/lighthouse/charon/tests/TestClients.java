@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 
+/** Provides a pre-configured test client. */
 @UtilityClass
 public class TestClients {
   TestClient charon() {

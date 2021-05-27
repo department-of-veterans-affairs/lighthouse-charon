@@ -6,6 +6,7 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/** Provides access to fully configured macros. */
 @Component
 @AllArgsConstructor(onConstructor_ = @Autowired)
 public class MacroProcessorFactory {

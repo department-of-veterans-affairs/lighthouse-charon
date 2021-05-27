@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/** Load alternateid properties from file into a config for use. */
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties("alternate-authorization-status-ids")

@@ -2,6 +2,7 @@ package gov.va.api.lighthouse.charon.models;
 
 import lombok.experimental.UtilityClass;
 
+/** Container class for all model exceptions. */
 @UtilityClass
 public class RpcModelExceptions {
 
@@ -15,6 +16,7 @@ public class RpcModelExceptions {
     }
   }
 
+  /** InvalidRpcResponse. */
   public static final class InvalidRpcResponse extends RpcModelException {
     public InvalidRpcResponse(String message) {
       super(message);

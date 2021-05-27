@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import lombok.SneakyThrows;
 
+/** Parse Vistalink xml responses. */
 public class VistalinkRpcResponseParser {
 
   private static JAXBContext JAXB_CONTEXT = createJaxbContext();

@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Helper class for invoking the XobvTestPing rpc. */
 @NoArgsConstructor(staticName = "create")
 public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestPing.Response> {
 
@@ -31,6 +32,7 @@ public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestP
         .build();
   }
 
+  /** Type safe Request class for XobvTestPing requests. */
   @Builder
   public static class Request implements TypeSafeRpcRequest {
     private Optional<String> context;
@@ -53,6 +55,7 @@ public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestP
     }
   }
 
+  /** Type safe Response class for XobvTestPing responses. */
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {

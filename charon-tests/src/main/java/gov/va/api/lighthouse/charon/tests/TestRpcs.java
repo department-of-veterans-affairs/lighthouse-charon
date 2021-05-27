@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 
+/** Set of RPCs used for testing. */
 @Value
 @Builder
 public class TestRpcs {

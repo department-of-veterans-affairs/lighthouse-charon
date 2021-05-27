@@ -15,6 +15,7 @@ import lombok.Value;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.BooleanUtils;
 
+/** System Definitions for each environment. */
 @UtilityClass
 public class SystemDefinitions {
   /** Return the applicable system definition for the current environment. */
@@ -192,6 +193,7 @@ public class SystemDefinitions {
     return value == null ? defaultValue : value;
   }
 
+  /** Site and DUZ. */
   @Value
   @Builder
   public static class SiteDuzPair {

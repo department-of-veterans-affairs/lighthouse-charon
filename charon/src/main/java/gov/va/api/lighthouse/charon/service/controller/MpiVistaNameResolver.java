@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+/** Use the MPI service to determine the vista sites that know of a given patient. */
 @Component
 @ConditionalOnProperty(name = "vistalink.resolver", havingValue = "mpi")
 @Slf4j

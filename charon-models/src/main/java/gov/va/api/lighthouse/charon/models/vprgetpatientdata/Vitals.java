@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Container for vista vitals models. */
 @AllArgsConstructor
 @Builder
 @Data
@@ -37,6 +38,7 @@ public class Vitals {
     return vitalResults;
   }
 
+  /** Vital measurements. */
   @AllArgsConstructor
   @Builder
   @Data
@@ -115,6 +117,7 @@ public class Vitals {
     }
   }
 
+  /** Vital qualifier. */
   @AllArgsConstructor
   @Builder
   @Data
@@ -128,6 +131,7 @@ public class Vitals {
     String vuid;
   }
 
+  /** Vitals model. */
   @AllArgsConstructor
   @Builder
   @Data

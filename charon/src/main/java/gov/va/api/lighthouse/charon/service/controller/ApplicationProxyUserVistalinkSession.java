@@ -18,6 +18,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+/** Provides an authenticated vistalink session using application proxy user credentials. */
 @Slf4j
 public class ApplicationProxyUserVistalinkSession implements VistalinkSession {
 

@@ -5,6 +5,7 @@ import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
 
+/** Interface for defining AlternateId processing. */
 public interface AlternateAuthorizationStatusIds {
 
   /**
@@ -13,6 +14,7 @@ public interface AlternateAuthorizationStatusIds {
    */
   AuthorizationId toPrivateId(AuthorizationId authorizationId);
 
+  /** When Alternate ids are disabled, perform no swaps. */
   class AlternateAuthorizationStatusIdsDisabled implements AlternateAuthorizationStatusIds {
 
     @Override
@@ -21,6 +23,7 @@ public interface AlternateAuthorizationStatusIds {
     }
   }
 
+  /** When alternate ids are enabled, swap public to private ids. */
   @Builder
   @Value
   class AlternateAuthorizationStatusIdsEnabled implements AlternateAuthorizationStatusIds {

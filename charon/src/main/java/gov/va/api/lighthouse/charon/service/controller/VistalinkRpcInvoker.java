@@ -25,6 +25,7 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+/** Invoker class that makes requests to a vista site's rpcs. */
 @Slf4j
 @ToString(onlyExplicitlyIncluded = true)
 public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {

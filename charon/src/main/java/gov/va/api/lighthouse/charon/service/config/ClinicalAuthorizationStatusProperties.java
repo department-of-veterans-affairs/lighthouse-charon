@@ -14,6 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
+/** Load configuration for Clinical Authorization from file to a config object. */
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties("clinical-authorization-status")

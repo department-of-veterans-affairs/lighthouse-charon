@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import lombok.Value;
 
+/** Class containing tools for creating, parsing, and validating FilemanDates. */
 @Value
 public class FilemanDate {
   Instant instant;
@@ -52,6 +53,7 @@ public class FilemanDate {
     return new DateTimeFormatter().format(instant().atZone(timeZone));
   }
 
+  /** Exception class for FilemanDate parsing failures. */
   public static class BadFilemanDate extends RuntimeException {
     @Serial private static final long serialVersionUID = 2556943342836450618L;
 

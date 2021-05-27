@@ -11,6 +11,10 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The MacroProcessor iterates over the request, and processes any macro's found. Macros are used to
+ * pre-process a request to be more suitable for use.
+ */
 @Value
 @Slf4j
 @Builder

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/** Catch thrown exceptions, and return appropriate responses. */
 @Slf4j
 @RestControllerAdvice
 @RequestMapping(produces = {"application/json"})

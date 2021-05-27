@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Value;
 
+/** Contains connection information about all known vista sites. */
 @Builder
 @Value
 @Schema

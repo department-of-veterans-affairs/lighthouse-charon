@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+/** Provides rules for getting connection details for a set of vista targets. */
 @Slf4j
 @Builder
 public class NameResolution {

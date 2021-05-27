@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
+/** Data needed for connecting to a vista instance. */
 @Value
 @Builder
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)

@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
+/**
+ * Configuration for doing path re-writes. Removes the leading path(load balancer) from the request.
+ */
 @Slf4j
 @Configuration
 public class PathRewriteConfig {
