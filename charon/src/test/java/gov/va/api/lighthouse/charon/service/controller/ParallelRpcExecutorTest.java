@@ -75,6 +75,30 @@ class ParallelRpcExecutorTest {
   }
 
   @Test
+  void contextOverridesAreUsedToMakeDifferentRpcRequests() {
+    ConnectionDetails c1 = _connectionDetail(1);
+    ConnectionDetails c2 = _connectionDetail(2);
+    ConnectionDetails c3 = _connectionDetail(3);
+    var r = _request();
+    RpcPrincipal p1 = _principal(1).contextOverride("C1");
+    RpcPrincipal p2 = _principal(2);
+    r.siteSpecificPrincipals().put(c1.name(), p1);
+    r.siteSpecificPrincipals().put(c2.name(), p2);
+    when(resolver.resolve(r.target())).thenReturn(List.of(c1, c2, c3));
+    when(factory.create(p1, c1)).thenReturn(invoker1);
+    when(factory.create(p2, c2)).thenReturn(invoker2);
+    when(factory.create(_request().principal(), c3)).thenReturn(invoker3);
+    RpcInvocationResult r1 = _result(1);
+    RpcInvocationResult r2 = _result(2);
+    RpcInvocationResult r3 = _result(3);
+    when(invoker1.invoke(r.rpc().context("C1"))).thenReturn(r1);
+    when(invoker2.invoke(r.rpc())).thenReturn(r2);
+    when(invoker3.invoke(r.rpc())).thenReturn(r3);
+    assertThat(executor.execute(r))
+        .isEqualTo(RpcResponse.builder().status(Status.OK).results(List.of(r1, r2, r3)).build());
+  }
+
+  @Test
   void emptyErrorResponseIsReturnedIfNoNamesAreResolved() {
     var r = _request();
     when(resolver.resolve(r.target())).thenReturn(List.of());
