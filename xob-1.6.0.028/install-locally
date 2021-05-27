@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ZIP=XOB_1_6_0_028.ZIP
+ZIP_CONTENT=vlj-1.6.0.028
+
+if [ ! -f "$ZIP" ]
+then
+cat <<EOF
+Missing $ZIP.
+Download a copy from https://download.vista.med.va.gov/index.html/SOFTWARE/XOB_1_6_0_028.ZIP
+EOF
+exit 1
+fi
+
+if [ -d $ZIP_CONTENT ]; then rm -rf $ZIP_CONTENT; fi
+unzip $ZIP
+
+
+installJar() {
+  local path="$1"
+  local file="$(basename $1)"
+  local artifact=${file%-*}
+  local version=${file#*-}
+  version=${version%.jar}
+  mvn install:install-file \
+    -Dfile=$path \
+    -DgroupId=$GROUP_ID \
+    -DartifactId=$artifact \
+    -Dversion=$version \
+    -Dpackaging=jar \
+    -DgeneratePom=true
+}
+
+installPom() {
+  local pom="$1"
+  local version=$(grep -m 1 "<version>" $pom | sed 's|^.*>\([0-9.]\+\).*|\1|')
+  mvn install:install-file -Dfile=$pom -DpomFile=$pom
+}
+
+GROUP_ID=$(grep -m 1 "<groupId>" vistalink-xob-bom.pom.xml | sed 's|^.*>\([a-z.]\+\).*|\1|')
+installPom vistalink-xob-bom.pom.xml
+installJar $ZIP_CONTENT/samples-J2SE/vljConnector-1.6.0.028.jar connector
+installJar $ZIP_CONTENT/samples-J2SE/vljFoundationsLib-1.6.0.028.jar foundations
+installJar $ZIP_CONTENT/samples-J2SE/vljSecurity-1.6.0.028.jar security

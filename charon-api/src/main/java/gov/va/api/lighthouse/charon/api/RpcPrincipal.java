@@ -23,11 +23,18 @@ public class RpcPrincipal {
   @NotBlank @NonNull private String verifyCode;
   /** Required for application proxy user. */
   private String applicationProxyUser;
+  /**
+   * For site specific principals, a different RPC context can be specified. This field is not valid
+   * for the default RPC request principal.
+   */
+  private String contextOverride;
 
   @Builder(builderMethodName = "standardUserBuilder", builderClassName = "StandardUserBuilder")
-  private RpcPrincipal(@NonNull String accessCode, @NonNull String verifyCode) {
+  private RpcPrincipal(
+      @NonNull String accessCode, @NonNull String verifyCode, String contextOverride) {
     this.accessCode = accessCode;
     this.verifyCode = verifyCode;
+    this.contextOverride = contextOverride;
   }
 
   @JsonCreator
@@ -37,10 +44,12 @@ public class RpcPrincipal {
   private RpcPrincipal(
       @JsonProperty("accessCode") @NonNull String accessCode,
       @JsonProperty("verifyCode") @NonNull String verifyCode,
-      @JsonProperty("applicationProxyUser") String applicationProxyUser) {
+      @JsonProperty("applicationProxyUser") String applicationProxyUser,
+      @JsonProperty("contextOverride") String contextOverride) {
     this.accessCode = accessCode;
     this.verifyCode = verifyCode;
     this.applicationProxyUser = applicationProxyUser;
+    this.contextOverride = contextOverride;
   }
 
   @SuppressWarnings("unused")

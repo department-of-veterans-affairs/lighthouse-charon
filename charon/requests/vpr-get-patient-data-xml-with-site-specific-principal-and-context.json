@@ -1,0 +1,30 @@
+{
+  "principal": {
+    "accessCode":"NOPE$VISTA_ACCESS_CODE",
+    "verifyCode":"NOPE$VISTA_VERIFY_CODE"
+  },
+  "siteSpecificPrincipals": {
+    "673": {
+      "applicationProxyUser":"$VISTA_APP_PROXY_USER",
+      "accessCode":"$VISTA_APP_PROXY_ACCESS_CODE",
+      "verifyCode":"$VISTA_APP_PROXY_VERIFY_CODE",
+      "contextOverride":"LHS RPC CONTEXT"
+    }
+  },
+  "target": {
+    "forPatient": "195607"
+  },
+  "rpc": {
+    "name":"VPR GET PATIENT DATA",
+    "context":"NOPE",
+    "parameters": [
+      {"string":";195607"},
+      {"string":"demographics;vitals"},
+      {"string":""},
+      {"string":""},
+      {"string":""},
+      {"string":""},
+      {"array": []}
+    ]
+  }
+}

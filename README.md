@@ -230,3 +230,9 @@ VISTA_RPC={"name":"VPR GET PATIENT DATA JSON","context":"VPR APPLICATION PROXY",
 > `K8S_LOAD_BALANCER` and `VISTA_HOST` use `host.docker.internal` on Windows and Mac.
 > Use `localhost` on Linux.
 > See https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds
+
+
+# Additional Considerations
+Charon uses VistaLink XOB libraries that are not available in an easy to use Maven repository.
+The `xob-1.6.0.028` module in this repository provides a utility that can be used install
+the required libraries locally.
