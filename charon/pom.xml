@@ -16,7 +16,7 @@
     <jacoco.coverage>0.67</jacoco.coverage>
     <javax.resource-api.version>1.7.1</javax.resource-api.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
-    <jaxb-runtime.version>3.0.2-b01</jaxb-runtime.version>
+    <jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
     <master-patient-index-client.version>2.0.0</master-patient-index-client.version>
     <talos.version>1.0.0</talos.version>
     <vistalink-xob-bom.version>1.6.0.028</vistalink-xob-bom.version>
