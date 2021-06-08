@@ -1,9 +1,9 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
 import gov.va.med.vistalink.rpc.RpcResponse;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 import java.io.StringReader;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import lombok.SneakyThrows;
 
 /** Parse Vistalink xml responses. */
