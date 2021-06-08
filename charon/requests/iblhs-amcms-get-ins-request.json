@@ -5,7 +5,7 @@
       "verifyCode":"$VISTA_VERIFY_CODE"
    },
    "target":{
-      "include":[ "host.docker.internal:18673:673:America/New_York" ]
+      "include":[ "localhost:18673:673:America/New_York" ]
    },
    "rpc":{
       "name":"IBLHS AMCMS GET INS",
