@@ -16,7 +16,7 @@ import lombok.Value;
 public class GetInsEntry {
   @NonNull String fileNumber;
 
-  String ien;
+  @NonNull String ien;
 
   @NonNull String fieldNumber;
 
