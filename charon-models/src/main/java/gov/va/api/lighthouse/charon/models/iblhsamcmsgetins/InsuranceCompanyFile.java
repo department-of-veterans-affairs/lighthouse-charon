@@ -3,7 +3,11 @@ package gov.va.api.lighthouse.charon.models.iblhsamcmsgetins;
 import lombok.Builder;
 import lombok.Data;
 
-/** Java representation of Fileman file #36 in VistA. */
+/**
+ * Java representation of Fileman file #36 in VistA.
+ *
+ * <p>Currently using insuranceElementList.xlsx version: 179.0
+ */
 @Data
 @Builder
 public class InsuranceCompanyFile {
