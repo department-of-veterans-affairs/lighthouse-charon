@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.charon.models.iblhsamcmsgetins;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
@@ -13,6 +14,7 @@ import lombok.Value;
  */
 @Value
 @Builder
+@AllArgsConstructor(staticName = "of")
 public class GetInsEntry {
   @NonNull String fileNumber;
 
