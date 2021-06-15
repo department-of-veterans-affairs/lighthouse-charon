@@ -24,9 +24,9 @@ public class GetInsEntryParserTest {
         arguments(IllegalArgumentException.class, null),
         arguments(IllegalArgumentException.class, "1^2^3^4"),
         arguments(IllegalArgumentException.class, "1^2^3^4^5^6"),
-        arguments(NullPointerException.class, "^2^3^4^5"),
-        arguments(NullPointerException.class, "1^^3^4^5"),
-        arguments(NullPointerException.class, "1^2^^4^5"));
+        arguments(IllegalArgumentException.class, "^2^3^4^5"),
+        arguments(IllegalArgumentException.class, "1^^3^4^5"),
+        arguments(IllegalArgumentException.class, "1^2^^4^5"));
   }
 
   @ParameterizedTest

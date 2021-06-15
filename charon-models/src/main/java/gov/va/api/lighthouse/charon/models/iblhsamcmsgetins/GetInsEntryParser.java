@@ -18,12 +18,16 @@ public class GetInsEntryParser implements EntryParser<GetInsEntry> {
       throw new IllegalArgumentException(
           "Invalid Number of fields. Expected 5, got " + caretSeparated.length);
     }
-    return GetInsEntry.builder()
-        .fileNumber(trimToNull(caretSeparated[0]))
-        .ien(trimToNull(caretSeparated[1]))
-        .fieldNumber(trimToNull(caretSeparated[2]))
-        .externalValueRepresentation(trimToNull(caretSeparated[3]))
-        .internalValueRepresentation(trimToNull(caretSeparated[4]))
-        .build();
+    try {
+      return GetInsEntry.builder()
+          .fileNumber(trimToNull(caretSeparated[0]))
+          .ien(trimToNull(caretSeparated[1]))
+          .fieldNumber(trimToNull(caretSeparated[2]))
+          .externalValueRepresentation(trimToNull(caretSeparated[3]))
+          .internalValueRepresentation(trimToNull(caretSeparated[4]))
+          .build();
+    } catch (NullPointerException e) {
+      throw new IllegalArgumentException("Illegal field values: " + e.getMessage(), e);
+    }
   }
 }
