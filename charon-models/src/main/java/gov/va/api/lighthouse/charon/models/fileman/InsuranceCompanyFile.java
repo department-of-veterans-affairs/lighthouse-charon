@@ -1,11 +1,16 @@
-package gov.va.api.lighthouse.charon.models.iblhsamcmsgetins;
+package gov.va.api.lighthouse.charon.models.fileman;
 
+import gov.va.api.lighthouse.charon.models.iblhsamcmsgetins.GetInsEntry;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /** Java representation of Fileman file #36 in VistA. */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(staticName = "empty")
 public class InsuranceCompanyFile {
   private GetInsEntry name;
 

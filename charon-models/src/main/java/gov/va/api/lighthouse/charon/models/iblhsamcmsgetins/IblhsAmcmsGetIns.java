@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpc;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpcRequest;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpcResponse;
+import gov.va.api.lighthouse.charon.models.fileman.InsuranceCompanyFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,12 @@ public class IblhsAmcmsGetIns
         resultsByStation = new HashMap<>();
       }
       return resultsByStation;
+    }
+
+    @Data
+    @Builder
+    public static class Results {
+      private InsuranceCompanyFile insuranceCompany;
     }
   }
 }
