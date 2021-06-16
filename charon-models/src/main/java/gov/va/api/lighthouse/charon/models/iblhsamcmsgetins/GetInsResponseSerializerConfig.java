@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 @Data
 @Builder
 @AllArgsConstructor
-public class GetInsSerializeConfig {
+public class GetInsResponseSerializerConfig {
 
     private InsuranceCompanyFile insuranceCompany;
 

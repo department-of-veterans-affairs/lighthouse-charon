@@ -2,10 +2,10 @@ package gov.va.api.lighthouse.charon.models.iblhsamcmsgetins;
 
 import gov.va.api.lighthouse.charon.models.fileman.InsuranceCompanyFile;
 
-public class GetInsSerializeConfigFactory {
+public class GetInsSerializerConfigFactory {
 
-    public static GetInsSerializeConfig create() {
-        return GetInsSerializeConfig.builder()
+    public static GetInsResponseSerializerConfig create() {
+        return GetInsResponseSerializerConfig.builder()
                 .insuranceCompany(InsuranceCompanyFile.empty())
                 .build();
     }
