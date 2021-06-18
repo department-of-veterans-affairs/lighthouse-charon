@@ -15,7 +15,8 @@ public class GetInsResponseSerializer {
             entry ->
                 config
                     .filemanToJava()
-                    .get(FilemanCoordinates.of(entry.fileNumber(), entry.fieldNumber()))
+                    .getOrDefault(
+                        FilemanCoordinates.of(entry.fileNumber(), entry.fieldNumber()), e -> {})
                     .accept(entry));
     return config.results();
   }
