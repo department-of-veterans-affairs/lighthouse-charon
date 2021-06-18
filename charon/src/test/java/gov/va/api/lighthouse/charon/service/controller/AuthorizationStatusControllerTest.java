@@ -4,13 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.when;
 
-import gov.va.api.lighthouse.charon.api.RpcDetails;
-import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
-import gov.va.api.lighthouse.charon.api.RpcMetadata;
-import gov.va.api.lighthouse.charon.api.RpcPrincipal;
-import gov.va.api.lighthouse.charon.api.RpcRequest;
-import gov.va.api.lighthouse.charon.api.RpcResponse;
-import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
+import gov.va.api.lighthouse.charon.api.*;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsDisabled;
@@ -104,7 +98,6 @@ public class AuthorizationStatusControllerTest {
             controllerWithAlternateIds()
                 .clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION"))
         .isEqualTo(responseOf(200, "ok", "1"));
-
     when(rpcExecutor.execute(
             rpcRequest(
                 List.of("privateSite2"),
@@ -140,9 +133,9 @@ public class AuthorizationStatusControllerTest {
         new AlternateAuthorizationStatusIdsEnabled(
             Map.of(
                 AuthorizationId.of("publicDuz1@publicSite1"),
-                    AuthorizationId.of("privateDuz1@privateSite1"),
+                AuthorizationId.of("privateDuz1@privateSite1"),
                 AuthorizationId.of("publicDuz2@publicSite2"),
-                    AuthorizationId.of("privateDuz2@privateSite2"))));
+                AuthorizationId.of("privateDuz2@privateSite2"))));
   }
 
   ResponseEntity<AuthorizationStatusController.ClinicalAuthorizationResponse> responseOf(

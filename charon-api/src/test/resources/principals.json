@@ -1,0 +1,19 @@
+{
+    "rpcPrincipals" : [
+        {
+            "rpcNames" : [
+                "LHS CHECK OPTION ACCESS"
+            ],
+            "applicationProxyUser" : "FAKE APU",
+            "codes" : [
+                {
+                    "sites" : [
+                        "673"
+                    ],
+                    "accessCode" : "FAKE ACCESS CODE",
+                    "verifyCode" : "FAKE VERIFY CODE"
+                }
+            ]
+        }
+    ]
+}

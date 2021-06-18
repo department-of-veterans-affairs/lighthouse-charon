@@ -15,6 +15,11 @@
     <Class name="gov.va.api.lighthouse.charon.service.config.VistalinkPropertiesConfig"/>
     <Bug pattern="PATH_TRAVERSAL_IN"/>
   </Match>
+  <!-- To support local testing, we allow the principals.json file to be overwritten by user input -->
+  <Match>
+    <Class name="gov.va.api.lighthouse.charon.service.config.RpcPrincipalsLoader"/>
+    <Bug pattern="PATH_TRAVERSAL_IN"/>
+  </Match>
   <!-- Lombok generated hashCode and equals is checking for null, then executing lazy initializer getter. -->
   <Match>
     <Class name="gov.va.api.lighthouse.charon.service.config.AlternateAuthorizationStatusIdProperties"/>

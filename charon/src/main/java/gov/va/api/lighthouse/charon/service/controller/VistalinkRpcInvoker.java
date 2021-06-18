@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcMetadata;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.med.environment.Environment;
 import gov.va.med.vistalink.rpc.NoRpcContextFaultException;
 import gov.va.med.vistalink.rpc.RpcNotInContextFaultException;
 import gov.va.med.vistalink.rpc.RpcNotOkForProxyUseException;
@@ -45,6 +46,7 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
       BiFunction<RpcPrincipal, ConnectionDetails, VistalinkSession> optionalSessionSelection) {
     this.connectionDetails = connectionDetails;
     this.macroProcessorFactory = macroProcessorFactory;
+    Environment.isProduction();
     /*
      * This is extensible to allow testing of the rest of this class. Under normal circumstances,
      * you do not need to specify this.

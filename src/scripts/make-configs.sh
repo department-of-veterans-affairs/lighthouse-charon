@@ -127,3 +127,24 @@ checkForUnsetValues charon $PROFILE
 cat > $REPO/charon/config/vistalink-$PROFILE.properties <<EOF
 673=localhost:18673:673:America/New_York
 EOF
+cat > $REPO/charon/config/principals.json << EOF
+{
+    "rpcPrincipals" : [
+        {
+            "rpcNames" : [
+                "LHS CHECK OPTION ACCESS"
+            ],
+            "applicationProxyUser" : "FAKE APU",
+            "codes" : [
+                {
+                    "sites" : [
+                        "673"
+                    ],
+                    "accessCode" : "FAKE ACCESS CODE",
+                    "verifyCode" : "FAKE VERIFY CODE"
+                }
+            ]
+        }
+    ]
+}
+EOF
