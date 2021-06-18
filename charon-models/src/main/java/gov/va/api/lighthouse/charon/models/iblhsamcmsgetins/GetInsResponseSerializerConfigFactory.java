@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.charon.models.iblhsamcmsgetins;
 
-public class GetInsSerializerConfigFactory {
+public class GetInsResponseSerializerConfigFactory {
 
   /** Create a Get Ins Serializer configuration. */
   public static GetInsResponseSerializerConfig create() {
