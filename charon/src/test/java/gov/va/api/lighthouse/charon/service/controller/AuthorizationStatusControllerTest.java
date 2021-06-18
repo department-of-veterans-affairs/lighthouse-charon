@@ -13,6 +13,7 @@ import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
+import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.DisabledEncryptedLogging;
 import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsDisabled;
 import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsEnabled;
 import java.util.Arrays;
@@ -132,7 +133,7 @@ public class AuthorizationStatusControllerTest {
             .defaultMenuOption("whoDis")
             .build();
     return new AuthorizationStatusController(
-        rpcExecutor, properties, alternateAuthorizationStatusIds);
+        rpcExecutor, properties, alternateAuthorizationStatusIds, new DisabledEncryptedLogging());
   }
 
   AuthorizationStatusController controllerWithAlternateIds() {
