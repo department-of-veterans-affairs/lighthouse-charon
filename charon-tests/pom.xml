@@ -75,7 +75,7 @@
                 <argument>-cp</argument>
                 <argument>charon.jar</argument>
                 <argument>-Dloader=gov.va.api.lighthouse.charon.service.Application</argument>
-                <argument>-Dcharon.principals.file=${project.basedir}/../charon/src/main/resources/principals.json</argument>
+                <argument>-Dcharon.principals.file=${project.basedir}/../charon/src/test/resources/principals.json</argument>
                 <argument>-Dvistalink.configuration=${project.basedir}/../charon/src/main/resources/vistalink.properties</argument>
                 <argument>-Dspring.config.additional-location=classpath:/application.properties,file:${project.basedir}/src/test/resources/default-it.properties,optional:file:${project.basedir}/config/secrets.properties</argument>
                 <argument>org.springframework.boot.loader.PropertiesLauncher</argument>
