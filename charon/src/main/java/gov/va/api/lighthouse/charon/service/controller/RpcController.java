@@ -3,6 +3,7 @@ package gov.va.api.lighthouse.charon.service.controller;
 import gov.va.api.health.autoconfig.logging.Redact;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
+import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.EncryptedLogging;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -17,16 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** Controller for making RPC requests. */
 @Validated
-@RestController()
+@RestController
 @RequestMapping(
     path = "/rpc",
     produces = {"application/json"})
-@AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
+@AllArgsConstructor(onConstructor_ = @Autowired)
 public class RpcController {
 
   private final RpcExecutor rpcExecutor;
   private final VistalinkProperties vistalinkProperties;
+  private final EncryptedLogging encryptedLogging;
 
   @GetMapping("/connections")
   public VistalinkProperties connections() {
@@ -36,8 +38,7 @@ public class RpcController {
   /** Process the RPC request. */
   @PostMapping(consumes = {"application/json"})
   public RpcResponse invoke(@Redact @RequestBody @Valid RpcRequest request) {
-    log.info("Target {}", request.target());
-    log.info("RPC {}", request.rpc());
+    log.info("Request: {}", encryptedLogging.encrypt(request.toString()));
     return rpcExecutor.execute(request);
   }
 }
