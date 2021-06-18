@@ -4,12 +4,14 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import gov.va.api.health.autoconfig.logging.Redact;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAccess;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
 import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
+import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.EncryptedLogging;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
     path = "/authorization-status",
     produces = {"application/json"})
 @AllArgsConstructor(onConstructor_ = @Autowired)
+@Slf4j
 public class AuthorizationStatusController {
   private final RpcExecutor rpcExecutor;
 
@@ -43,36 +47,48 @@ public class AuthorizationStatusController {
 
   private final AlternateAuthorizationStatusIds alternateIds;
 
+  private final EncryptedLogging encryptedLogging;
+
   /** Test a users clinical authorization status. Uses the LHS CHECK OPTION ACCESS VPC. */
   @GetMapping(
       value = {"/clinical"},
       params = {"site", "duz"})
   public ResponseEntity<ClinicalAuthorizationResponse> clinicalAuthorization(
       @NotBlank @RequestParam(name = "site") String site,
-      @NotBlank @RequestParam(name = "duz") String duz,
+      @Redact @NotBlank @RequestParam(name = "duz") String duz,
       @RequestParam(name = "menu-option", required = false) String menuOption) {
 
     if (isBlank(menuOption)) {
       menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
     }
-    AuthorizationId authorizationId =
-        alternateIds.toPrivateId(AuthorizationId.builder().duz(duz).site(site).build());
+    AuthorizationId specifiedAuthorizationId =
+        AuthorizationId.builder().duz(duz).site(site).build();
+    AuthorizationId usableAuthorizationId = alternateIds.toPrivateId(specifiedAuthorizationId);
+    log.info(
+        "Checking {}",
+        encryptedLogging.encrypt(
+            String.format(
+                "Option %s, requested %s, using %s",
+                menuOption, specifiedAuthorizationId, usableAuthorizationId)));
     RpcResponse response =
         rpcExecutor.execute(
             RpcRequest.builder()
                 .rpc(
                     LhsCheckOptionAccess.Request.builder()
-                        .duz(authorizationId.duz())
+                        .duz(usableAuthorizationId.duz())
                         .menuOption(menuOption)
                         .build()
                         .asDetails())
-                .target(RpcVistaTargets.builder().include(List.of(authorizationId.site())).build())
+                .target(
+                    RpcVistaTargets.builder()
+                        .include(List.of(usableAuthorizationId.site()))
+                        .build())
                 .principal(clinicalAuthorizationStatusProperties.principal())
                 .build());
     LhsCheckOptionAccess.Response typeSafeResult =
         LhsCheckOptionAccess.create().fromResults(response.results());
     return parseLhsCheckOptionAccessResponse(
-        typeSafeResult.resultsByStation(), authorizationId.site());
+        typeSafeResult.resultsByStation(), usableAuthorizationId.site());
   }
 
   ResponseEntity<ClinicalAuthorizationResponse> parseLhsCheckOptionAccessResponse(
@@ -115,6 +131,7 @@ public class AuthorizationStatusController {
 
   private ResponseEntity<ClinicalAuthorizationResponse> responseOf(
       String status, String value, int httpCode) {
+    log.info("Responding [{}] {} ({})", httpCode, status, value);
     return ClinicalAuthorizationResponse.builder()
         .status(status)
         .value(value)

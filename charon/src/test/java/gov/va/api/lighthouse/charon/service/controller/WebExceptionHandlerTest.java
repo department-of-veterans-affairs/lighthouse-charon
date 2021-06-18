@@ -16,6 +16,7 @@ import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
+import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.DisabledEncryptedLogging;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
 import gov.va.api.lighthouse.charon.service.controller.UnrecoverableVistalinkExceptions.LoginFailure;
 import java.lang.reflect.Method;
@@ -41,7 +42,8 @@ public class WebExceptionHandlerTest {
   RpcExecutor executor = mock(RpcExecutor.class);
 
   private RpcController controller =
-      new RpcController(executor, VistalinkProperties.builder().build());
+      new RpcController(
+          executor, VistalinkProperties.builder().build(), new DisabledEncryptedLogging());
 
   private WebExceptionHandler exceptionHandler = new WebExceptionHandler();
 

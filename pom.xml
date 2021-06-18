@@ -5,11 +5,11 @@
   <parent>
     <groupId>gov.va.api.health</groupId>
     <artifactId>health-apis-parent</artifactId>
-    <version>8.0.20</version>
+    <version>8.0.21</version>
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>charon-parent</artifactId>
-  <version>4.0.7-SNAPSHOT</version>
+  <version>4.0.8-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>charon-api</module>
