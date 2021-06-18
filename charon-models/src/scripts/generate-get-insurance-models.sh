@@ -97,7 +97,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Serialization configuatino for  IBLHS AMCMS GET INS RPC results.
+ * Serialization configuration for IBLHS AMCMS GET INS RPC results.
  * Generated using insuranceElementList.xlsx version ${VERSION}.
  */
 @Data

@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Serialization configuatino for IBLHS AMCMS GET INS RPC results. Generated using
+ * Serialization configuration for IBLHS AMCMS GET INS RPC results. Generated using
  * insuranceElementList.xlsx version 183.0.
  */
 @Data
