@@ -7,6 +7,7 @@ import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcResponse.Status;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
+import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.DisabledEncryptedLogging;
 import gov.va.api.lighthouse.charon.service.config.VistalinkProperties;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -44,7 +45,8 @@ class RpcControllerTest {
         executor,
         VistalinkProperties.builder()
             .vistas(List.of(_connectionDetail(1), _connectionDetail(2)))
-            .build());
+            .build(),
+        new DisabledEncryptedLogging());
   }
 
   @Test
