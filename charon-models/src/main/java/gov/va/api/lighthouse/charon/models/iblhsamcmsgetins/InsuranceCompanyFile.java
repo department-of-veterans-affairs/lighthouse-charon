@@ -1,6 +1,5 @@
-package gov.va.api.lighthouse.charon.models.fileman;
+package gov.va.api.lighthouse.charon.models.iblhsamcmsgetins;
 
-import gov.va.api.lighthouse.charon.models.iblhsamcmsgetins.GetInsEntry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
