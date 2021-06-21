@@ -1,17 +1,69 @@
 {
-    "rpcPrincipals" : [
+    "entries" : [
         {
             "rpcNames" : [
-                "LHS CHECK OPTION ACCESS"
+                "TACO",
+                "NACHO",
+                "BURRITO"
             ],
-            "applicationProxyUser" : "FAKE APU",
+            "applicationProxyUser" : "MEXICAN!",
             "codes" : [
                 {
                     "sites" : [
-                        "673"
+                        "111",
+                        "222"
                     ],
-                    "accessCode" : "FAKE ACCESS CODE",
-                    "verifyCode" : "FAKE VERIFY CODE"
+                    "accessCode" : "MEXICAN_FOOD",
+                    "verifyCode" : "IS_AMAZING"
+                },
+                {
+                    "sites" : [
+                        "111-M",
+                        "222-M"
+                    ],
+                    "accessCode" : "MEXICAN_FOOD",
+                    "verifyCode" : "IS_STILL_GREAT"
+                }
+            ]
+        },
+        {
+            "rpcNames" : [
+                "STIR-FRY",
+                "SASHIMI"
+            ],
+            "applicationProxyUser" : "ASIAN!",
+            "codes" : [
+                {
+                    "sites" : [
+                        "111",
+                        "222"
+                    ],
+                    "accessCode" : "ASIAN_FOOD",
+                    "verifyCode" : "IS_AMAZING"
+                },
+                {
+                    "sites" : [
+                        "111-A",
+                        "222-A"
+                    ],
+                    "accessCode" : "ASIAN_FOOD",
+                    "verifyCode" : "IS_STILL_GREAT"
+                }
+            ]
+        },
+        {
+            "rpcNames" : [
+                "PIZZA",
+                "SPAGHETTI"
+            ],
+            "applicationProxyUser" : "ITALIAN",
+            "codes" : [
+                {
+                    "sites" : [
+                        "666"
+                    ],
+                    "accessCode" : "ITALIAN_FOOD",
+                    "verifyCode" : "IS_AMAZING"
                 }
             ]
         }

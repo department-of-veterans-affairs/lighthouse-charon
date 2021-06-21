@@ -1,55 +1,119 @@
 package gov.va.api.lighthouse.charon.api;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/** Provides helper methods for searching all know RpcPrincipals. */
+/** Contains all known principal information. */
+@Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RpcPrincipals {
-  RpcPrincipalConfig config;
+  @NotEmpty private List<PrincipalEntry> entries;
 
-  /** Return the principal for a given RPC name at a given vista site. */
-  public RpcPrincipal findPrincipal(String rpcName, String site) {
-    var entry = findEntryByRpcName(rpcName);
-    if (entry.isEmpty()) {
-      return null;
+  /** Lazy getter. */
+  public List<PrincipalEntry> entries() {
+    if (entries == null) {
+      entries = new ArrayList<>();
     }
-    var code =
-        entry.get().codes().stream().filter(codes -> codes.sites().contains(site)).findFirst();
-    if (code.isEmpty()) {
-      return null;
-    }
-    return RpcPrincipal.builder()
-        .applicationProxyUser(entry.get().applicationProxyUser())
-        .accessCode(code.get().accessCode())
-        .verifyCode(code.get().verifyCode())
-        .build();
+    return entries;
   }
 
-  /** Find all principals for a given RPC name. */
-  public List<RpcPrincipal> findPrincipals(String rpcName) {
-    var entry = findEntryByRpcName(rpcName);
-    if (entry.isEmpty()) {
-      return null;
+  @AssertTrue(message = "RPC names must be unique across entries. ")
+  @SuppressWarnings("unused")
+  boolean isRpcNamesUnique() {
+    Set<String> names = new HashSet<>();
+    for (PrincipalEntry e : entries()) {
+      for (String s : e.rpcNames()) {
+        if (names.isEmpty()) {
+          names.add(s);
+        } else if (names.contains(s)) {
+          return false;
+        } else {
+          names.add(s);
+        }
+      }
     }
-    return entry.get().codes().stream()
-        .map(
-            c ->
-                RpcPrincipal.builder()
-                    .applicationProxyUser(entry.get().applicationProxyUser())
-                    .accessCode(c.accessCode())
-                    .verifyCode(c.verifyCode())
-                    .build())
-        .collect(Collectors.toList());
+    return true;
   }
 
-  private Optional<RpcPrincipalConfig.PrincipalEntry> findEntryByRpcName(String rpcName) {
-    return config.rpcPrincipals().stream()
-        .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
-        .findFirst();
+  @Data
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+  public static class PrincipalEntry {
+    @NotEmpty private List<String> rpcNames;
+
+    @NotNull @NotBlank private String applicationProxyUser;
+
+    @NotEmpty private List<Codes> codes;
+
+    /** Lazy getter. */
+    public List<Codes> codes() {
+      if (codes == null) {
+        codes = new ArrayList<>();
+      }
+      return codes;
+    }
+
+    @AssertTrue(message = "Sites must be unique across codes per entry. ")
+    @SuppressWarnings("unused")
+    boolean isSitesUniqueWithinCodes() {
+      Set<String> sites = new HashSet<>();
+      for (Codes c : codes()) {
+        for (String s : c.sites()) {
+          if (sites.isEmpty()) {
+            sites.add(s);
+          } else if (sites.contains(s)) {
+            return false;
+          } else {
+            sites.add(s);
+          }
+        }
+      }
+      return true;
+    }
+
+    /** Lazy getter. */
+    public List<String> rpcNames() {
+      if (rpcNames == null) {
+        rpcNames = new ArrayList<>();
+      }
+      return rpcNames;
+    }
+  }
+
+  @Data
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+  public static class Codes {
+    @NotEmpty private List<String> sites;
+
+    @NotBlank private String accessCode;
+
+    @NotBlank private String verifyCode;
+
+    /** Lazy getter. */
+    public List<String> sites() {
+      if (sites == null) {
+        sites = new ArrayList<>();
+      }
+      return sites;
+    }
   }
 }

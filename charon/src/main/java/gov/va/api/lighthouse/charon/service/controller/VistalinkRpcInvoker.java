@@ -7,7 +7,6 @@ import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcMetadata;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
 import gov.va.api.lighthouse.charon.service.config.ConnectionDetails;
-import gov.va.med.environment.Environment;
 import gov.va.med.vistalink.rpc.NoRpcContextFaultException;
 import gov.va.med.vistalink.rpc.RpcNotInContextFaultException;
 import gov.va.med.vistalink.rpc.RpcNotOkForProxyUseException;

@@ -12,8 +12,10 @@
   </Match>
   <!-- To support local testing, we allow the vistalink.properties and principals.json file to be overwritten by user input -->
   <Match>
-    <Class name="gov.va.api.lighthouse.charon.service.config.VistalinkPropertiesConfig"/>
-    <Class name="gov.va.api.lighthouse.charon.service.config.RpcPrincipalsLoader"/>
+    <Or>
+      <Class name="gov.va.api.lighthouse.charon.service.config.VistalinkPropertiesConfig"/>
+      <Class name="gov.va.api.lighthouse.charon.service.config.RpcPrincipalConfig"/>
+    </Or>>
     <Bug pattern="PATH_TRAVERSAL_IN"/>
   </Match>
   <!-- Lombok generated hashCode and equals is checking for null, then executing lazy initializer getter. -->
