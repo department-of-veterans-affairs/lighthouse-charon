@@ -25,11 +25,12 @@ init() {
 main() {
   local longOpts='debug,file:,help,version:'
   local shortOpts='f:hv:'
-  ARGS=$(getopt -n $(basename ${0}) \
+  local args
+  if ! args=$(getopt -n $(basename ${0}) \
     -l "${longOpts}" \
     -o "${shortOpts}" \
-    -- "$@")
-  eval set -- "${ARGS}"
+    -- "$@"); then usage "Ew, David!"; fi
+  eval set -- "${args}"
   while true
   do
     case "${1}" in
@@ -95,19 +96,24 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import javax.annotation.processing.Generated;
 
 /**
  * Serialization configuration for IBLHS AMCMS GET INS RPC results.
- * Generated using insuranceElementList.xlsx version ${VERSION}.
  */
 @Data
 @Builder
 @AllArgsConstructor
+@Generated(value="charon-models/src/scripts/generate-get-insurance-models.sh",date="$(date --utc +%FT%XZ)",comments="Generated using insuranceElementList.xlsx version ${VERSION}.")
 public class GetInsResponseSerializerConfig {
 
     private GetInsRpcResults results;
 
     private final Map<FilemanCoordinates, Consumer<GetInsEntry>> filemanToJava = createMappings();
+
+    public static GetInsResponseSerializerConfig create() {
+      return GetInsResponseSerializerConfig.builder().results(GetInsRpcResults.empty()).build();
+    }
 
     private Map<FilemanCoordinates, Consumer<GetInsEntry>> createMappings() {
         Map<FilemanCoordinates, Consumer<GetInsEntry>> mappings = new HashMap<>();
@@ -118,7 +124,6 @@ $(awk -F, -i <(awkFunctions) -v last="$(cat ${CSV} | wc -l)" '
     }
   }' ${CSV})
         return Map.copyOf(mappings);
-      
     }
 }
 EOF
@@ -133,19 +138,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.processing.Generated;
+
 /** 
  * Response model for the IBLHS AMCMS GET INS RPC.
- * Generated using insuranceElementList.xlsx version ${VERSION}.
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(staticName = "empty")
+@Generated(value="charon-models/src/scripts/generate-get-insurance-models.sh",date="$(date --utc +%FT%XZ)",comments="Generated using insuranceElementList.xlsx version ${VERSION}.")
 public class GetInsRpcResults {
-$(awk -F',' -i <(awkFunctions) '
+$(awk -F, -i <(awkFunctions) '
   /^\S/ {
     if ( $14$16 != "" && toupper($10) != "DO NOT USE") {
-      printf "/** %s %s. */\n", NR, $16  
+      fhirMappings=$16
+      gsub(/\\n/, ",", fhirMappings)
+      printf "/** %s %s. */\n", NR, fhirMappings
       printf "private GetInsEntry %s%s;\n", prefix($2), toCamelCase($5)
     }
   }' ${CSV})
@@ -155,4 +164,3 @@ EOF
 
 init
 main $@
-
