@@ -27,11 +27,26 @@ public class IblhsAmcmsGetInsTest {
                             .vista("666")
                             .error(Optional.of("4311"))
                             .build(),
-                        RpcInvocationResult.builder().vista("888").response("Shanktopus!").build()))
+                        RpcInvocationResult.builder()
+                            .vista("888")
+                            .response("36^1^.01^Shanktopus!^SHANKTOPUS")
+                            .build()))
                 .getResultsByStation())
         .isEqualTo(
             IblhsAmcmsGetIns.Response.builder()
-                .resultsByStation(Map.of("888", "Shanktopus!"))
+                .resultsByStation(
+                    Map.of(
+                        "888",
+                        GetInsRpcResults.builder()
+                            .insCoName(
+                                GetInsEntry.builder()
+                                    .fileNumber("36")
+                                    .ien("1")
+                                    .fieldNumber(".01")
+                                    .externalValueRepresentation("Shanktopus!")
+                                    .internalValueRepresentation("SHANKTOPUS")
+                                    .build())
+                            .build()))
                 .build()
                 .getResultsByStation());
   }
