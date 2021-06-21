@@ -15,7 +15,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Generated(
     value = "charon-models/src/scripts/generate-get-insurance-models.sh",
-    date = "2021-06-21T14:30:56Z",
+    date = "2021-06-21T15:07:18Z",
     comments = "Generated using insuranceElementList.xlsx version 183.0.")
 public class GetInsResponseSerializerConfig {
   private final Map<FilemanCoordinates, Consumer<GetInsEntry>> filemanToJava = createMappings();
