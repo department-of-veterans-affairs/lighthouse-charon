@@ -16,7 +16,7 @@ public class RpcPrincipalsLoader {
 
   @Bean
   @SneakyThrows
-  RpcPrincipals loadPrincipals(@Value("${charon.principals.file}") String principalFile) {
+  RpcPrincipals loadPrincipals(@Value("${charon.rpc-principals.file}") String principalFile) {
     return RpcPrincipals.builder()
         .config(new ObjectMapper().readValue(new File(principalFile), RpcPrincipalConfig.class))
         .build();

@@ -10,13 +10,9 @@
     </Or>
     <Bug pattern="URF_UNREAD_FIELD"/>
   </Match>
-  <!-- To support local testing, we allow the vistalink.properties file to be overwritten by user input -->
+  <!-- To support local testing, we allow the vistalink.properties and principals.json file to be overwritten by user input -->
   <Match>
     <Class name="gov.va.api.lighthouse.charon.service.config.VistalinkPropertiesConfig"/>
-    <Bug pattern="PATH_TRAVERSAL_IN"/>
-  </Match>
-  <!-- To support local testing, we allow the principals.json file to be overwritten by user input -->
-  <Match>
     <Class name="gov.va.api.lighthouse.charon.service.config.RpcPrincipalsLoader"/>
     <Bug pattern="PATH_TRAVERSAL_IN"/>
   </Match>

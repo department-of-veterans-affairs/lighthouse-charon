@@ -46,7 +46,6 @@ public class VistalinkRpcInvoker implements RpcInvoker, MacroExecutionContext {
       BiFunction<RpcPrincipal, ConnectionDetails, VistalinkSession> optionalSessionSelection) {
     this.connectionDetails = connectionDetails;
     this.macroProcessorFactory = macroProcessorFactory;
-    Environment.isProduction();
     /*
      * This is extensible to allow testing of the rest of this class. Under normal circumstances,
      * you do not need to specify this.

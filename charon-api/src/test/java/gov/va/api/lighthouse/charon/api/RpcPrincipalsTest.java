@@ -17,6 +17,7 @@ public class RpcPrincipalsTest {
     assertThat(testPrincipals().findPrincipal("LHS CHECK OPTION ACCESS", "673"))
         .isEqualTo(testPrincipal());
     assertThat(testPrincipals().findPrincipal("WHO DIS?", "WHERE DIS?")).isNull();
+    assertThat(testPrincipals().findPrincipal("LHS CHECK OPTION ACCESS", "WHERE DIS?")).isNull();
   }
 
   @Test

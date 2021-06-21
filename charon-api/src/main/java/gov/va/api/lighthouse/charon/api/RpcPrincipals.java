@@ -14,10 +14,7 @@ public class RpcPrincipals {
 
   /** Return the principal for a given RPC name at a given vista site. */
   public RpcPrincipal findPrincipal(String rpcName, String site) {
-    Optional<RpcPrincipalConfig.PrincipalEntry> entry =
-        config.rpcPrincipals().stream()
-            .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
-            .findFirst();
+    var entry = findEntryByRpcName(rpcName);
     if (entry.isEmpty()) {
       return null;
     }
@@ -35,10 +32,7 @@ public class RpcPrincipals {
 
   /** Find all principals for a given RPC name. */
   public List<RpcPrincipal> findPrincipals(String rpcName) {
-    Optional<RpcPrincipalConfig.PrincipalEntry> entry =
-        config.rpcPrincipals().stream()
-            .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
-            .findFirst();
+    var entry = findEntryByRpcName(rpcName);
     if (entry.isEmpty()) {
       return null;
     }
@@ -51,5 +45,11 @@ public class RpcPrincipals {
                     .verifyCode(c.verifyCode())
                     .build())
         .collect(Collectors.toList());
+  }
+
+  private Optional<RpcPrincipalConfig.PrincipalEntry> findEntryByRpcName(String rpcName) {
+    return config.rpcPrincipals().stream()
+        .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
+        .findFirst();
   }
 }
