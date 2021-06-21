@@ -8,7 +8,7 @@ public class GetInsResponseSerializer {
 
   /** Deserialize a GET INS RPC response string. */
   public GetInsRpcResults deserialize(String getInsEntries) {
-    GetInsResponseSerializerConfig config = GetInsResponseSerializerConfigFactory.create();
+    GetInsResponseSerializerConfig config = GetInsResponseSerializerConfig.create();
     GetInsEntryParser.create()
         .parseNewLineDelimited(getInsEntries)
         .forEach(

@@ -4,21 +4,27 @@ import gov.va.api.lighthouse.charon.models.FilemanCoordinates;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import javax.annotation.processing.Generated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-/**
- * Serialization configuration for IBLHS AMCMS GET INS RPC results. Generated using
- * insuranceElementList.xlsx version 183.0.
- */
+/** Serialization configuration for IBLHS AMCMS GET INS RPC results. */
 @Data
 @Builder
 @AllArgsConstructor
+@Generated(
+    value = "charon-models/src/scripts/generate-get-insurance-models.sh",
+    date = "2021-06-21T14:30:56Z",
+    comments = "Generated using insuranceElementList.xlsx version 183.0.")
 public class GetInsResponseSerializerConfig {
   private final Map<FilemanCoordinates, Consumer<GetInsEntry>> filemanToJava = createMappings();
 
   private GetInsRpcResults results;
+
+  public static GetInsResponseSerializerConfig create() {
+    return GetInsResponseSerializerConfig.builder().results(GetInsRpcResults.empty()).build();
+  }
 
   private Map<FilemanCoordinates, Consumer<GetInsEntry>> createMappings() {
     Map<FilemanCoordinates, Consumer<GetInsEntry>> mappings = new HashMap<>();
