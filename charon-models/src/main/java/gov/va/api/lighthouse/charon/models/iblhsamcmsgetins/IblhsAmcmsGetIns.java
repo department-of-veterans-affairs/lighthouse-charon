@@ -20,7 +20,7 @@ import lombok.NonNull;
 public class IblhsAmcmsGetIns
     implements TypeSafeRpc<IblhsAmcmsGetIns.Request, IblhsAmcmsGetIns.Response> {
 
-  private static final String RPC_NAME = "IBLHS AMCMS GET INS";
+  public static final String RPC_NAME = "IBLHS AMCMS GET INS";
 
   private static final String RPC_CONTEXT = "IBLHS AMCMS RPCS";
 

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class LhsCheckOptionAccess
     implements TypeSafeRpc<LhsCheckOptionAccess.Request, LhsCheckOptionAccess.Response> {
 
-  private static final String RPC_NAME = "LHS CHECK OPTION ACCESS";
+  public static final String RPC_NAME = "LHS CHECK OPTION ACCESS";
   private static final String RPC_CONTEXT = "LHS RPC CONTEXT";
 
   @Override

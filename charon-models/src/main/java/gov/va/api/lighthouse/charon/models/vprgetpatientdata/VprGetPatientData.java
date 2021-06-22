@@ -31,7 +31,7 @@ import lombok.Value;
 @NoArgsConstructor(staticName = "create")
 public class VprGetPatientData
     implements TypeSafeRpc<VprGetPatientData.Request, VprGetPatientData.Response> {
-  private static final String RPC_NAME = "VPR GET PATIENT DATA";
+  public static final String RPC_NAME = "VPR GET PATIENT DATA";
 
   private static final String DEFAULT_RPC_CONTEXT = "VPR APPLICATION PROXY";
 
