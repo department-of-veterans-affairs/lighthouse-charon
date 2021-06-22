@@ -115,7 +115,7 @@ altIds() { echo "$(IFS=",";echo "${ALT_IDS[*]}")"; }
 
 makeConfig charon $PROFILE
 addValue charon $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
-addValue charon $PROFILE charon.rpc-principals.file "config/principals-$PROFILE.properties"
+configValue charon $PROFILE charon.rpc-principals.file "config/principals-$PROFILE.json"
 configValue charon $PROFILE charon.rpc.client-keys "disabled"
 configValue charon $PROFILE clinical-authorization-status.access-code "$VISTA_APP_PROXY_ACCESS_CODE"
 configValue charon $PROFILE clinical-authorization-status.verify-code "$VISTA_APP_PROXY_VERIFY_CODE"
