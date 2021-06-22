@@ -131,19 +131,19 @@ cat > $REPO/charon/config/vistalink-$PROFILE.properties <<EOF
 EOF
 cat > $REPO/charon/config/principals-$PROFILE.json << EOF
 {
-    "rpcPrincipals" : [
+    "entries" : [
         {
             "rpcNames" : [
                 "LHS CHECK OPTION ACCESS"
             ],
-            "applicationProxyUser" : "FAKE APU",
+            "applicationProxyUser" : "$VISTA_APP_PROXY_USER",
             "codes" : [
                 {
                     "sites" : [
                         "673"
                     ],
-                    "accessCode" : "FAKE ACCESS CODE",
-                    "verifyCode" : "FAKE VERIFY CODE"
+                    "accessCode" : "$VISTA_APP_PROXY_ACCESS_CODE",
+                    "verifyCode" : "$VISTA_APP_PROXY_VERIFY_CODE"
                 }
             ]
         }
