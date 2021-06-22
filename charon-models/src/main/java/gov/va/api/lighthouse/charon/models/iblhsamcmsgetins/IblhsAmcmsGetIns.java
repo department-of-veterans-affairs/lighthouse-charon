@@ -30,7 +30,11 @@ public class IblhsAmcmsGetIns
         .resultsByStation(
             results.stream()
                 .filter(result -> result.error().isEmpty())
-                .collect(toMap(RpcInvocationResult::vista, RpcInvocationResult::response)))
+                .collect(
+                    toMap(
+                        result -> result.vista(),
+                        result ->
+                            GetInsResponseSerializer.create().deserialize(result.response()))))
         .build();
   }
 
@@ -54,9 +58,9 @@ public class IblhsAmcmsGetIns
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
-    private Map<String, String> resultsByStation;
+    private Map<String, GetInsRpcResults> resultsByStation;
 
-    Map<String, String> getResultsByStation() {
+    Map<String, GetInsRpcResults> getResultsByStation() {
       if (resultsByStation == null) {
         resultsByStation = new HashMap<>();
       }
