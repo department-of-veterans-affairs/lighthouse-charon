@@ -15,7 +15,7 @@ public class RpcPrincipalsConfigTest {
   void loadPrincipals() {
     RpcPrincipalLookup testPrincipals =
         new RpcPrincipalConfig().loadPrincipals("src/test/resources/principals.json");
-    assertThat(testPrincipals.findPrincipalByNameAndSite("SASHIMI", "222-A"))
+    assertThat(testPrincipals.findByNameAndSite("SASHIMI", "222-A"))
         .isEqualTo(
             Optional.of(
                 RpcPrincipal.builder()

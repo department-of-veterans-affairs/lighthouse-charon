@@ -6,18 +6,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 public class RpcPrincipalsTest {
-  private List<RpcPrincipal> asian() {
-    return List.of(
+  private Map<String, RpcPrincipal> asian() {
+    return Map.of(
+        "111",
         RpcPrincipal.builder()
             .applicationProxyUser("ASIAN!")
             .accessCode("ASIAN_FOOD")
             .verifyCode("IS_AMAZING")
             .build(),
+        "222",
+        RpcPrincipal.builder()
+            .applicationProxyUser("ASIAN!")
+            .accessCode("ASIAN_FOOD")
+            .verifyCode("IS_AMAZING")
+            .build(),
+        "111-A",
+        RpcPrincipal.builder()
+            .applicationProxyUser("ASIAN!")
+            .accessCode("ASIAN_FOOD")
+            .verifyCode("IS_STILL_GREAT")
+            .build(),
+        "222-A",
         RpcPrincipal.builder()
             .applicationProxyUser("ASIAN!")
             .accessCode("ASIAN_FOOD")
@@ -26,22 +41,21 @@ public class RpcPrincipalsTest {
   }
 
   @Test
-  void findAllPrincipalsByName() {
-    assertThat(testPrincipals().findAllPrincipalsByName("TACO")).isEqualTo(mexican());
-    assertThat(testPrincipals().findAllPrincipalsByName("NACHO")).isEqualTo(mexican());
-    assertThat(testPrincipals().findAllPrincipalsByName("NACHO")).isEqualTo(mexican());
-    assertThat(testPrincipals().findAllPrincipalsByName("STIR-FRY")).isEqualTo(asian());
-    assertThat(testPrincipals().findAllPrincipalsByName("SASHIMI")).isEqualTo(asian());
-    assertThat(testPrincipals().findAllPrincipalsByName("PIZZA")).isEqualTo(italian());
-    assertThat(testPrincipals().findAllPrincipalsByName("SPAGHETTI")).isEqualTo(italian());
-    assertThat(testPrincipals().findAllPrincipalsByName("BRUSSELSPROUTS"))
-        .isEqualTo(Collections.emptyList());
-    assertThat(testPrincipals().findAllPrincipalsByName(null)).isEqualTo(Collections.emptyList());
+  void findByName() {
+    assertThat(testPrincipals().findByName("TACO")).isEqualTo(mexican());
+    assertThat(testPrincipals().findByName("NACHO")).isEqualTo(mexican());
+    assertThat(testPrincipals().findByName("BURRITO")).isEqualTo(mexican());
+    assertThat(testPrincipals().findByName("STIR-FRY")).isEqualTo(asian());
+    assertThat(testPrincipals().findByName("SASHIMI")).isEqualTo(asian());
+    assertThat(testPrincipals().findByName("PIZZA")).isEqualTo(italian());
+    assertThat(testPrincipals().findByName("SPAGHETTI")).isEqualTo(italian());
+    assertThat(testPrincipals().findByName("BRUSSELSPROUTS")).isEqualTo(Collections.emptyMap());
+    assertThat(testPrincipals().findByName(null)).isEqualTo(Collections.emptyMap());
   }
 
   @Test
-  void findPrincipalByNameAndSite() {
-    assertThat(testPrincipals().findPrincipalByNameAndSite("TACO", "111"))
+  void findByNameAndSite() {
+    assertThat(testPrincipals().findByNameAndSite("TACO", "111"))
         .isEqualTo(
             Optional.of(
                 RpcPrincipal.builder()
@@ -49,7 +63,7 @@ public class RpcPrincipalsTest {
                     .accessCode("MEXICAN_FOOD")
                     .verifyCode("IS_AMAZING")
                     .build()));
-    assertThat(testPrincipals().findPrincipalByNameAndSite("TACO", "111-M"))
+    assertThat(testPrincipals().findByNameAndSite("TACO", "111-M"))
         .isEqualTo(
             Optional.of(
                 RpcPrincipal.builder()
@@ -57,7 +71,7 @@ public class RpcPrincipalsTest {
                     .accessCode("MEXICAN_FOOD")
                     .verifyCode("IS_STILL_GREAT")
                     .build()));
-    assertThat(testPrincipals().findPrincipalByNameAndSite("SASHIMI", "222-A"))
+    assertThat(testPrincipals().findByNameAndSite("SASHIMI", "222-A"))
         .isEqualTo(
             Optional.of(
                 RpcPrincipal.builder()
@@ -65,7 +79,7 @@ public class RpcPrincipalsTest {
                     .accessCode("ASIAN_FOOD")
                     .verifyCode("IS_STILL_GREAT")
                     .build()));
-    assertThat(testPrincipals().findPrincipalByNameAndSite("PIZZA", "666"))
+    assertThat(testPrincipals().findByNameAndSite("PIZZA", "666"))
         .isEqualTo(
             Optional.of(
                 RpcPrincipal.builder()
@@ -73,13 +87,12 @@ public class RpcPrincipalsTest {
                     .accessCode("ITALIAN_FOOD")
                     .verifyCode("IS_AMAZING")
                     .build()));
-    assertThat(testPrincipals().findPrincipalByNameAndSite("CHEESECAKE", "NOPE"))
+    assertThat(testPrincipals().findByNameAndSite("CHEESECAKE", "NOPE"))
         .isEqualTo(Optional.empty());
-    assertThat(testPrincipals().findPrincipalByNameAndSite("CHEESECAKE", "111-A"))
+    assertThat(testPrincipals().findByNameAndSite("CHEESECAKE", "111-A"))
         .isEqualTo(Optional.empty());
-    assertThat(testPrincipals().findPrincipalByNameAndSite("PIZZA", "111-M"))
-        .isEqualTo(Optional.empty());
-    assertThat(testPrincipals().findPrincipalByNameAndSite(null, null)).isEqualTo(Optional.empty());
+    assertThat(testPrincipals().findByNameAndSite("PIZZA", "111-M")).isEqualTo(Optional.empty());
+    assertThat(testPrincipals().findByNameAndSite(null, null)).isEqualTo(Optional.empty());
   }
 
   @Test
@@ -95,7 +108,7 @@ public class RpcPrincipalsTest {
                             .rpcNames(List.of("STRAWBERRY", "CURRY", "WINE"))
                             .build()))
                 .build()
-                .isRpcNamesUnique())
+                .isEachRpcNameUnique())
         .isTrue();
     assertThat(
             RpcPrincipals.builder()
@@ -108,7 +121,7 @@ public class RpcPrincipalsTest {
                             .rpcNames(List.of("STRAWBERRY", "CURRY", "WINE", "TACO"))
                             .build()))
                 .build()
-                .isRpcNamesUnique())
+                .isEachRpcNameUnique())
         .isFalse();
   }
 
@@ -142,8 +155,9 @@ public class RpcPrincipalsTest {
         .isFalse();
   }
 
-  private List<RpcPrincipal> italian() {
-    return List.of(
+  private Map<String, RpcPrincipal> italian() {
+    return Map.of(
+        "666",
         RpcPrincipal.builder()
             .applicationProxyUser("ITALIAN!")
             .accessCode("ITALIAN_FOOD")
@@ -151,13 +165,27 @@ public class RpcPrincipalsTest {
             .build());
   }
 
-  private List<RpcPrincipal> mexican() {
-    return List.of(
+  private Map<String, RpcPrincipal> mexican() {
+    return Map.of(
+        "111",
         RpcPrincipal.builder()
             .applicationProxyUser("MEXICAN!")
             .accessCode("MEXICAN_FOOD")
             .verifyCode("IS_AMAZING")
             .build(),
+        "222",
+        RpcPrincipal.builder()
+            .applicationProxyUser("MEXICAN!")
+            .accessCode("MEXICAN_FOOD")
+            .verifyCode("IS_AMAZING")
+            .build(),
+        "111-M",
+        RpcPrincipal.builder()
+            .applicationProxyUser("MEXICAN!")
+            .accessCode("MEXICAN_FOOD")
+            .verifyCode("IS_STILL_GREAT")
+            .build(),
+        "222-M",
         RpcPrincipal.builder()
             .applicationProxyUser("MEXICAN!")
             .accessCode("MEXICAN_FOOD")

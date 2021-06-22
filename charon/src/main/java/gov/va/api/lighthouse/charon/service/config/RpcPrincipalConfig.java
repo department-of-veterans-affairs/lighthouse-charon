@@ -10,8 +10,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +22,8 @@ public class RpcPrincipalConfig {
 
   @Bean
   @SneakyThrows
-  RpcPrincipalLookup loadPrincipals(@Value("${charon.rpc-principals.file}") String principalsFile) {
-    if (StringUtils.isBlank(principalsFile)) {
-      throw new IllegalArgumentException("Missing $charon.rpc-principals.file.");
-    }
+  RpcPrincipalLookup loadPrincipals(
+      @NonNull @Value("${charon.rpc-principals.file}") String principalsFile) {
     RpcPrincipals rpcPrincipals =
         new ObjectMapper().readValue(new File(principalsFile), RpcPrincipals.class);
     validate(rpcPrincipals, principalsFile);

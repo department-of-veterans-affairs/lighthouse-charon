@@ -1,7 +1,8 @@
 package gov.va.api.lighthouse.charon.api;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -14,34 +15,31 @@ public class RpcPrincipalLookup {
   RpcPrincipals rpcPrincipals;
 
   /** Find all principals for a given RPC name. */
-  public List<RpcPrincipal> findAllPrincipalsByName(String rpcName) {
+  public Map<String, RpcPrincipal> findByName(String rpcName) {
     var entries = findEntriesByName(rpcName);
     if (entries.isEmpty()) {
-      return List.of();
+      return Map.of();
     }
-    List<RpcPrincipal> principals = new ArrayList<>();
+    Map<String, RpcPrincipal> principals = new HashMap<>();
     for (RpcPrincipals.PrincipalEntry e : entries) {
       String apu = e.applicationProxyUser();
       for (RpcPrincipals.Codes c : e.codes()) {
-        principals.add(
-            RpcPrincipal.builder()
-                .applicationProxyUser(apu)
-                .verifyCode(c.verifyCode())
-                .accessCode(c.accessCode())
-                .build());
+        for (String s : c.sites()) {
+          principals.put(
+              s,
+              RpcPrincipal.builder()
+                  .applicationProxyUser(apu)
+                  .verifyCode(c.verifyCode())
+                  .accessCode(c.accessCode())
+                  .build());
+        }
       }
     }
     return principals;
   }
 
-  private List<RpcPrincipals.PrincipalEntry> findEntriesByName(String rpcName) {
-    return rpcPrincipals.entries().stream()
-        .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
-        .collect(Collectors.toList());
-  }
-
   /** Return the principal for a given RPC name at a given vista site. */
-  public Optional<RpcPrincipal> findPrincipalByNameAndSite(String rpcName, String site) {
+  public Optional<RpcPrincipal> findByNameAndSite(String rpcName, String site) {
     var entries = findEntriesByName(rpcName);
     if (entries.isEmpty()) {
       return Optional.empty();
@@ -59,5 +57,11 @@ public class RpcPrincipalLookup {
       }
     }
     return Optional.empty();
+  }
+
+  private List<RpcPrincipals.PrincipalEntry> findEntriesByName(String rpcName) {
+    return rpcPrincipals.entries().stream()
+        .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
+        .collect(Collectors.toList());
   }
 }

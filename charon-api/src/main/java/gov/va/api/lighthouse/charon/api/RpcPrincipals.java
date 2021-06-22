@@ -33,16 +33,12 @@ public class RpcPrincipals {
 
   @AssertTrue(message = "RPC names must be unique across entries. ")
   @SuppressWarnings("unused")
-  boolean isRpcNamesUnique() {
+  boolean isEachRpcNameUnique() {
     Set<String> names = new HashSet<>();
     for (PrincipalEntry e : entries()) {
       for (String s : e.rpcNames()) {
-        if (names.isEmpty()) {
-          names.add(s);
-        } else if (names.contains(s)) {
+        if (!names.add(s)) {
           return false;
-        } else {
-          names.add(s);
         }
       }
     }
@@ -75,12 +71,8 @@ public class RpcPrincipals {
       Set<String> sites = new HashSet<>();
       for (Codes c : codes()) {
         for (String s : c.sites()) {
-          if (sites.isEmpty()) {
-            sites.add(s);
-          } else if (sites.contains(s)) {
+          if (!sites.add(s)) {
             return false;
-          } else {
-            sites.add(s);
           }
         }
       }
