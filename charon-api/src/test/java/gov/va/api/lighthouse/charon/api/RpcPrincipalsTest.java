@@ -200,6 +200,6 @@ public class RpcPrincipalsTest {
   }
 
   private RpcPrincipalLookup testPrincipals() {
-    return new RpcPrincipalLookup(testConfig());
+    return RpcPrincipalLookup.of(testConfig());
   }
 }

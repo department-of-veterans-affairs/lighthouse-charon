@@ -1,5 +1,7 @@
 package gov.va.api.lighthouse.charon.api;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +12,7 @@ import lombok.Builder;
 
 /** Provides helper methods for searching all know RpcPrincipals. */
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 public class RpcPrincipalLookup {
   RpcPrincipals rpcPrincipals;
 
@@ -40,23 +42,10 @@ public class RpcPrincipalLookup {
 
   /** Return the principal for a given RPC name at a given vista site. */
   public Optional<RpcPrincipal> findByNameAndSite(String rpcName, String site) {
-    var entries = findEntriesByName(rpcName);
-    if (entries.isEmpty()) {
+    if (isBlank(rpcName) || isBlank(site)) {
       return Optional.empty();
     }
-    for (RpcPrincipals.PrincipalEntry e : entries) {
-      for (RpcPrincipals.Codes c : e.codes()) {
-        if (c.sites().contains(site)) {
-          return Optional.of(
-              RpcPrincipal.builder()
-                  .applicationProxyUser(e.applicationProxyUser())
-                  .accessCode(c.accessCode())
-                  .verifyCode(c.verifyCode())
-                  .build());
-        }
-      }
-    }
-    return Optional.empty();
+    return Optional.ofNullable(findByName(rpcName).get(site));
   }
 
   private List<RpcPrincipals.PrincipalEntry> findEntriesByName(String rpcName) {

@@ -27,7 +27,7 @@ public class RpcPrincipalConfig {
     RpcPrincipals rpcPrincipals =
         new ObjectMapper().readValue(new File(principalsFile), RpcPrincipals.class);
     validate(rpcPrincipals, principalsFile);
-    return RpcPrincipalLookup.builder().rpcPrincipals(rpcPrincipals).build();
+    return RpcPrincipalLookup.of(rpcPrincipals);
   }
 
   void validate(RpcPrincipals rpcPrincipals, String principalsFile) {

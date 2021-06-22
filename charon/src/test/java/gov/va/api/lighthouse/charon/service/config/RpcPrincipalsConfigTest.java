@@ -26,6 +26,12 @@ public class RpcPrincipalsConfigTest {
   }
 
   @Test
+  void loadPrincipalsNullFile() {
+    assertThatExceptionOfType(NullPointerException.class)
+        .isThrownBy(() -> new RpcPrincipalConfig().loadPrincipals(null));
+  }
+
+  @Test
   void validate() {
     assertThatExceptionOfType(IllegalArgumentException.class)
         .isThrownBy(
