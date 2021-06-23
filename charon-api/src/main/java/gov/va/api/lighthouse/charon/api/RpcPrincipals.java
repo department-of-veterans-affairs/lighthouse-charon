@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -23,6 +24,22 @@ import lombok.NoArgsConstructor;
 public class RpcPrincipals {
   @NotEmpty private List<PrincipalEntry> entries;
 
+  /**
+   * Turn a collection if things in to a bigger collection of Strings and verify that each string is
+   * unique.
+   */
+  private static <T> boolean isUnique(Iterable<T> items, Function<T, Iterable<String>> valuesOf) {
+    Set<String> uniqueValues = new HashSet<>();
+    for (T item : items) {
+      for (String value : valuesOf.apply(item)) {
+        if (!uniqueValues.add(value)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   /** Lazy getter. */
   public List<PrincipalEntry> entries() {
     if (entries == null) {
@@ -34,15 +51,28 @@ public class RpcPrincipals {
   @AssertTrue(message = "RPC names must be unique across entries. ")
   @SuppressWarnings("unused")
   boolean isEachRpcNameUnique() {
-    Set<String> names = new HashSet<>();
-    for (PrincipalEntry e : entries()) {
-      for (String s : e.rpcNames()) {
-        if (!names.add(s)) {
-          return false;
-        }
+    return isUnique(entries(), PrincipalEntry::rpcNames);
+  }
+
+  @Data
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+  public static class Codes {
+    @NotEmpty private List<String> sites;
+
+    @NotBlank private String accessCode;
+
+    @NotBlank private String verifyCode;
+
+    /** Lazy getter. */
+    public List<String> sites() {
+      if (sites == null) {
+        sites = new ArrayList<>();
       }
+      return sites;
     }
-    return true;
   }
 
   @Data
@@ -68,15 +98,7 @@ public class RpcPrincipals {
     @AssertTrue(message = "Sites must be unique across codes per entry. ")
     @SuppressWarnings("unused")
     boolean isSitesUniqueWithinCodes() {
-      Set<String> sites = new HashSet<>();
-      for (Codes c : codes()) {
-        for (String s : c.sites()) {
-          if (!sites.add(s)) {
-            return false;
-          }
-        }
-      }
-      return true;
+      return isUnique(codes(), Codes::sites);
     }
 
     /** Lazy getter. */
@@ -85,27 +107,6 @@ public class RpcPrincipals {
         rpcNames = new ArrayList<>();
       }
       return rpcNames;
-    }
-  }
-
-  @Data
-  @Builder
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-  public static class Codes {
-    @NotEmpty private List<String> sites;
-
-    @NotBlank private String accessCode;
-
-    @NotBlank private String verifyCode;
-
-    /** Lazy getter. */
-    public List<String> sites() {
-      if (sites == null) {
-        sites = new ArrayList<>();
-      }
-      return sites;
     }
   }
 }

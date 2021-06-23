@@ -1,12 +1,12 @@
 package gov.va.api.lighthouse.charon.api;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
@@ -16,7 +16,7 @@ import lombok.Builder;
 public class RpcPrincipalLookup {
   RpcPrincipals rpcPrincipals;
 
-  /** Find all principals for a given RPC name. */
+  /** Find all principals for a given RPC name organized by site ID. */
   public Map<String, RpcPrincipal> findByName(String rpcName) {
     var entries = findEntriesByName(rpcName);
     if (entries.isEmpty()) {
@@ -51,6 +51,6 @@ public class RpcPrincipalLookup {
   private List<RpcPrincipals.PrincipalEntry> findEntriesByName(String rpcName) {
     return rpcPrincipals.entries().stream()
         .filter(principalEntry -> principalEntry.rpcNames().contains(rpcName))
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 }
