@@ -115,6 +115,7 @@ altIds() { echo "$(IFS=",";echo "${ALT_IDS[*]}")"; }
 
 makeConfig charon $PROFILE
 addValue charon $PROFILE vistalink.configuration "config/vistalink-$PROFILE.properties"
+configValue charon $PROFILE charon.rpc-principals.file "config/principals-$PROFILE.json"
 configValue charon $PROFILE charon.rpc.client-keys "disabled"
 configValue charon $PROFILE clinical-authorization-status.access-code "$VISTA_APP_PROXY_ACCESS_CODE"
 configValue charon $PROFILE clinical-authorization-status.verify-code "$VISTA_APP_PROXY_VERIFY_CODE"
@@ -127,4 +128,25 @@ checkForUnsetValues charon $PROFILE
 
 cat > $REPO/charon/config/vistalink-$PROFILE.properties <<EOF
 673=localhost:18673:673:America/New_York
+EOF
+cat > $REPO/charon/config/principals-$PROFILE.json << EOF
+{
+    "entries" : [
+        {
+            "rpcNames" : [
+                "LHS CHECK OPTION ACCESS"
+            ],
+            "applicationProxyUser" : "$VISTA_APP_PROXY_USER",
+            "codes" : [
+                {
+                    "sites" : [
+                        "673"
+                    ],
+                    "accessCode" : "$VISTA_APP_PROXY_ACCESS_CODE",
+                    "verifyCode" : "$VISTA_APP_PROXY_VERIFY_CODE"
+                }
+            ]
+        }
+    ]
+}
 EOF

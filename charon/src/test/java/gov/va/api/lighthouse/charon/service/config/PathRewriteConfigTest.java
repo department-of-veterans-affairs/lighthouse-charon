@@ -15,6 +15,7 @@ import org.springframework.boot.web.server.LocalServerPort;
     properties = {
       "vistalink.configuration=src/test/resources/vistalink.properties",
       "charon.rpc.client-keys=disabled",
+      "charon.rpc-principals.file=src/test/resources/principals.json",
       "clinical-authorization-status.access-code=123",
       "clinical-authorization-status.verify-code=987",
       "clinical-authorization-status.application-proxy-user=supershank",

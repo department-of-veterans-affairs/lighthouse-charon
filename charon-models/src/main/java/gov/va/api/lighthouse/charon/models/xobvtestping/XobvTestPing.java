@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(staticName = "create")
 public class XobvTestPing implements TypeSafeRpc<XobvTestPing.Request, XobvTestPing.Response> {
 
-  private static final String RPC_NAME = "XOBV TEST PING";
+  public static final String RPC_NAME = "XOBV TEST PING";
 
   private static final String DEFAULT_RPC_CONTEXT = "XOBV VISTALINK TESTER";
 

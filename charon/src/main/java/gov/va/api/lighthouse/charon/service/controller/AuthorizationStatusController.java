@@ -57,6 +57,7 @@ public class AuthorizationStatusController {
       @NotBlank @RequestParam(name = "site") String site,
       @Redact @NotBlank @RequestParam(name = "duz") String duz,
       @RequestParam(name = "menu-option", required = false) String menuOption) {
+
     if (isBlank(menuOption)) {
       menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
     }

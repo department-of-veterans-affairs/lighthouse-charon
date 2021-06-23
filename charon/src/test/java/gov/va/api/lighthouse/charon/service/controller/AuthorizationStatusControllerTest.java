@@ -105,7 +105,6 @@ public class AuthorizationStatusControllerTest {
             controllerWithAlternateIds()
                 .clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION"))
         .isEqualTo(responseOf(200, "ok", "1"));
-
     when(rpcExecutor.execute(
             rpcRequest(
                 List.of("privateSite2"),
@@ -141,9 +140,9 @@ public class AuthorizationStatusControllerTest {
         new AlternateAuthorizationStatusIdsEnabled(
             Map.of(
                 AuthorizationId.of("publicDuz1@publicSite1"),
-                    AuthorizationId.of("privateDuz1@privateSite1"),
+                AuthorizationId.of("privateDuz1@privateSite1"),
                 AuthorizationId.of("publicDuz2@publicSite2"),
-                    AuthorizationId.of("privateDuz2@privateSite2"))));
+                AuthorizationId.of("privateDuz2@privateSite2"))));
   }
 
   ResponseEntity<AuthorizationStatusController.ClinicalAuthorizationResponse> responseOf(
