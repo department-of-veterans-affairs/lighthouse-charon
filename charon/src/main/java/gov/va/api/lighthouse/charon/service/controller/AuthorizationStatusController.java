@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static gov.va.api.health.autoconfig.logging.LogSanitizer.sanitize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -75,7 +76,7 @@ public class AuthorizationStatusController {
                 menuOption, specifiedAuthorizationId, usableAuthorizationId)));
     var principal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
     if (principal.isEmpty()) {
-      return responseOf("No credentials for site.", site, 500);
+      return responseOf("No credentials for site.", sanitize(site), 500);
     }
     RpcResponse response =
         rpcExecutor.execute(
