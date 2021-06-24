@@ -93,7 +93,7 @@ public class AuthorizationStatusControllerTest {
         .isEqualTo(responseOf(200, "ok", "1"));
     assertThat(controller().clinicalAuthorization("unknownSite", "DUZ", ""))
         .isEqualTo(
-            ResponseEntity.status(500)
+            ResponseEntity.status(400)
                 .body(
                     AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
                         .status("No credentials for site.")

@@ -93,7 +93,7 @@ public class AuthorizationStatusController {
                 menuOption, specifiedAuthorizationId, usableAuthorizationId)));
     var principal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
     if (principal.isEmpty()) {
-      return responseOf("No credentials for site.", sanitize(site), 500);
+      return responseOf("No credentials for site.", sanitize(site), 400);
     }
     RpcResponse response =
         rpcExecutor.execute(
