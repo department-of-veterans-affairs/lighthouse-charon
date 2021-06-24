@@ -8,11 +8,12 @@ import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.api.RpcMetadata;
 import gov.va.api.lighthouse.charon.api.RpcPrincipal;
+import gov.va.api.lighthouse.charon.api.RpcPrincipalLookup;
+import gov.va.api.lighthouse.charon.api.RpcPrincipals;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
-import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.DisabledEncryptedLogging;
 import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsDisabled;
 import gov.va.api.lighthouse.charon.service.controller.AlternateAuthorizationStatusIds.AlternateAuthorizationStatusIdsEnabled;
@@ -70,23 +71,27 @@ public class AuthorizationStatusControllerTest {
   void clinicalAuthorization() {
     when(rpcExecutor.execute(
             rpcRequest(
-                List.of("SITE"),
+                List.of("publicSite1"),
                 rpcPrincipal("apu5555", "ac1234", "vc9876"),
                 rpcDetails("LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "DUZ", "MENUOPTION"))))
         .thenReturn(
-            rpcResponse(RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "SITE"))));
-    assertThat(controller().clinicalAuthorization("SITE", "DUZ", "MENUOPTION"))
+            rpcResponse(
+                RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "publicSite1"))));
+    assertThat(
+            controller()
+                .clinicalAuthorization("publicSite1", "DUZ", "MENUOPTION", "DEFAULTMENUOPTION"))
         .isEqualTo(responseOf(200, "ok", "1"));
     when(rpcExecutor.execute(
             rpcRequest(
-                List.of("SITE"),
+                List.of("publicSite2"),
                 rpcPrincipal("apu5555", "ac1234", "vc9876"),
                 rpcDetails("LHS CHECK OPTION ACCESS", "LHS RPC CONTEXT", "DUZ", "whoDis"))))
         .thenReturn(
-            rpcResponse(RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "SITE"))));
-    assertThat(controller().clinicalAuthorization("SITE", "DUZ", null))
+            rpcResponse(
+                RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "publicSite2"))));
+    assertThat(controller().clinicalAuthorization("publicSite2", "DUZ", null, "whoDis"))
         .isEqualTo(responseOf(200, "ok", "1"));
-    assertThat(controller().clinicalAuthorization("SITE", "DUZ", ""))
+    assertThat(controller().clinicalAuthorization("publicSite2", "DUZ", "", "whoDis"))
         .isEqualTo(responseOf(200, "ok", "1"));
   }
 
@@ -103,7 +108,7 @@ public class AuthorizationStatusControllerTest {
                 RpcResponse.Status.OK, List.of(rpcInvocationResult("1^11", "privateSite1"))));
     assertThat(
             controllerWithAlternateIds()
-                .clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION"))
+                .clinicalAuthorization("publicSite1", "publicDuz1", "MENUOPTION", "default"))
         .isEqualTo(responseOf(200, "ok", "1"));
     when(rpcExecutor.execute(
             rpcRequest(
@@ -114,7 +119,8 @@ public class AuthorizationStatusControllerTest {
             rpcResponse(
                 RpcResponse.Status.OK, List.of(rpcInvocationResult("2^11", "privateSite2"))));
     assertThat(
-            controllerWithAlternateIds().clinicalAuthorization("publicSite2", "publicDuz2", null))
+            controllerWithAlternateIds()
+                .clinicalAuthorization("publicSite2", "publicDuz2", null, "whoDis"))
         .isEqualTo(responseOf(200, "ok", "2"));
   }
 
@@ -124,15 +130,26 @@ public class AuthorizationStatusControllerTest {
 
   private AuthorizationStatusController controller(
       AlternateAuthorizationStatusIds alternateAuthorizationStatusIds) {
-    ClinicalAuthorizationStatusProperties properties =
-        ClinicalAuthorizationStatusProperties.builder()
-            .accessCode("ac1234")
-            .verifyCode("vc9876")
-            .applicationProxyUser("apu5555")
-            .defaultMenuOption("whoDis")
-            .build();
     return new AuthorizationStatusController(
-        rpcExecutor, properties, alternateAuthorizationStatusIds, new DisabledEncryptedLogging());
+        rpcExecutor,
+        alternateAuthorizationStatusIds,
+        new DisabledEncryptedLogging(),
+        RpcPrincipalLookup.of(
+            RpcPrincipals.builder()
+                .entries(
+                    List.of(
+                        RpcPrincipals.PrincipalEntry.builder()
+                            .rpcNames(List.of("LHS CHECK OPTION ACCESS"))
+                            .applicationProxyUser("apu5555")
+                            .codes(
+                                List.of(
+                                    RpcPrincipals.Codes.builder()
+                                        .sites(List.of("publicSite1", "publicSite2"))
+                                        .accessCode("ac1234")
+                                        .verifyCode("vc9876")
+                                        .build()))
+                            .build()))
+                .build()));
   }
 
   AuthorizationStatusController controllerWithAlternateIds() {

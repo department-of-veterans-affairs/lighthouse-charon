@@ -5,12 +5,12 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import gov.va.api.health.autoconfig.logging.Redact;
+import gov.va.api.lighthouse.charon.api.RpcPrincipalLookup;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAccess;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
-import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.EncryptedLogging;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -43,11 +43,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthorizationStatusController {
   private final RpcExecutor rpcExecutor;
 
-  private final ClinicalAuthorizationStatusProperties clinicalAuthorizationStatusProperties;
-
   private final AlternateAuthorizationStatusIds alternateIds;
 
   private final EncryptedLogging encryptedLogging;
+
+  private final RpcPrincipalLookup rpcPrincipalLookup;
 
   /** Test a users clinical authorization status. Uses the LHS CHECK OPTION ACCESS VPC. */
   @GetMapping(
@@ -56,10 +56,13 @@ public class AuthorizationStatusController {
   public ResponseEntity<ClinicalAuthorizationResponse> clinicalAuthorization(
       @NotBlank @RequestParam(name = "site") String site,
       @Redact @NotBlank @RequestParam(name = "duz") String duz,
-      @RequestParam(name = "menu-option", required = false) String menuOption) {
+      @RequestParam(name = "menu-option", required = false) String menuOption,
+      @org.springframework.beans.factory.annotation.Value(
+              "${clinical-authorization-status.default-menu-option}")
+          String defaultMenuOption) {
 
     if (isBlank(menuOption)) {
-      menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
+      menuOption = defaultMenuOption;
     }
     AuthorizationId specifiedAuthorizationId =
         AuthorizationId.builder().duz(duz).site(site).build();
@@ -70,6 +73,13 @@ public class AuthorizationStatusController {
             String.format(
                 "Option %s, requested %s, using %s",
                 menuOption, specifiedAuthorizationId, usableAuthorizationId)));
+    var maybePrincipal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
+    if (maybePrincipal.isEmpty()) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Principal not found for site[%s] and rpcName[%s].",
+              LhsCheckOptionAccess.RPC_NAME, site));
+    }
     RpcResponse response =
         rpcExecutor.execute(
             RpcRequest.builder()
@@ -83,7 +93,7 @@ public class AuthorizationStatusController {
                     RpcVistaTargets.builder()
                         .include(List.of(usableAuthorizationId.site()))
                         .build())
-                .principal(clinicalAuthorizationStatusProperties.principal())
+                .principal(maybePrincipal.get())
                 .build());
     LhsCheckOptionAccess.Response typeSafeResult =
         LhsCheckOptionAccess.create().fromResults(response.results());
