@@ -1,7 +1,6 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
 import static gov.va.api.health.autoconfig.logging.LogSanitizer.sanitize;
-import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
