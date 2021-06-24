@@ -73,12 +73,9 @@ public class AuthorizationStatusController {
             String.format(
                 "Option %s, requested %s, using %s",
                 menuOption, specifiedAuthorizationId, usableAuthorizationId)));
-    var maybePrincipal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
-    if (maybePrincipal.isEmpty()) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Principal not found for site[%s] and rpcName[%s].",
-              LhsCheckOptionAccess.RPC_NAME, site));
+    var principal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
+    if (principal.isEmpty()) {
+      return responseOf("No credentials for site.", site, 500);
     }
     RpcResponse response =
         rpcExecutor.execute(
@@ -93,7 +90,7 @@ public class AuthorizationStatusController {
                     RpcVistaTargets.builder()
                         .include(List.of(usableAuthorizationId.site()))
                         .build())
-                .principal(maybePrincipal.get())
+                .principal(principal.get())
                 .build());
     LhsCheckOptionAccess.Response typeSafeResult =
         LhsCheckOptionAccess.create().fromResults(response.results());

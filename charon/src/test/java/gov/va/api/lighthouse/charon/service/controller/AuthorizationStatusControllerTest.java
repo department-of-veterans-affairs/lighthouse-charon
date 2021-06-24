@@ -94,8 +94,14 @@ public class AuthorizationStatusControllerTest {
         .isEqualTo(responseOf(200, "ok", "1"));
     assertThat(controller().clinicalAuthorization("publicSite2", "DUZ", "", "whoDis"))
         .isEqualTo(responseOf(200, "ok", "1"));
-    assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> controller().clinicalAuthorization("unknownSite", "DUZ", "", "whoDies"));
+    assertThat(controller().clinicalAuthorization("unknownSite", "DUZ", "", "whoDies"))
+        .isEqualTo(
+            ResponseEntity.status(500)
+                .body(
+                    AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
+                        .status("No credentials for site.")
+                        .value("unknownSite")
+                        .build()));
   }
 
   @Test
