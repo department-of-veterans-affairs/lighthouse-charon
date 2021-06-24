@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
     path = "/authorization-status",
     produces = {"application/json"})
-@AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 public class AuthorizationStatusController {
   private final RpcExecutor rpcExecutor;
@@ -50,6 +49,28 @@ public class AuthorizationStatusController {
 
   private final RpcPrincipalLookup rpcPrincipalLookup;
 
+  private final String defaultMenuOption;
+
+  /** AuthorizationStatusController constructor with field validation. */
+  public AuthorizationStatusController(
+      @Autowired RpcExecutor rpcExecutor,
+      @Autowired AlternateAuthorizationStatusIds alternateIds,
+      @Autowired EncryptedLogging encryptedLogging,
+      @Autowired RpcPrincipalLookup rpcPrincipalLookup,
+      @org.springframework.beans.factory.annotation.Value(
+              "${clinical-authorization-status.default-menu-option}")
+          String defaultMenuOption) {
+    this.rpcExecutor = rpcExecutor;
+    this.alternateIds = alternateIds;
+    this.encryptedLogging = encryptedLogging;
+    this.rpcPrincipalLookup = rpcPrincipalLookup;
+    if (StringUtils.isBlank(defaultMenuOption)) {
+      throw new IllegalArgumentException(
+          "${clinical-authorization-status.default-menu-option} is not set or is empty.");
+    }
+    this.defaultMenuOption = defaultMenuOption;
+  }
+
   /** Test a users clinical authorization status. Uses the LHS CHECK OPTION ACCESS VPC. */
   @GetMapping(
       value = {"/clinical"},
@@ -57,10 +78,7 @@ public class AuthorizationStatusController {
   public ResponseEntity<ClinicalAuthorizationResponse> clinicalAuthorization(
       @NotBlank @RequestParam(name = "site") String site,
       @Redact @NotBlank @RequestParam(name = "duz") String duz,
-      @RequestParam(name = "menu-option", required = false) String menuOption,
-      @org.springframework.beans.factory.annotation.Value(
-              "${clinical-authorization-status.default-menu-option}")
-          String defaultMenuOption) {
+      @RequestParam(name = "menu-option", required = false) String menuOption) {
 
     if (isBlank(menuOption)) {
       menuOption = defaultMenuOption;
