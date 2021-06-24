@@ -1,26 +1,27 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
+import static gov.va.api.health.autoconfig.logging.LogSanitizer.sanitize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import gov.va.api.health.autoconfig.logging.Redact;
+import gov.va.api.lighthouse.charon.api.RpcPrincipalLookup;
 import gov.va.api.lighthouse.charon.api.RpcRequest;
 import gov.va.api.lighthouse.charon.api.RpcResponse;
 import gov.va.api.lighthouse.charon.api.RpcVistaTargets;
 import gov.va.api.lighthouse.charon.models.lhscheckoptionaccess.LhsCheckOptionAccess;
 import gov.va.api.lighthouse.charon.service.config.AuthorizationId;
-import gov.va.api.lighthouse.charon.service.config.ClinicalAuthorizationStatusProperties;
 import gov.va.api.lighthouse.charon.service.config.EncyptedLoggingConfig.EncryptedLogging;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -38,16 +39,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(
     path = "/authorization-status",
     produces = {"application/json"})
-@AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 public class AuthorizationStatusController {
   private final RpcExecutor rpcExecutor;
 
-  private final ClinicalAuthorizationStatusProperties clinicalAuthorizationStatusProperties;
-
   private final AlternateAuthorizationStatusIds alternateIds;
 
   private final EncryptedLogging encryptedLogging;
+
+  private final RpcPrincipalLookup rpcPrincipalLookup;
+
+  private final String defaultMenuOption;
+
+  /** AuthorizationStatusController constructor with field validation. */
+  public AuthorizationStatusController(
+      @Autowired RpcExecutor rpcExecutor,
+      @Autowired AlternateAuthorizationStatusIds alternateIds,
+      @Autowired EncryptedLogging encryptedLogging,
+      @Autowired RpcPrincipalLookup rpcPrincipalLookup,
+      @org.springframework.beans.factory.annotation.Value(
+              "${clinical-authorization-status.default-menu-option}")
+          String defaultMenuOption) {
+    this.rpcExecutor = rpcExecutor;
+    this.alternateIds = alternateIds;
+    this.encryptedLogging = encryptedLogging;
+    this.rpcPrincipalLookup = rpcPrincipalLookup;
+    if (isBlank(defaultMenuOption)) {
+      throw new IllegalArgumentException(
+          "${clinical-authorization-status.default-menu-option} is not set or is empty.");
+    }
+    this.defaultMenuOption = defaultMenuOption;
+  }
 
   /** Test a users clinical authorization status. Uses the LHS CHECK OPTION ACCESS VPC. */
   @GetMapping(
@@ -59,7 +81,7 @@ public class AuthorizationStatusController {
       @RequestParam(name = "menu-option", required = false) String menuOption) {
 
     if (isBlank(menuOption)) {
-      menuOption = clinicalAuthorizationStatusProperties.getDefaultMenuOption();
+      menuOption = defaultMenuOption;
     }
     AuthorizationId specifiedAuthorizationId =
         AuthorizationId.builder().duz(duz).site(site).build();
@@ -70,6 +92,10 @@ public class AuthorizationStatusController {
             String.format(
                 "Option %s, requested %s, using %s",
                 menuOption, specifiedAuthorizationId, usableAuthorizationId)));
+    var principal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
+    if (principal.isEmpty()) {
+      return responseOf("No credentials for site.", sanitize(site), 500);
+    }
     RpcResponse response =
         rpcExecutor.execute(
             RpcRequest.builder()
@@ -83,7 +109,7 @@ public class AuthorizationStatusController {
                     RpcVistaTargets.builder()
                         .include(List.of(usableAuthorizationId.site()))
                         .build())
-                .principal(clinicalAuthorizationStatusProperties.principal())
+                .principal(principal.get())
                 .build());
     LhsCheckOptionAccess.Response typeSafeResult =
         LhsCheckOptionAccess.create().fromResults(response.results());
