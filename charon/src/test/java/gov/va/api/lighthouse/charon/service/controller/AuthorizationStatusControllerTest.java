@@ -97,7 +97,7 @@ public class AuthorizationStatusControllerTest {
                 .body(
                     AuthorizationStatusController.ClinicalAuthorizationResponse.builder()
                         .status("No credentials for site.")
-                        .value("unknownSite")
+                        .value("Site: unknownSite. Alternate site: unknownSite.")
                         .build()));
   }
 
@@ -131,11 +131,17 @@ public class AuthorizationStatusControllerTest {
   }
 
   AuthorizationStatusController controller() {
-    return controller(new AlternateAuthorizationStatusIdsDisabled());
+    return controller(
+        new AlternateAuthorizationStatusIdsDisabled(),
+        RpcPrincipals.Codes.builder()
+            .sites(List.of("publicSite1", "publicSite2"))
+            .accessCode("ac1234")
+            .verifyCode("vc9876")
+            .build());
   }
 
   private AuthorizationStatusController controller(
-      AlternateAuthorizationStatusIds alternateAuthorizationStatusIds) {
+      AlternateAuthorizationStatusIds alternateAuthorizationStatusIds, RpcPrincipals.Codes codes) {
     return new AuthorizationStatusController(
         rpcExecutor,
         alternateAuthorizationStatusIds,
@@ -147,13 +153,7 @@ public class AuthorizationStatusControllerTest {
                         RpcPrincipals.PrincipalEntry.builder()
                             .rpcNames(List.of("LHS CHECK OPTION ACCESS"))
                             .applicationProxyUser("apu5555")
-                            .codes(
-                                List.of(
-                                    RpcPrincipals.Codes.builder()
-                                        .sites(List.of("publicSite1", "publicSite2"))
-                                        .accessCode("ac1234")
-                                        .verifyCode("vc9876")
-                                        .build()))
+                            .codes(List.of(codes))
                             .build()))
                 .build()),
         "defaultOption");
@@ -166,7 +166,12 @@ public class AuthorizationStatusControllerTest {
                 AuthorizationId.of("publicDuz1@publicSite1"),
                 AuthorizationId.of("privateDuz1@privateSite1"),
                 AuthorizationId.of("publicDuz2@publicSite2"),
-                AuthorizationId.of("privateDuz2@privateSite2"))));
+                AuthorizationId.of("privateDuz2@privateSite2"))),
+        RpcPrincipals.Codes.builder()
+            .sites(List.of("privateSite1", "privateSite2"))
+            .accessCode("ac1234")
+            .verifyCode("vc9876")
+            .build());
   }
 
   ResponseEntity<AuthorizationStatusController.ClinicalAuthorizationResponse> responseOf(
