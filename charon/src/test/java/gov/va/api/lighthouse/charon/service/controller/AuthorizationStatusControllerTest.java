@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.when;
 
@@ -93,6 +94,8 @@ public class AuthorizationStatusControllerTest {
         .isEqualTo(responseOf(200, "ok", "1"));
     assertThat(controller().clinicalAuthorization("publicSite2", "DUZ", "", "whoDis"))
         .isEqualTo(responseOf(200, "ok", "1"));
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> controller().clinicalAuthorization("unknownSite", "DUZ", "", "whoDies"));
   }
 
   @Test
