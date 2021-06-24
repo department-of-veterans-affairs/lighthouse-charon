@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.service.controller;
 
 import static gov.va.api.health.autoconfig.logging.LogSanitizer.sanitize;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -64,7 +65,7 @@ public class AuthorizationStatusController {
     this.alternateIds = alternateIds;
     this.encryptedLogging = encryptedLogging;
     this.rpcPrincipalLookup = rpcPrincipalLookup;
-    if (StringUtils.isBlank(defaultMenuOption)) {
+    if (isBlank(defaultMenuOption)) {
       throw new IllegalArgumentException(
           "${clinical-authorization-status.default-menu-option} is not set or is empty.");
     }
