@@ -75,8 +75,8 @@ public class AuthorizationStatusController {
       value = {"/clinical"},
       params = {"site", "duz"})
   public ResponseEntity<ClinicalAuthorizationResponse> clinicalAuthorization(
-      @NotBlank @RequestParam(name = "unsafeSite") String unsafeSite,
-      @Redact @NotBlank @RequestParam(name = "unsafeDuz") String unsafeDuz,
+      @NotBlank @RequestParam(name = "site") String unsafeSite,
+      @Redact @NotBlank @RequestParam(name = "duz") String unsafeDuz,
       @RequestParam(name = "menu-option", required = false) String menuOption) {
 
     if (isBlank(menuOption)) {
