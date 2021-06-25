@@ -1,0 +1,34 @@
+{
+   "principal":{
+      "applicationProxyUser":"LHS,APPLICATION PROXY",
+      "accessCode":"123LIGHTHOUSE",
+      "verifyCode":"321LIGHTHOUSE*"
+   },
+   "target":{
+      "include":[
+         "host.docker.internal:18673:673:America/New_York"
+      ]
+   },
+   "rpc":{
+      "name":"LHS LIGHTHOUSE RPC GATEWAY",
+      "context":"LHS RPC CONTEXT",
+      "parameters":[
+         {
+            "array":[
+            "debugmode^1",
+            "api^manifest^list",
+            "param^FILE^literal^36",
+            "param^IENS^literal^",
+            "param^FIELDS^literal^@;.01;.05;.111;.112;.113;.114;.115;.116;.131",
+            "param^FLAGS^literal^",
+            "param^NUMBER^literal^",
+            "param^FROM^literal^",
+            "param^PART^literal^",
+            "param^INDEX^literal^",
+            "param^SCREEN^literal^",
+            "param^ID^literal^"
+            ]
+         }
+      ]
+   }
+}

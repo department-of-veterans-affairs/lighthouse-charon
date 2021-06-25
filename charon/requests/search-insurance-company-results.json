@@ -1,0 +1,61 @@
+{
+   "results":{
+      "fileName":"INSURANCE COMPANY",
+      "fileNumber":36,
+      "header":{
+         "maxRequested":"*",
+         "moreFound":false,
+         "numberFound":4
+      },
+      "insuranceCompany":[
+         {
+            "city":"JACKSONVILLE",
+            "id":4,
+            "inactive":"",
+            "name":"BCBS OF FL",
+            "phoneNumber":"800-727-2227",
+            "state":"FLORIDA",
+            "streetAddressLine1":"PO BOX 1798",
+            "streetAddressLine2":"REGIONAL CLAIMS OFFICE",
+            "streetAddressLine3":"ATTN: MICHAEL",
+            "zipCode":"32231-0014"
+         },
+         {
+            "city":"ANYTOWN",
+            "id":3,
+            "inactive":"",
+            "name":"HEALTH INSURANCE PLUS",
+            "phoneNumber":"",
+            "state":"WEST VIRGINIA",
+            "streetAddressLine1":"ANYSTREET",
+            "streetAddressLine2":"",
+            "streetAddressLine3":"",
+            "zipCode":99990
+         },
+         {
+            "city":"ANYTOWN",
+            "id":2,
+            "inactive":"",
+            "name":"MEDICARE",
+            "phoneNumber":"",
+            "state":"",
+            "streetAddressLine1":"ANYSTREET",
+            "streetAddressLine2":"",
+            "streetAddressLine3":"",
+            "zipCode":99990
+         },
+         {
+            "city":"ANUTOWN",
+            "id":1,
+            "inactive":"",
+            "name":"PRIVATE INSURANCE CO INC",
+            "phoneNumber":"",
+            "state":"",
+            "streetAddressLine1":"ANYSREET",
+            "streetAddressLine2":"",
+            "streetAddressLine3":"",
+            "zipCode":99990
+         }
+      ]
+   }
+}
