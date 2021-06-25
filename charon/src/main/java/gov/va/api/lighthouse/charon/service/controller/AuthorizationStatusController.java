@@ -75,15 +75,15 @@ public class AuthorizationStatusController {
       value = {"/clinical"},
       params = {"site", "duz"})
   public ResponseEntity<ClinicalAuthorizationResponse> clinicalAuthorization(
-      @NotBlank @RequestParam(name = "site") String site,
-      @Redact @NotBlank @RequestParam(name = "duz") String duz,
+      @NotBlank @RequestParam(name = "site") String unsafeSite,
+      @Redact @NotBlank @RequestParam(name = "duz") String unsafeDuz,
       @RequestParam(name = "menu-option", required = false) String menuOption) {
 
     if (isBlank(menuOption)) {
       menuOption = defaultMenuOption;
     }
     AuthorizationId specifiedAuthorizationId =
-        AuthorizationId.builder().duz(duz).site(site).build();
+        AuthorizationId.builder().duz(unsafeDuz).site(unsafeSite).build();
     AuthorizationId usableAuthorizationId = alternateIds.toPrivateId(specifiedAuthorizationId);
     log.info(
         "Checking {}",
@@ -91,9 +91,16 @@ public class AuthorizationStatusController {
             String.format(
                 "Option %s, requested %s, using %s",
                 menuOption, specifiedAuthorizationId, usableAuthorizationId)));
-    var principal = rpcPrincipalLookup.findByNameAndSite(LhsCheckOptionAccess.RPC_NAME, site);
+    var principal =
+        rpcPrincipalLookup.findByNameAndSite(
+            LhsCheckOptionAccess.RPC_NAME, usableAuthorizationId.site());
     if (principal.isEmpty()) {
-      return responseOf("No credentials for site.", sanitize(site), 400);
+      return responseOf(
+          "No credentials for site.",
+          sanitize(
+              String.format(
+                  "Site: %s. Alternate site: %s.", unsafeSite, usableAuthorizationId.site())),
+          400);
     }
     RpcResponse response =
         rpcExecutor.execute(
