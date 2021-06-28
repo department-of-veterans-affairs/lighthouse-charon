@@ -19,7 +19,7 @@
               "api^manifest^gets",
               "param^FILE^literal^2",
               "param^IENS^literal^69",
-              "param^FIELDS^literal^991.01;.3121*",
+              "param^FIELDS^literal^.3121*",
               "param^FLAGS^literal^IEN"
             ]
          }
