@@ -19,7 +19,7 @@
             "api^manifest^list",
             "param^FILE^literal^36",
             "param^IENS^literal^",
-            "param^FIELDS^literal^@;.01;.05;.111;.112;.113;.114;.115;.116;.131",
+            "param^FIELDS^literal^@;.01IE;.05IE;.111IE;.112IE;.113IE;.114IE;.115IE;.116IE;.131IE",
             "param^FLAGS^literal^",
             "param^NUMBER^literal^",
             "param^FROM^literal^",

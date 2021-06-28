@@ -1,61 +1,124 @@
 {
-   "results":{
-      "fileName":"INSURANCE COMPANY",
-      "fileNumber":36,
-      "header":{
-         "maxRequested":"*",
-         "moreFound":false,
-         "numberFound":4
+   "results":[
+      {
+         "fields":{
+            ".01":{
+               "ext":"BCBS OF FL",
+               "in":"BCBS OF FL"
+            },
+            ".111":{
+               "ext":"PO BOX 1798",
+               "in":"PO BOX 1798"
+            },
+            ".112":{
+               "ext":"REGIONAL CLAIMS OFFICE",
+               "in":"REGIONAL CLAIMS OFFICE"
+            },
+            ".113":{
+               "ext":"ATTN: MICHAEL",
+               "in":"ATTN: MICHAEL"
+            },
+            ".114":{
+               "ext":"JACKSONVILLE",
+               "in":"JACKSONVILLE"
+            },
+            ".115":{
+               "ext":"FLORIDA",
+               "in":12
+            },
+            ".116":{
+               "ext":"32231-0014",
+               "in":322310014
+            },
+            ".131":{
+               "ext":"800-727-2227",
+               "in":"800-727-2227"
+            },
+            "EN":{
+               "in":4
+            }
+         },
+         "file":"36^insuranceCompany",
+         "ien":1
       },
-      "insuranceCompany":[
-         {
-            "city":"JACKSONVILLE",
-            "id":4,
-            "inactive":"",
-            "name":"BCBS OF FL",
-            "phoneNumber":"800-727-2227",
-            "state":"FLORIDA",
-            "streetAddressLine1":"PO BOX 1798",
-            "streetAddressLine2":"REGIONAL CLAIMS OFFICE",
-            "streetAddressLine3":"ATTN: MICHAEL",
-            "zipCode":"32231-0014"
+      {
+         "fields":{
+            ".01":{
+               "ext":"HEALTH INSURANCE PLUS",
+               "in":"HEALTH INSURANCE PLUS"
+            },
+            ".111":{
+               "ext":"ANYSTREET",
+               "in":"ANYSTREET"
+            },
+            ".114":{
+               "ext":"ANYTOWN",
+               "in":"ANYTOWN"
+            },
+            ".115":{
+               "ext":"WEST VIRGINIA",
+               "in":54
+            },
+            ".116":{
+               "ext":99990,
+               "in":99990
+            },
+            "EN":{
+               "in":3
+            }
          },
-         {
-            "city":"ANYTOWN",
-            "id":3,
-            "inactive":"",
-            "name":"HEALTH INSURANCE PLUS",
-            "phoneNumber":"",
-            "state":"WEST VIRGINIA",
-            "streetAddressLine1":"ANYSTREET",
-            "streetAddressLine2":"",
-            "streetAddressLine3":"",
-            "zipCode":99990
+         "file":"36^insuranceCompany",
+         "ien":2
+      },
+      {
+         "fields":{
+            ".01":{
+               "ext":"MEDICARE",
+               "in":"MEDICARE"
+            },
+            ".111":{
+               "ext":"ANYSTREET",
+               "in":"ANYSTREET"
+            },
+            ".114":{
+               "ext":"ANYTOWN",
+               "in":"ANYTOWN"
+            },
+            ".116":{
+               "ext":99990,
+               "in":99990
+            },
+            "EN":{
+               "in":2
+            }
          },
-         {
-            "city":"ANYTOWN",
-            "id":2,
-            "inactive":"",
-            "name":"MEDICARE",
-            "phoneNumber":"",
-            "state":"",
-            "streetAddressLine1":"ANYSTREET",
-            "streetAddressLine2":"",
-            "streetAddressLine3":"",
-            "zipCode":99990
+         "file":"36^insuranceCompany",
+         "ien":3
+      },
+      {
+         "fields":{
+            ".01":{
+               "ext":"PRIVATE INSURANCE CO INC",
+               "in":"PRIVATE INSURANCE CO INC"
+            },
+            ".111":{
+               "ext":"ANYSREET",
+               "in":"ANYSREET"
+            },
+            ".114":{
+               "ext":"ANUTOWN",
+               "in":"ANUTOWN"
+            },
+            ".116":{
+               "ext":99990,
+               "in":99990
+            },
+            "EN":{
+               "in":1
+            }
          },
-         {
-            "city":"ANUTOWN",
-            "id":1,
-            "inactive":"",
-            "name":"PRIVATE INSURANCE CO INC",
-            "phoneNumber":"",
-            "state":"",
-            "streetAddressLine1":"ANYSREET",
-            "streetAddressLine2":"",
-            "streetAddressLine3":"",
-            "zipCode":99990
-         }
-      ]
-   }
+         "file":"36^insuranceCompany",
+         "ien":4
+      }
+   ]
 }
