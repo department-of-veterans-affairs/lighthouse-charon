@@ -2,141 +2,141 @@
    "results":[
       {
          "fields":{
-            "*GROUP NAME":{
-               "ext":"FEDERAL",
-               "in":"FEDERAL"
-            },
-            "*NAME OF INSURED":{
-               "ext":"TESTPAT,SUSAN G",
-               "in":"TESTPAT,SUSAN G"
-            },
-            "*SUBSCRIBER ID":{
-               "ext":"R50797108",
-               "in":"R50797108"
-            },
-            "COORDINATION OF BENEFITS":{
-               "ext":"PRIMARY",
-               "in":1
-            },
-            "DATE ENTERED":{
-               "ext":"JUN 28, 2021",
-               "in":3210628
-            },
-            "DATE LAST EDITED":{
-               "ext":"JUN 28, 2021@16:02",
-               "in":3210628.1602
-            },
-            "DATE LAST VERIFIED":{
-               "ext":"JUN 28, 2021@16:02",
-               "in":3210628.1602
-            },
-            "DATE OF SOURCE OF INFORMATION":{
-               "ext":"JUN 28, 2021@16:02:48",
-               "in":3210628.160248
-            },
-            "EFFECTIVE DATE OF POLICY":{
-               "ext":"JAN 12, 1992",
-               "in":2920112
-            },
-            "EIV AUTO-UPDATE":{
-               "ext":"NO",
-               "in":0
-            },
-            "ENTERED BY":{
-               "ext":"TOMLIN,BRIAN",
-               "in":520824650
-            },
-            "GROUP PLAN":{
-               "ext":"BCBS OF FL",
-               "in":87
-            },
-            "INSURANCE EXPIRATION DATE":{
-               "ext":"JAN 01, 2025",
-               "in":3250101
-            },
-            "INSURANCE TYPE":{
+            ".01":{
                "ext":"BCBS OF FL",
                "in":4
             },
-            "INSURED'S CITY":{
-               "ext":"PALM BEACH",
-               "in":"PALM BEACH"
+            ".18":{
+               "ext":"BCBS OF FL",
+               "in":87
             },
-            "INSURED'S COUNTRY":{
-               "ext":"US",
-               "in":"US"
+            ".2":{
+               "ext":"PRIMARY",
+               "in":1
             },
-            "INSURED'S DOB":{
-               "ext":"JUL 21, 1949",
-               "in":2490721
-            },
-            "INSURED'S PHONE":{
-               "ext":"555-12-6543",
-               "in":"555-12-6543"
-            },
-            "INSURED'S SEX":{
-               "ext":"FEMALE",
-               "in":"F"
-            },
-            "INSURED'S SSN":{
-               "ext":"666-12-3456",
-               "in":666123456
-            },
-            "INSURED'S STATE":{
-               "ext":"FLORIDA",
-               "in":12
-            },
-            "INSURED'S STREET 1":{
-               "ext":"100 MAIN STREET",
-               "in":"100 MAIN STREET"
-            },
-            "INSURED'S ZIP":{
-               "ext":"33411-1000",
-               "in":334111000
-            },
-            "LAST EDITED BY":{
-               "ext":"TOMLIN,BRIAN",
-               "in":520824650
-            },
-            "NAME OF INSURED":{
-               "ext":"TESTPAT,SUSAN G",
-               "in":"TESTPAT,SUSAN G"
-            },
-            "NEW GROUP NUMBER":{
-               "ext":"FEP",
-               "in":"FEP"
-            },
-            "PHARMACY RELATIONSHIP CODE":{
-               "ext":2,
-               "in":3
-            },
-            "PT. RELATIONSHIP - HIPAA":{
-               "ext":"SPOUSE",
-               "in":"01"
-            },
-            "PT. RELATIONSHIP TO INSURED":{
-               "ext":"SPOUSE",
-               "in":"02"
-            },
-            "REQUESTED SERVICE DATE":{
-               "ext":"MAY 20, 2021",
-               "in":3210520
-            },
-            "SOURCE OF INFORMATION":{
-               "ext":"ADV MED COST MGMT SOLUTION",
-               "in":22
-            },
-            "SUBSCRIBER ID":{
+            "1":{
                "ext":"R50797108",
                "in":"R50797108"
             },
-            "VERIFIED BY":{
+            "1.01":{
+               "ext":"JUN 28, 2021",
+               "in":3210628
+            },
+            "1.02":{
                "ext":"TOMLIN,BRIAN",
                "in":520824650
             },
-            "WHOSE INSURANCE":{
+            "1.03":{
+               "ext":"JUN 28, 2021@16:02",
+               "in":3210628.1602
+            },
+            "1.04":{
+               "ext":"TOMLIN,BRIAN",
+               "in":520824650
+            },
+            "1.05":{
+               "ext":"JUN 28, 2021@16:02",
+               "in":3210628.1602
+            },
+            "1.06":{
+               "ext":"TOMLIN,BRIAN",
+               "in":520824650
+            },
+            "1.09":{
+               "ext":"ADV MED COST MGMT SOLUTION",
+               "in":22
+            },
+            "1.1":{
+               "ext":"JUN 28, 2021@16:02:48",
+               "in":3210628.160248
+            },
+            "15":{
+               "ext":"FEDERAL",
+               "in":"FEDERAL"
+            },
+            "16":{
+               "ext":"SPOUSE",
+               "in":"02"
+            },
+            "17":{
+               "ext":"TESTPAT,SUSAN G",
+               "in":"TESTPAT,SUSAN G"
+            },
+            "21":{
+               "ext":"FEP",
+               "in":"FEP"
+            },
+            "3":{
+               "ext":"JAN 01, 2025",
+               "in":3250101
+            },
+            "3.01":{
+               "ext":"JUL 21, 1949",
+               "in":2490721
+            },
+            "3.05":{
+               "ext":"666-12-3456",
+               "in":666123456
+            },
+            "3.06":{
+               "ext":"100 MAIN STREET",
+               "in":"100 MAIN STREET"
+            },
+            "3.08":{
+               "ext":"PALM BEACH",
+               "in":"PALM BEACH"
+            },
+            "3.09":{
+               "ext":"FLORIDA",
+               "in":12
+            },
+            "3.1":{
+               "ext":"33411-1000",
+               "in":334111000
+            },
+            "3.11":{
+               "ext":"555-12-6543",
+               "in":"555-12-6543"
+            },
+            "3.12":{
+               "ext":"FEMALE",
+               "in":"F"
+            },
+            "3.13":{
+               "ext":"US",
+               "in":"US"
+            },
+            "4.03":{
+               "ext":"SPOUSE",
+               "in":"01"
+            },
+            "4.04":{
+               "ext":"NO",
+               "in":0
+            },
+            "4.05":{
+               "ext":2,
+               "in":3
+            },
+            "6":{
                "ext":"SPOUSE",
                "in":"s"
+            },
+            "7.01":{
+               "ext":"TESTPAT,SUSAN G",
+               "in":"TESTPAT,SUSAN G"
+            },
+            "7.02":{
+               "ext":"R50797108",
+               "in":"R50797108"
+            },
+            "8":{
+               "ext":"JAN 12, 1992",
+               "in":2920112
+            },
+            "8.01":{
+               "ext":"MAY 20, 2021",
+               "in":3210520
             }
          },
          "file":"2.312^insuranceType",
