@@ -1,184 +1,146 @@
 {
    "results":[
       {
-         "patient":{
-            "external":{
-               "integrationControlNumber":195601,
-               "name":"HANSON,JOSHUA Z"
+         "fields":{
+            "*GROUP NAME":{
+               "ext":"FEDERAL",
+               "in":"FEDERAL"
             },
-            "ien":"69,",
-            "internal":{
-               "integrationControlNumber":195601,
-               "name":"HANSON,JOSHUA Z"
-            }
-         }
-      },
-      {
-         "insuranceType":{
-            "external":{
-               "commentPatientPolicy":"",
-               "coordinationOfBenefits":"PRIMARY",
-               "dateEntered":"JUN 25, 2021",
-               "dateLastEdited":"JUN 25, 2021@04:21",
-               "dateLastVerified":"JUN 25, 2021@04:21",
-               "dateOfSourceOfInformation":"JUN 25, 2021@04:21:46",
-               "dateTimePeriod":"",
-               "dateTimePeriodFormatQual":"",
-               "ebDisplayEntry":"",
-               "effectiveDateOfPolicy":"JAN 12, 1992",
-               "eivAutoupdate":"NO",
-               "employClaimStAddressLine2":"",
-               "employClaimStAddressLine3":"",
-               "employerClaimsCity":"",
-               "employerClaimsPhone":"",
-               "employerClaimsState":"",
-               "employerClaimsStreetAddress":"",
-               "employerClaimsZipCode":"",
-               "employmentStatus":"",
-               "enteredBy":"TOMLIN,BRIAN",
-               "esghp":"",
-               "groupName":"FEDERAL",
-               "groupNumber":"",
-               "groupPlan":"BCBS OF FL",
-               "insuranceExpirationDate":"JAN 01, 2025",
-               "insuranceType":"BCBS OF FL",
-               "insuredsBranch":"",
-               "insuredsCity":"PALM BEACH",
-               "insuredsCountry":"US",
-               "insuredsCountrySubdivision":"",
-               "insuredsDob":"JUL 21, 1949",
-               "insuredsPhone":"555-12-6543",
-               "insuredsRank":"",
-               "insuredsSex":"FEMALE",
-               "insuredsSsn":"666-12-3456",
-               "insuredsState":"FLORIDA",
-               "insuredsStreet1":"100 MAIN STREET",
-               "insuredsStreet2":"",
-               "insuredsZip":"33411-1000",
-               "lastEditedBy":"TOMLIN,BRIAN",
-               "militaryEmploymentStatus":"",
-               "militaryGovtAffiliationCode":"",
-               "militaryInfoStatusCode":"",
-               "militaryPersonnelDescription":"",
-               "militaryServiceRankCode":"",
-               "nameOfInsured":"TESTPAT,SUSAN G",
-               "newGroupName":"",
-               "newGroupNumber":"FEP",
-               "patientId":"",
-               "patientIdRollback":"",
-               "patientsSecQualifier1":"",
-               "patientsSecQualifier2":"",
-               "patientsSecQualifier3":"",
-               "patientsSecondaryId1":"",
-               "patientsSecondaryId2":"",
-               "patientsSecondaryId3":"",
-               "pharmacyPersonCode":"",
-               "pharmacyRelationshipCode":2,
-               "primaryCareProvider":"",
-               "primaryProviderPhone":"",
-               "ptRelationshipHipaa":"SPOUSE",
-               "ptRelationshipToInsured":"SPOUSE",
-               "requestedServiceDate":"MAY 20, 2021",
-               "requestedServiceType":"",
-               "retirementDate":"",
-               "sendBillToEmployer":"",
-               "sourceOfInformation":"ADV MED COST MGMT SOLUTION",
-               "stopPolicyFromBilling":"",
-               "subscriberId":"R50797108",
-               "subscriberIdRollback":"",
-               "subscribersEmployerName":"",
-               "subscribersSecId1":"",
-               "subscribersSecId2":"",
-               "subscribersSecId3":"",
-               "subscribersSecQualifier1":"",
-               "subscribersSecQualifier2":"",
-               "subscribersSecQualifier3":"",
-               "verifiedBy":"TOMLIN,BRIAN",
-               "whoseInsurance":"SPOUSE"
+            "*NAME OF INSURED":{
+               "ext":"TESTPAT,SUSAN G",
+               "in":"TESTPAT,SUSAN G"
             },
-            "ien":"1,69,",
-            "internal":{
-               "commentPatientPolicy":"",
-               "coordinationOfBenefits":1,
-               "dateEntered":3210625,
-               "dateLastEdited":3210625.0421,
-               "dateLastVerified":3210625.0421,
-               "dateOfSourceOfInformation":3210625.042146,
-               "dateTimePeriod":"",
-               "dateTimePeriodFormatQual":"",
-               "ebDisplayEntry":"",
-               "effectiveDateOfPolicy":2920112,
-               "eivAutoupdate":0,
-               "employClaimStAddressLine2":"",
-               "employClaimStAddressLine3":"",
-               "employerClaimsCity":"",
-               "employerClaimsPhone":"",
-               "employerClaimsState":"",
-               "employerClaimsStreetAddress":"",
-               "employerClaimsZipCode":"",
-               "employmentStatus":"",
-               "enteredBy":520824650,
-               "esghp":"",
-               "groupName":"FEDERAL",
-               "groupNumber":"",
-               "groupPlan":87,
-               "insuranceExpirationDate":3250101,
-               "insuranceType":4,
-               "insuredsBranch":"",
-               "insuredsCity":"PALM BEACH",
-               "insuredsCountry":"US",
-               "insuredsCountrySubdivision":"",
-               "insuredsDob":2490721,
-               "insuredsPhone":"555-12-6543",
-               "insuredsRank":"",
-               "insuredsSex":"F",
-               "insuredsSsn":666123456,
-               "insuredsState":12,
-               "insuredsStreet1":"100 MAIN STREET",
-               "insuredsStreet2":"",
-               "insuredsZip":334111000,
-               "lastEditedBy":520824650,
-               "militaryEmploymentStatus":"",
-               "militaryGovtAffiliationCode":"",
-               "militaryInfoStatusCode":"",
-               "militaryPersonnelDescription":"",
-               "militaryServiceRankCode":"",
-               "nameOfInsured":"TESTPAT,SUSAN G",
-               "newGroupName":"",
-               "newGroupNumber":"FEP",
-               "patientId":"",
-               "patientIdRollback":"",
-               "patientsSecQualifier1":"",
-               "patientsSecQualifier2":"",
-               "patientsSecQualifier3":"",
-               "patientsSecondaryId1":"",
-               "patientsSecondaryId2":"",
-               "patientsSecondaryId3":"",
-               "pharmacyPersonCode":"",
-               "pharmacyRelationshipCode":3,
-               "primaryCareProvider":"",
-               "primaryProviderPhone":"",
-               "ptRelationshipHipaa":"01",
-               "ptRelationshipToInsured":"02",
-               "requestedServiceDate":3210520,
-               "requestedServiceType":"",
-               "retirementDate":"",
-               "sendBillToEmployer":"",
-               "sourceOfInformation":22,
-               "stopPolicyFromBilling":"",
-               "subscriberId":"R50797108",
-               "subscriberIdRollback":"",
-               "subscribersEmployerName":"",
-               "subscribersSecId1":"",
-               "subscribersSecId2":"",
-               "subscribersSecId3":"",
-               "subscribersSecQualifier1":"",
-               "subscribersSecQualifier2":"",
-               "subscribersSecQualifier3":"",
-               "verifiedBy":520824650,
-               "whoseInsurance":"s"
+            "*SUBSCRIBER ID":{
+               "ext":"R50797108",
+               "in":"R50797108"
+            },
+            "COORDINATION OF BENEFITS":{
+               "ext":"PRIMARY",
+               "in":1
+            },
+            "DATE ENTERED":{
+               "ext":"JUN 28, 2021",
+               "in":3210628
+            },
+            "DATE LAST EDITED":{
+               "ext":"JUN 28, 2021@16:02",
+               "in":3210628.1602
+            },
+            "DATE LAST VERIFIED":{
+               "ext":"JUN 28, 2021@16:02",
+               "in":3210628.1602
+            },
+            "DATE OF SOURCE OF INFORMATION":{
+               "ext":"JUN 28, 2021@16:02:48",
+               "in":3210628.160248
+            },
+            "EFFECTIVE DATE OF POLICY":{
+               "ext":"JAN 12, 1992",
+               "in":2920112
+            },
+            "EIV AUTO-UPDATE":{
+               "ext":"NO",
+               "in":0
+            },
+            "ENTERED BY":{
+               "ext":"TOMLIN,BRIAN",
+               "in":520824650
+            },
+            "GROUP PLAN":{
+               "ext":"BCBS OF FL",
+               "in":87
+            },
+            "INSURANCE EXPIRATION DATE":{
+               "ext":"JAN 01, 2025",
+               "in":3250101
+            },
+            "INSURANCE TYPE":{
+               "ext":"BCBS OF FL",
+               "in":4
+            },
+            "INSURED'S CITY":{
+               "ext":"PALM BEACH",
+               "in":"PALM BEACH"
+            },
+            "INSURED'S COUNTRY":{
+               "ext":"US",
+               "in":"US"
+            },
+            "INSURED'S DOB":{
+               "ext":"JUL 21, 1949",
+               "in":2490721
+            },
+            "INSURED'S PHONE":{
+               "ext":"555-12-6543",
+               "in":"555-12-6543"
+            },
+            "INSURED'S SEX":{
+               "ext":"FEMALE",
+               "in":"F"
+            },
+            "INSURED'S SSN":{
+               "ext":"666-12-3456",
+               "in":666123456
+            },
+            "INSURED'S STATE":{
+               "ext":"FLORIDA",
+               "in":12
+            },
+            "INSURED'S STREET 1":{
+               "ext":"100 MAIN STREET",
+               "in":"100 MAIN STREET"
+            },
+            "INSURED'S ZIP":{
+               "ext":"33411-1000",
+               "in":334111000
+            },
+            "LAST EDITED BY":{
+               "ext":"TOMLIN,BRIAN",
+               "in":520824650
+            },
+            "NAME OF INSURED":{
+               "ext":"TESTPAT,SUSAN G",
+               "in":"TESTPAT,SUSAN G"
+            },
+            "NEW GROUP NUMBER":{
+               "ext":"FEP",
+               "in":"FEP"
+            },
+            "PHARMACY RELATIONSHIP CODE":{
+               "ext":2,
+               "in":3
+            },
+            "PT. RELATIONSHIP - HIPAA":{
+               "ext":"SPOUSE",
+               "in":"01"
+            },
+            "PT. RELATIONSHIP TO INSURED":{
+               "ext":"SPOUSE",
+               "in":"02"
+            },
+            "REQUESTED SERVICE DATE":{
+               "ext":"MAY 20, 2021",
+               "in":3210520
+            },
+            "SOURCE OF INFORMATION":{
+               "ext":"ADV MED COST MGMT SOLUTION",
+               "in":22
+            },
+            "SUBSCRIBER ID":{
+               "ext":"R50797108",
+               "in":"R50797108"
+            },
+            "VERIFIED BY":{
+               "ext":"TOMLIN,BRIAN",
+               "in":520824650
+            },
+            "WHOSE INSURANCE":{
+               "ext":"SPOUSE",
+               "in":"s"
             }
-         }
+         },
+         "file":"2.312^insuranceType",
+         "ien":"1,69,"
       }
    ]
 }

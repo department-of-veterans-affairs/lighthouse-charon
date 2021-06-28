@@ -1,8 +1,8 @@
 {
    "principal":{
       "applicationProxyUser":"LHS,APPLICATION PROXY",
-      "accessCode":"123LIGHTHOUSE",
-      "verifyCode":"321LIGHTHOUSE*"
+      "accessCode":"$VISTA_ACCESS_CODE",
+      "verifyCode":"$VISTA_VERIFY_CODE"
    },
    "target":{
       "include":[
@@ -14,14 +14,14 @@
       "context":"LHS RPC CONTEXT",
       "parameters":[
          {
-            "array":[
-              "debugmode^1",
-              "api^manifest^gets",
-              "param^FILE^literal^2",
-              "param^IENS^literal^69",
-              "param^FIELDS^literal^.01;991.01;.3121*",
-              "param^FLAGS^literal^IER"
-            ]
+        "array":[
+          "debugmode^1",
+          "api^manifest^gets",
+          "param^FILE^literal^2.312",
+          "param^IENS^literal^1,69,",
+          "param^FIELDS^literal^**",
+          "param^FLAGS^literal^NIER"
+        ]
          }
       ]
    }

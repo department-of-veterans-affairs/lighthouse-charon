@@ -17,10 +17,10 @@
             "array":[
               "debugmode^1",
               "api^manifest^gets",
-              "param^FILE^literal^36",
-              "param^IENS^literal^4",
-              "param^FIELDS^literal^",
-              "param^FLAGS^literal^IENR"
+              "param^FILE^literal^2",
+              "param^IENS^literal^69",
+              "param^FIELDS^literal^991.01;.3121*",
+              "param^FLAGS^literal^IEN"
             ]
          }
       ]

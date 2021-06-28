@@ -1,283 +1,226 @@
 {
    "results":[
       {
-         "insuranceCompany":{
-            "external":{
-               "allowMultipleBedsections":"YES",
-               "ambulatorySurgRevCode":331,
-               "anotherCoProcDentClaims":"",
-               "anotherCoProcessAppeals":"",
-               "anotherCoProcessInquiries":"NO",
-               "anotherCoProcessIpClaims":"YES",
-               "anotherCoProcessOpClaims":"",
-               "anotherCoProcessPrecerts":"NO",
-               "anotherCoProcessRxClaims":"NO",
-               "appealsAddressCity":"",
-               "appealsAddressStLine1":"",
-               "appealsAddressStLine2":"",
-               "appealsAddressStLine3":"",
-               "appealsAddressState":"",
-               "appealsAddressZip":"",
-               "appealsCompanyName":"",
-               "appealsFax":"",
-               "appealsPhoneNumber":"",
-               "attendingPhysicianId":"",
-               "attrendIdBillSecIdInst":"YES",
-               "attrendIdBillSecIdProf":"YES",
-               "billingCompanyName":"",
-               "billingPhoneNumber":"800-727-2227",
-               "binNumber":610502,
-               "blank":"",
-               "chpshp":"",
-               "city":"JACKSONVILLE",
-               "claimsDentalCompanyName":"",
-               "claimsDentalFax":"",
-               "claimsDentalPhoneNumber":"",
-               "claimsDentalProcessCity":"",
-               "claimsDentalProcessState":"",
-               "claimsDentalProcessZip":"",
-               "claimsDentalStreetAddr1":"",
-               "claimsDentalStreetAddr2":"",
-               "claimsInptCompanyName":"",
-               "claimsInptFax":"800-255-6065",
-               "claimsInptPhoneNumber":"813.626.1101",
-               "claimsInptProcessCity":"JACKSONVILLE",
-               "claimsInptProcessState":"FLORIDA",
-               "claimsInptProcessZip":"32231-0014",
-               "claimsInptStreetAddress1":"P.O. BOX 6003",
-               "claimsInptStreetAddress2":"",
-               "claimsInptStreetAddress3":"",
-               "claimsOptCompanyName":"",
-               "claimsOptFax":"",
-               "claimsOptPhoneNumber":"(787)751-5656",
-               "claimsOptProcessCity":"NEW YORK",
-               "claimsOptProcessState":"NEW YORK",
-               "claimsOptProcessZip":"10116-2832",
-               "claimsOptStreetAddress1":"PO BOX 2832",
-               "claimsOptStreetAddress2":"",
-               "claimsOptStreetAddress3":"",
-               "claimsRxCity":"LEXINGTON ",
-               "claimsRxCompanyName":"",
-               "claimsRxFax":"",
-               "claimsRxPhoneNumber":"",
-               "claimsRxState":"KENTUCKY",
-               "claimsRxStreetAddress1":"PO BOX 14610",
-               "claimsRxStreetAddress2":"",
-               "claimsRxStreetAddress3":"",
-               "claimsRxZip":"40512-1234",
-               "collectionsDollarLimit":"",
-               "delete200641":"",
-               "differentRevenueCodesToUse":"500:510",
-               "ediIdNumberDental":"",
-               "ediIdNumberInst":"12B34",
-               "ediIdNumberProf":"SB590",
-               "ediInstSecondaryId1":"",
-               "ediInstSecondaryId2":"",
-               "ediInstSecondaryIdQual1":"",
-               "ediInstSecondaryIdQual2":"",
-               "ediProfSecondaryId1":"",
-               "ediProfSecondaryId2":"",
-               "ediProfSecondaryIdQual1":"",
-               "ediProfSecondaryIdQual2":"",
-               "ediUmo278Id":"",
-               "electronicInsuranceType":"GROUP POLICY",
-               "faxNumber":"615-968-9275",
-               "filingTimeFrame":"12 MONTHS",
-               "hospitalProviderNumber":"",
-               "hpidoeid":"",
-               "inactive":"",
-               "inquiryAddressCity":"",
-               "inquiryAddressStLine1":"",
-               "inquiryAddressStLine2":"",
-               "inquiryAddressStLine3":"",
-               "inquiryAddressState":"",
-               "inquiryAddressZipCode":"",
-               "inquiryCompanyName":"",
-               "inquiryFax":"",
-               "inquiryPhoneNumber":"1-800-410-7778",
-               "insCompanyLinkParent":"",
-               "insCompanyLinkType":"",
-               "lastExtractDateForTest":"",
-               "maxNumberTestBillsPerDay":"",
-               "name":"BCBS OF FL",
-               "nifId":"",
-               "numberTestBillsForLastDt":"",
-               "oneOptVisitOnBillOnly":"NO",
-               "parentChpHpid":"",
-               "payer":"BCBS OF FLORIDA",
-               "perfProvCareUnitPrompt":"",
-               "perfProvSecondIdType1500":"",
-               "perfProvSecondIdTypeUb":"",
-               "phoneNumber":"800-727-2227",
-               "precertCompanyName":"",
-               "precertificationPhoneNumber":"800-955-5692",
-               "prescriptionRefillRevCode":"",
-               "printSecMedClaimsWoMra":"",
-               "printSectertAutoClaims":"",
-               "professionalProviderNumber":593214855,
-               "refProvSecIdDefCms1500":"BLUE SHIELD",
-               "refProvSecIdReqOnClaims":"NONE",
-               "reimburse":"WILL REIMBURSE",
-               "remarks":"",
-               "repointDeletedCompanyTo":"",
-               "repointPatientsTo":"",
-               "scheduledForDeletion":"",
-               "secondaryIdRequirements":"NONE REQUIRED",
-               "sendLabOrFacIdsForVamc":"YES",
-               "signatureRequiredOnBill":"YES",
-               "standardFtf":"",
-               "standardFtfValue":365,
-               "state":"FLORIDA",
-               "streetAddressLine1":"PO BOX 1798",
-               "streetAddressLine2":"REGIONAL CLAIMS OFFICE",
-               "streetAddressLine3":"ATTN: MICHAEL",
-               "transmitElectronically":"YES-TEST",
-               "typeOfCoverage":"HEALTH INSURANCE",
-               "useBillProvVamcAddress":"",
-               "useVamcAsBillProvOn1500":"",
-               "useVamcAsBillProvOnUb04":"",
-               "verificationPhoneNumber":"1-800-365-9036",
-               "zipCode":"32231-0014"
+         "fields":{
+            "*SEND LAB OR FAC IDS FOR VAMC":{
+               "ext":"YES",
+               "in":1
             },
-            "ien":"4,",
-            "internal":{
-               "allowMultipleBedsections":1,
-               "ambulatorySurgRevCode":331,
-               "anotherCoProcDentClaims":"",
-               "anotherCoProcessAppeals":"",
-               "anotherCoProcessInquiries":0,
-               "anotherCoProcessIpClaims":1,
-               "anotherCoProcessOpClaims":"",
-               "anotherCoProcessPrecerts":0,
-               "anotherCoProcessRxClaims":0,
-               "appealsAddressCity":"",
-               "appealsAddressStLine1":"",
-               "appealsAddressStLine2":"",
-               "appealsAddressStLine3":"",
-               "appealsAddressState":"",
-               "appealsAddressZip":"",
-               "appealsCompanyName":"",
-               "appealsFax":"",
-               "appealsPhoneNumber":"",
-               "attendingPhysicianId":"",
-               "attrendIdBillSecIdInst":1,
-               "attrendIdBillSecIdProf":1,
-               "billingCompanyName":"",
-               "billingPhoneNumber":"800-727-2227",
-               "binNumber":610502,
-               "blank":"",
-               "chpshp":"",
-               "city":"JACKSONVILLE",
-               "claimsDentalCompanyName":"",
-               "claimsDentalFax":"",
-               "claimsDentalPhoneNumber":"",
-               "claimsDentalProcessCity":"",
-               "claimsDentalProcessState":"",
-               "claimsDentalProcessZip":"",
-               "claimsDentalStreetAddr1":"",
-               "claimsDentalStreetAddr2":"",
-               "claimsInptCompanyName":"",
-               "claimsInptFax":"800-255-6065",
-               "claimsInptPhoneNumber":"813.626.1101",
-               "claimsInptProcessCity":"JACKSONVILLE",
-               "claimsInptProcessState":12,
-               "claimsInptProcessZip":322310014,
-               "claimsInptStreetAddress1":"P.O. BOX 6003",
-               "claimsInptStreetAddress2":"",
-               "claimsInptStreetAddress3":"",
-               "claimsOptCompanyName":"",
-               "claimsOptFax":"",
-               "claimsOptPhoneNumber":"(787)751-5656",
-               "claimsOptProcessCity":"NEW YORK",
-               "claimsOptProcessState":36,
-               "claimsOptProcessZip":101162832,
-               "claimsOptStreetAddress1":"PO BOX 2832",
-               "claimsOptStreetAddress2":"",
-               "claimsOptStreetAddress3":"",
-               "claimsRxCity":"LEXINGTON ",
-               "claimsRxCompanyName":"",
-               "claimsRxFax":"",
-               "claimsRxPhoneNumber":"",
-               "claimsRxState":21,
-               "claimsRxStreetAddress1":"PO BOX 14610",
-               "claimsRxStreetAddress2":"",
-               "claimsRxStreetAddress3":"",
-               "claimsRxZip":405121234,
-               "collectionsDollarLimit":"",
-               "delete200641":"",
-               "differentRevenueCodesToUse":"500:510",
-               "ediIdNumberDental":"",
-               "ediIdNumberInst":"12B34",
-               "ediIdNumberProf":"SB590",
-               "ediInstSecondaryId1":"",
-               "ediInstSecondaryId2":"",
-               "ediInstSecondaryIdQual1":"",
-               "ediInstSecondaryIdQual2":"",
-               "ediProfSecondaryId1":"",
-               "ediProfSecondaryId2":"",
-               "ediProfSecondaryIdQual1":"",
-               "ediProfSecondaryIdQual2":"",
-               "ediUmo278Id":"",
-               "electronicInsuranceType":5,
-               "faxNumber":"615-968-9275",
-               "filingTimeFrame":"12 MONTHS",
-               "hospitalProviderNumber":"",
-               "hpidoeid":"",
-               "inactive":"",
-               "inquiryAddressCity":"",
-               "inquiryAddressStLine1":"",
-               "inquiryAddressStLine2":"",
-               "inquiryAddressStLine3":"",
-               "inquiryAddressState":"",
-               "inquiryAddressZipCode":"",
-               "inquiryCompanyName":"",
-               "inquiryFax":"",
-               "inquiryPhoneNumber":"1-800-410-7778",
-               "insCompanyLinkParent":"",
-               "insCompanyLinkType":"",
-               "lastExtractDateForTest":"",
-               "maxNumberTestBillsPerDay":"",
-               "name":"BCBS OF FL",
-               "nifId":"",
-               "numberTestBillsForLastDt":"",
-               "oneOptVisitOnBillOnly":0,
-               "parentChpHpid":"",
-               "payer":42,
-               "perfProvCareUnitPrompt":"",
-               "perfProvSecondIdType1500":"",
-               "perfProvSecondIdTypeUb":"",
-               "phoneNumber":"800-727-2227",
-               "precertCompanyName":"",
-               "precertificationPhoneNumber":"800-955-5692",
-               "prescriptionRefillRevCode":"",
-               "printSecMedClaimsWoMra":"",
-               "printSectertAutoClaims":"",
-               "professionalProviderNumber":593214855,
-               "refProvSecIdDefCms1500":2,
-               "refProvSecIdReqOnClaims":0,
-               "reimburse":"Y",
-               "remarks":"",
-               "repointDeletedCompanyTo":"",
-               "repointPatientsTo":"",
-               "scheduledForDeletion":"",
-               "secondaryIdRequirements":0,
-               "sendLabOrFacIdsForVamc":1,
-               "signatureRequiredOnBill":1,
-               "standardFtf":"",
-               "standardFtfValue":365,
-               "state":12,
-               "streetAddressLine1":"PO BOX 1798",
-               "streetAddressLine2":"REGIONAL CLAIMS OFFICE",
-               "streetAddressLine3":"ATTN: MICHAEL",
-               "transmitElectronically":2,
-               "typeOfCoverage":1,
-               "useBillProvVamcAddress":"",
-               "useVamcAsBillProvOn1500":"",
-               "useVamcAsBillProvOnUb04":"",
-               "verificationPhoneNumber":"1-800-365-9036",
-               "zipCode":322310014
+            "ALLOW MULTIPLE BEDSECTIONS":{
+               "ext":"YES",
+               "in":1
+            },
+            "AMBULATORY SURG. REV. CODE":{
+               "ext":331,
+               "in":331
+            },
+            "ANOTHER CO. PROCESS INQUIRIES?":{
+               "ext":"NO",
+               "in":0
+            },
+            "ANOTHER CO. PROCESS IP CLAIMS?":{
+               "ext":"YES",
+               "in":1
+            },
+            "ANOTHER CO. PROCESS PRECERTS?":{
+               "ext":"NO",
+               "in":0
+            },
+            "ANOTHER CO. PROCESS RX CLAIMS?":{
+               "ext":"NO",
+               "in":0
+            },
+            "ATT/REND ID BILL SEC ID INST":{
+               "ext":"YES",
+               "in":1
+            },
+            "ATT/REND ID BILL SEC ID PROF":{
+               "ext":"YES",
+               "in":1
+            },
+            "BILLING PHONE NUMBER":{
+               "ext":"800-727-2227",
+               "in":"800-727-2227"
+            },
+            "BIN NUMBER":{
+               "ext":610502,
+               "in":610502
+            },
+            "CITY":{
+               "ext":"JACKSONVILLE",
+               "in":"JACKSONVILLE"
+            },
+            "CLAIMS (INPT) FAX":{
+               "ext":"800-255-6065",
+               "in":"800-255-6065"
+            },
+            "CLAIMS (INPT) PHONE NUMBER":{
+               "ext":"813.626.1101",
+               "in":"813.626.1101"
+            },
+            "CLAIMS (INPT) PROCESS CITY":{
+               "ext":"JACKSONVILLE",
+               "in":"JACKSONVILLE"
+            },
+            "CLAIMS (INPT) PROCESS STATE":{
+               "ext":"FLORIDA",
+               "in":12
+            },
+            "CLAIMS (INPT) PROCESS ZIP":{
+               "ext":"32231-0014",
+               "in":322310014
+            },
+            "CLAIMS (INPT) STREET ADDRESS 1":{
+               "ext":"P.O. BOX 6003",
+               "in":"P.O. BOX 6003"
+            },
+            "CLAIMS (OPT) PHONE NUMBER":{
+               "ext":"(787)751-5656",
+               "in":"(787)751-5656"
+            },
+            "CLAIMS (OPT) PROCESS CITY":{
+               "ext":"NEW YORK",
+               "in":"NEW YORK"
+            },
+            "CLAIMS (OPT) PROCESS STATE":{
+               "ext":"NEW YORK",
+               "in":36
+            },
+            "CLAIMS (OPT) PROCESS ZIP":{
+               "ext":"10116-2832",
+               "in":101162832
+            },
+            "CLAIMS (OPT) STREET ADDRESS 1":{
+               "ext":"PO BOX 2832",
+               "in":"PO BOX 2832"
+            },
+            "CLAIMS (RX) CITY":{
+               "ext":"LEXINGTON ",
+               "in":"LEXINGTON "
+            },
+            "CLAIMS (RX) STATE":{
+               "ext":"KENTUCKY",
+               "in":21
+            },
+            "CLAIMS (RX) STREET ADDRESS 1":{
+               "ext":"PO BOX 14610",
+               "in":"PO BOX 14610"
+            },
+            "CLAIMS (RX) ZIP":{
+               "ext":"40512-1234",
+               "in":405121234
+            },
+            "DIFFERENT REVENUE CODES TO USE":{
+               "ext":"500:510",
+               "in":"500:510"
+            },
+            "EDI ID NUMBER - INST":{
+               "ext":"12B34",
+               "in":"12B34"
+            },
+            "EDI ID NUMBER - PROF":{
+               "ext":"SB590",
+               "in":"SB590"
+            },
+            "ELECTRONIC INSURANCE TYPE":{
+               "ext":"GROUP POLICY",
+               "in":5
+            },
+            "FAX NUMBER":{
+               "ext":"615-968-9275",
+               "in":"615-968-9275"
+            },
+            "FILING TIME FRAME":{
+               "ext":"12 MONTHS",
+               "in":"12 MONTHS"
+            },
+            "INQUIRY PHONE NUMBER":{
+               "ext":"1-800-410-7778",
+               "in":"1-800-410-7778"
+            },
+            "NAME":{
+               "ext":"BCBS OF FL",
+               "in":"BCBS OF FL"
+            },
+            "ONE OPT. VISIT ON BILL ONLY":{
+               "ext":"NO",
+               "in":0
+            },
+            "PAYER":{
+               "ext":"BCBS OF FLORIDA",
+               "in":42
+            },
+            "PHONE NUMBER":{
+               "ext":"800-727-2227",
+               "in":"800-727-2227"
+            },
+            "PRECERTIFICATION PHONE NUMBER":{
+               "ext":"800-955-5692",
+               "in":"800-955-5692"
+            },
+            "PROFESSIONAL PROVIDER NUMBER":{
+               "ext":593214855,
+               "in":593214855
+            },
+            "REF PROV SEC ID DEF CMS-1500":{
+               "ext":"BLUE SHIELD",
+               "in":2
+            },
+            "REF PROV SEC ID REQ ON CLAIMS":{
+               "ext":"NONE",
+               "in":0
+            },
+            "REIMBURSE?":{
+               "ext":"WILL REIMBURSE",
+               "in":"Y"
+            },
+            "SECONDARY ID REQUIREMENTS":{
+               "ext":"NONE REQUIRED",
+               "in":0
+            },
+            "SIGNATURE REQUIRED ON BILL?":{
+               "ext":"YES",
+               "in":1
+            },
+            "STANDARD FTF VALUE":{
+               "ext":365,
+               "in":365
+            },
+            "STATE":{
+               "ext":"FLORIDA",
+               "in":12
+            },
+            "STREET ADDRESS [LINE 1]":{
+               "ext":"PO BOX 1798",
+               "in":"PO BOX 1798"
+            },
+            "STREET ADDRESS [LINE 2]":{
+               "ext":"REGIONAL CLAIMS OFFICE",
+               "in":"REGIONAL CLAIMS OFFICE"
+            },
+            "STREET ADDRESS [LINE 3]":{
+               "ext":"ATTN: MICHAEL",
+               "in":"ATTN: MICHAEL"
+            },
+            "TRANSMIT ELECTRONICALLY":{
+               "ext":"YES-TEST",
+               "in":2
+            },
+            "TYPE OF COVERAGE":{
+               "ext":"HEALTH INSURANCE",
+               "in":1
+            },
+            "VERIFICATION PHONE NUMBER":{
+               "ext":"1-800-365-9036",
+               "in":"1-800-365-9036"
+            },
+            "ZIP CODE":{
+               "ext":"32231-0014",
+               "in":322310014
             }
-         }
+         },
+         "file":"36^insuranceCompany",
+         "ien":"4,"
       }
    ]
 }

@@ -1,8 +1,8 @@
 {
    "principal":{
       "applicationProxyUser":"LHS,APPLICATION PROXY",
-      "accessCode":"123LIGHTHOUSE",
-      "verifyCode":"321LIGHTHOUSE*"
+      "accessCode":"$VISTA_ACCESS_CODE",
+      "verifyCode":"$VISTA_VERIFY_CODE"
    },
    "target":{
       "include":[
