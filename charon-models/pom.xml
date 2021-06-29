@@ -4,12 +4,12 @@
   <parent>
     <groupId>gov.va.api.health</groupId>
     <artifactId>health-apis-parent</artifactId>
-    <version>8.0.21</version>
+    <version>8.0.22</version>
     <relativePath/>
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>charon-models</artifactId>
-  <version>4.0.13-SNAPSHOT</version>
+  <version>4.0.13</version>
   <packaging>jar</packaging>
   <properties>
     <checkstyle.suppressions.location>${project.basedir}/checkstyle-suppressions.xml</checkstyle.suppressions.location>
