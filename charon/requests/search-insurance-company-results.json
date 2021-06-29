@@ -1,0 +1,119 @@
+{
+   "metatdata":[
+      {
+         "maxRequested":"*",
+         "moreFound":false,
+         "numberFound":4
+      }
+   ],
+   "results":[
+      {
+         "fields":{
+            "#.01":{
+               "ext":"BCBS OF FL",
+               "in":"BCBS OF FL"
+            },
+            "#.111":{
+               "ext":"PO BOX 1798",
+               "in":"PO BOX 1798"
+            },
+            "#.112":{
+               "ext":"REGIONAL CLAIMS OFFICE",
+               "in":"REGIONAL CLAIMS OFFICE"
+            },
+            "#.113":{
+               "ext":"ATTN: MICHAEL",
+               "in":"ATTN: MICHAEL"
+            },
+            "#.114":{
+               "ext":"JACKSONVILLE",
+               "in":"JACKSONVILLE"
+            },
+            "#.115":{
+               "ext":"FLORIDA",
+               "in":12
+            },
+            "#.116":{
+               "ext":"32231-0014",
+               "in":322310014
+            },
+            "#.131":{
+               "ext":"800-727-2227",
+               "in":"800-727-2227"
+            }
+         },
+         "file":36,
+         "ien":1
+      },
+      {
+         "fields":{
+            "#.01":{
+               "ext":"HEALTH INSURANCE PLUS",
+               "in":"HEALTH INSURANCE PLUS"
+            },
+            "#.111":{
+               "ext":"ANYSTREET",
+               "in":"ANYSTREET"
+            },
+            "#.114":{
+               "ext":"ANYTOWN",
+               "in":"ANYTOWN"
+            },
+            "#.115":{
+               "ext":"WEST VIRGINIA",
+               "in":54
+            },
+            "#.116":{
+               "ext":99990,
+               "in":99990
+            }
+         },
+         "file":36,
+         "ien":2
+      },
+      {
+         "fields":{
+            "#.01":{
+               "ext":"MEDICARE",
+               "in":"MEDICARE"
+            },
+            "#.111":{
+               "ext":"ANYSTREET",
+               "in":"ANYSTREET"
+            },
+            "#.114":{
+               "ext":"ANYTOWN",
+               "in":"ANYTOWN"
+            },
+            "#.116":{
+               "ext":99990,
+               "in":99990
+            }
+         },
+         "file":36,
+         "ien":3
+      },
+      {
+         "fields":{
+            "#.01":{
+               "ext":"PRIVATE INSURANCE CO INC",
+               "in":"PRIVATE INSURANCE CO INC"
+            },
+            "#.111":{
+               "ext":"ANYSREET",
+               "in":"ANYSREET"
+            },
+            "#.114":{
+               "ext":"ANUTOWN",
+               "in":"ANUTOWN"
+            },
+            "#.116":{
+               "ext":99990,
+               "in":99990
+            }
+         },
+         "file":36,
+         "ien":4
+      }
+   ]
+}

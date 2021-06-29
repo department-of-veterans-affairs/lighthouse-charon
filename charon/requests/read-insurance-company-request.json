@@ -1,0 +1,28 @@
+{
+   "principal":{
+      "applicationProxyUser":"LHS,APPLICATION PROXY",
+      "accessCode":"$VISTA_ACCESS_CODE",
+      "verifyCode":"$VISTA_VERIFY_CODE"
+   },
+   "target":{
+      "include":[
+         "host.docker.internal:18673:673:America/New_York"
+      ]
+   },
+   "rpc":{
+      "name":"LHS LIGHTHOUSE RPC GATEWAY",
+      "context":"LHS RPC CONTEXT",
+      "parameters":[
+         {
+            "array":[
+              "debugmode^1",
+              "api^manifest^gets",
+              "param^FILE^literal^36",
+              "param^IENS^literal^4",
+              "param^FIELDS^literal^",
+              "param^FLAGS^literal^IENR"
+            ]
+         }
+      ]
+   }
+}
