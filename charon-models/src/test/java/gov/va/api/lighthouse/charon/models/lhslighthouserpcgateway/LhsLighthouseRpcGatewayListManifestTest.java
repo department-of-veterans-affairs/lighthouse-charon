@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-public class LhsLighthouseRpcGatewayTest {
+public class LhsLighthouseRpcGatewayListManifestTest {
 
   @Test
   void fromResults() {
@@ -31,53 +31,50 @@ public class LhsLighthouseRpcGatewayTest {
                 .response("Nah!")
                 .build());
     var expected =
-        LhsLighthouseRpcGateway.Response.builder()
+        LhsLighthouseRpcGatewayListManifest.Response.builder()
             .resultsByStation(
                 Map.of(
                     "777",
-                    LhsLighthouseRpcGateway.Response.Results.builder()
+                    LighthouseRpcGatewayResults.builder()
                         .results(
                             List.of(
-                                LhsLighthouseRpcGateway.Response.FilemanEntry.builder()
+                                LighthouseRpcGatewayResults.FilemanEntry.builder()
                                     .file("2.312")
                                     .ien("1,69,")
                                     .fields(
                                         Map.of(
                                             "#.01",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "BCBS OF FL", "4"),
                                             "#.18",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "BCBS OF FL", "87"),
                                             "#.2",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "PRIMARY", "1"),
                                             "#3",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "JAN 01, 2025", "3250101"),
                                             "#4.03",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "SPOUSE", "01"),
                                             "#7.02",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "R50797108", "R50797108"),
                                             "#8",
-                                                LhsLighthouseRpcGateway.Response.Values.of(
+                                                LighthouseRpcGatewayResults.Values.of(
                                                     "JAN 12, 1992", "2920112")))
                                     .build()))
                         .build()))
             .build();
-    assertThat(LhsLighthouseRpcGateway.create().fromResults(sample)).isEqualTo(expected);
+    assertThat(LhsLighthouseRpcGatewayListManifest.create().fromResults(sample))
+        .isEqualTo(expected);
   }
 
   @Test
   void lazyInitialization() {
     // Request
-    var sample =
-        LhsLighthouseRpcGateway.Request.builder()
-            .api(LhsLighthouseRpcGateway.Request.ApiManifest.GETS)
-            .file("1")
-            .build();
+    var sample = LhsLighthouseRpcGatewayListManifest.Request.builder().file("1").build();
     assertThat(sample.iens()).isEmpty();
     assertThat(sample.fields()).isEmpty();
     assertThat(sample.flags()).isEmpty();
@@ -89,22 +86,29 @@ public class LhsLighthouseRpcGatewayTest {
     assertThat(sample.id()).isEmpty();
 
     // Response
-    assertThat(LhsLighthouseRpcGateway.Response.builder().build().resultsByStation()).isEmpty();
+    assertThat(LhsLighthouseRpcGatewayListManifest.Response.builder().build().resultsByStation())
+        .isEmpty();
   }
 
   @Test
   void requestAsDetails() {
     var sample =
-        LhsLighthouseRpcGateway.Request.builder()
-            .api(LhsLighthouseRpcGateway.Request.ApiManifest.GETS)
+        LhsLighthouseRpcGatewayListManifest.Request.builder()
             .file("2")
-            .iens(List.of("1", "2"))
+            .iens(Optional.of("1"))
             .fields(List.of(".01", ".3121*"))
-            .flags(List.of("N", "I", "E"))
+            .flags(
+                List.of(
+                    LhsLighthouseRpcGatewayListManifest.Request.ListManifestFlags
+                        .RETURN_INTERNAL_VALUES,
+                    LhsLighthouseRpcGatewayListManifest.Request.ListManifestFlags.IGNORE_ERRORS))
             .number(Optional.of("15"))
             .from(
                 Optional.of(
-                    LhsLighthouseRpcGateway.Request.From.builder().name("NAME").ien("1").build()))
+                    LhsLighthouseRpcGatewayListManifest.Request.From.builder()
+                        .name("NAME")
+                        .ien("1")
+                        .build()))
             .part(Optional.of("5"))
             .index(Optional.of("2"))
             .screen(Optional.of("3"))
@@ -112,7 +116,7 @@ public class LhsLighthouseRpcGatewayTest {
             .build();
     var expected =
         RpcDetails.builder()
-            .name(LhsLighthouseRpcGateway.RPC_NAME)
+            .name(LhsLighthouseRpcGatewayListManifest.RPC_NAME)
             .context("LHS RPC CONTEXT")
             .parameters(
                 List.of(
@@ -120,11 +124,11 @@ public class LhsLighthouseRpcGatewayTest {
                         .array(
                             List.of(
                                 "debugmode^1",
-                                "api^manifest^gets",
+                                "api^manifest^list",
                                 "param^FILE^literal^2",
-                                "param^IENS^literal^1;2",
+                                "param^IENS^literal^1",
                                 "param^FIELDS^literal^.01;.3121*",
-                                "param^FLAGS^literal^NIE",
+                                "param^FLAGS^literal^PIE",
                                 "param^NUMBER^literal^15",
                                 "param^FROM^list^1^NAME",
                                 "param^FROM^list^2^1",

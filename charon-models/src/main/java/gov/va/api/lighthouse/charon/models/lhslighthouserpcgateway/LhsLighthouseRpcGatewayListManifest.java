@@ -1,6 +1,7 @@
 package gov.va.api.lighthouse.charon.models.lhslighthouserpcgateway;
 
 import static java.lang.String.join;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
@@ -22,24 +23,25 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
 
-/** Java representation of the LHS LIGHTHOUSE RPC GATEWAY RPC. */
+/** Java representation of the LHS LIGHTHOUSE RPC GATEWAY RPC LIST manifest. */
 @NoArgsConstructor(staticName = "create")
-public class LhsLighthouseRpcGateway
-    implements TypeSafeRpc<LhsLighthouseRpcGateway.Request, LhsLighthouseRpcGateway.Response> {
+public class LhsLighthouseRpcGatewayListManifest
+    implements TypeSafeRpc<
+        LhsLighthouseRpcGatewayListManifest.Request, LhsLighthouseRpcGatewayListManifest.Response> {
   public static final String RPC_NAME = "LHS LIGHTHOUSE RPC GATEWAY";
 
   private static final String DEFAULT_RPC_CONTEXT = "LHS RPC CONTEXT";
 
   @SneakyThrows
-  private LhsLighthouseRpcGateway.Response.Results deserialize(String value) {
-    return JacksonConfig.createMapper()
-        .readValue(value, LhsLighthouseRpcGateway.Response.Results.class);
+  private LighthouseRpcGatewayResults deserialize(String value) {
+    return JacksonConfig.createMapper().readValue(value, LighthouseRpcGatewayResults.class);
   }
 
   @Override
   @SneakyThrows
-  public TypeSafeRpcResponse fromResults(List<RpcInvocationResult> results) {
-    return LhsLighthouseRpcGateway.Response.builder()
+  public LhsLighthouseRpcGatewayListManifest.Response fromResults(
+      List<RpcInvocationResult> results) {
+    return LhsLighthouseRpcGatewayListManifest.Response.builder()
         .resultsByStation(
             results.stream()
                 .filter(invocationResult -> invocationResult.error().isEmpty())
@@ -53,15 +55,13 @@ public class LhsLighthouseRpcGateway
   public static class Request implements TypeSafeRpcRequest {
     @Builder.Default String debugMode = "1";
 
-    @NonNull ApiManifest api;
-
     @NonNull String file;
 
-    List<String> iens;
+    Optional<String> iens;
 
     List<String> fields;
 
-    List<String> flags;
+    List<ListManifestFlags> flags;
 
     Optional<String> number;
 
@@ -77,13 +77,15 @@ public class LhsLighthouseRpcGateway
 
     @Override
     public RpcDetails asDetails() {
-      List<String> parameters = new ArrayList<>(6);
+      List<String> parameters = new ArrayList<>(11);
       parameters.add("debugmode^" + debugMode());
-      parameters.add(api().rpcParamString());
+      parameters.add("api^manifest^list");
       parameters.add("param^FILE^literal^" + file());
-      parameters.add("param^IENS^literal^" + join(";", iens()));
+      parameters.add("param^IENS^literal^" + iens().orElse(""));
       parameters.add("param^FIELDS^literal^" + join(";", fields()));
-      parameters.add("param^FLAGS^literal^" + join("", flags()));
+      parameters.add(
+          "param^FLAGS^literal^P"
+              + flags().stream().map(ListManifestFlags::flag).collect(joining("")));
       parameters.add("param^NUMBER^literal^" + number().orElse(""));
       if (from().isPresent()) {
         parameters.add("param^FROM^list^1^" + from().get().name());
@@ -116,7 +118,7 @@ public class LhsLighthouseRpcGateway
     }
 
     /** Lazy Initializer. */
-    List<String> flags() {
+    List<ListManifestFlags> flags() {
       if (flags == null) {
         flags = List.of();
       }
@@ -140,9 +142,9 @@ public class LhsLighthouseRpcGateway
     }
 
     /** Lazy Initializer. */
-    List<String> iens() {
+    Optional<String> iens() {
       if (iens == null) {
-        iens = List.of();
+        iens = Optional.empty();
       }
       return iens;
     }
@@ -180,11 +182,17 @@ public class LhsLighthouseRpcGateway
     }
 
     @AllArgsConstructor
-    public enum ApiManifest {
-      GETS("api^manifest^gets"),
-      LIST("api^manifest^list");
+    public enum ListManifestFlags {
+      BACKWARDS("B"),
+      IGNORE_ERRORS("E"),
+      RETURN_INTERNAL_VALUES("I"),
+      USE_PRIMARY_KEY("K"),
+      MNEMONIC_SUPPRESSION("M"),
+      QUICK_LIST("Q"),
+      UNSCREENED_LOOKUP("U"),
+      CHOOSE_INDEX("X");
 
-      @Getter private final String rpcParamString;
+      @Getter private final String flag;
     }
 
     @Value
@@ -200,39 +208,14 @@ public class LhsLighthouseRpcGateway
   @Data
   @Builder
   public static class Response implements TypeSafeRpcResponse {
-    private Map<String, Results> resultsByStation;
+    private Map<String, LighthouseRpcGatewayResults> resultsByStation;
 
     /** Lazy Initialization. */
-    Map<String, Results> resultsByStation() {
+    Map<String, LighthouseRpcGatewayResults> resultsByStation() {
       if (resultsByStation == null) {
         resultsByStation = Map.of();
       }
       return resultsByStation;
-    }
-
-    @Value
-    @Builder
-    public static class Results {
-      private List<FilemanEntry> results;
-    }
-
-    @Value
-    @Builder
-    public static class FilemanEntry {
-      private Map<String, Values> fields;
-
-      private String file;
-
-      private String ien;
-    }
-
-    @Value
-    @Builder
-    @AllArgsConstructor(staticName = "of")
-    public static class Values {
-      String ext;
-
-      String in;
     }
   }
 }
