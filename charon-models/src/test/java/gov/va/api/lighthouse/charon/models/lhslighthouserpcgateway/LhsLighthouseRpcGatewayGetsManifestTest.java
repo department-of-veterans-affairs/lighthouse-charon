@@ -31,38 +31,38 @@ public class LhsLighthouseRpcGatewayGetsManifestTest {
                 .response("Nah!")
                 .build());
     var expected =
-        LhsLighthouseRpcGatewayGetsManifest.Response.builder()
+        LhsLighthouseRpcGatewayResponse.builder()
             .resultsByStation(
                 Map.of(
                     "777",
-                    LighthouseRpcGatewayResults.builder()
+                    LhsLighthouseRpcGatewayResponse.Results.builder()
                         .results(
                             List.of(
-                                LighthouseRpcGatewayResults.FilemanEntry.builder()
+                                LhsLighthouseRpcGatewayResponse.FilemanEntry.builder()
                                     .file("2.312")
                                     .ien("1,69,")
                                     .fields(
                                         Map.of(
                                             "#.01",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "BCBS OF FL", "4"),
                                             "#.18",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "BCBS OF FL", "87"),
                                             "#.2",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "PRIMARY", "1"),
                                             "#3",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "JAN 01, 2025", "3250101"),
                                             "#4.03",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "SPOUSE", "01"),
                                             "#7.02",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "R50797108", "R50797108"),
                                             "#8",
-                                                LighthouseRpcGatewayResults.Values.of(
+                                                LhsLighthouseRpcGatewayResponse.Values.of(
                                                     "JAN 12, 1992", "2920112")))
                                     .build()))
                         .build()))
@@ -81,10 +81,6 @@ public class LhsLighthouseRpcGatewayGetsManifestTest {
             .fields(List.of("3"))
             .build();
     assertThat(sample.flags()).isEmpty();
-
-    // Response
-    assertThat(LhsLighthouseRpcGatewayListManifest.Response.builder().build().resultsByStation())
-        .isEmpty();
   }
 
   @Test

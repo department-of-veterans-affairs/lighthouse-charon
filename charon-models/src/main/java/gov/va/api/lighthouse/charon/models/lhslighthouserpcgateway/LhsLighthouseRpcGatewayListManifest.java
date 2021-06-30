@@ -9,10 +9,8 @@ import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpc;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpcRequest;
-import gov.va.api.lighthouse.charon.models.TypeSafeRpcResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,21 +25,21 @@ import lombok.Value;
 @NoArgsConstructor(staticName = "create")
 public class LhsLighthouseRpcGatewayListManifest
     implements TypeSafeRpc<
-        LhsLighthouseRpcGatewayListManifest.Request, LhsLighthouseRpcGatewayListManifest.Response> {
+        LhsLighthouseRpcGatewayListManifest.Request, LhsLighthouseRpcGatewayResponse> {
   public static final String RPC_NAME = "LHS LIGHTHOUSE RPC GATEWAY";
 
   private static final String DEFAULT_RPC_CONTEXT = "LHS RPC CONTEXT";
 
   @SneakyThrows
-  private LighthouseRpcGatewayResults deserialize(String value) {
-    return JacksonConfig.createMapper().readValue(value, LighthouseRpcGatewayResults.class);
+  private LhsLighthouseRpcGatewayResponse.Results deserialize(String value) {
+    return JacksonConfig.createMapper()
+        .readValue(value, LhsLighthouseRpcGatewayResponse.Results.class);
   }
 
   @Override
   @SneakyThrows
-  public LhsLighthouseRpcGatewayListManifest.Response fromResults(
-      List<RpcInvocationResult> results) {
-    return LhsLighthouseRpcGatewayListManifest.Response.builder()
+  public LhsLighthouseRpcGatewayResponse fromResults(List<RpcInvocationResult> results) {
+    return LhsLighthouseRpcGatewayResponse.builder()
         .resultsByStation(
             results.stream()
                 .filter(invocationResult -> invocationResult.error().isEmpty())
@@ -201,21 +199,6 @@ public class LhsLighthouseRpcGatewayListManifest
       String name;
 
       String ien;
-    }
-  }
-
-  /** Java model of the RPC's string response for (de)serialization. */
-  @Data
-  @Builder
-  public static class Response implements TypeSafeRpcResponse {
-    private Map<String, LighthouseRpcGatewayResults> resultsByStation;
-
-    /** Lazy Initialization. */
-    Map<String, LighthouseRpcGatewayResults> resultsByStation() {
-      if (resultsByStation == null) {
-        resultsByStation = Map.of();
-      }
-      return resultsByStation;
     }
   }
 }
