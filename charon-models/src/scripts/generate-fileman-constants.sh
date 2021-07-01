@@ -96,11 +96,11 @@ $(awk -F, -i <(awkFunctions) -v filename="${filename}" '
         next
       }
       if (filePrinted == "false" && $2 != "File") {
-        printf "public String FILE_NUMBER = \"%s\";\n", $2
+        printf "public static final String FILE_NUMBER = \"%s\";\n", $2
         filePrinted = "true" 
       }
       if ( $14$16 != "" && toupper($10) != "DO NOT USE") {
-        printf "public String %s = \"%s\";\n", upperCaseWithUnderscores($5), $4
+        printf "public static final String %s = \"%s\";\n", upperCaseWithUnderscores($5), $4
       }
     }' ${CSV})
 }
