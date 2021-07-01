@@ -13,18 +13,50 @@ public class LhsLighthouseRpcGatewayListManifestTest {
 
   @Test
   void fromResults() {
+    var responseString =
+        """
+            {
+              "results": [
+                {
+                  "fields": {
+                    "#.01": {
+                      "ext": "BCBS OF FL",
+                      "in": 4
+                    },
+                    "#.18": {
+                      "ext": "BCBS OF FL",
+                      "in": 87
+                    },
+                    "#.2": {
+                      "ext": "PRIMARY",
+                      "in": 1
+                    },
+                    "#3": {
+                      "ext": "JAN 01, 2025",
+                      "in": 3250101
+                    },
+                    "#4.03": {
+                      "ext": "SPOUSE",
+                      "in": "01"
+                    },
+                    "#7.02": {
+                      "ext": "R50797108",
+                      "in": "R50797108"
+                    },
+                    "#8": {
+                      "ext": "JAN 12, 1992",
+                      "in": 2920112
+                    }
+                  },
+                  "file": 2.312,
+                  "ien": "1,69,"
+                }
+              ]
+            }
+            """;
     var sample =
         List.of(
-            RpcInvocationResult.builder()
-                .vista("777")
-                .response(
-                    "{\"results\":[{\"fields\":{"
-                        + "\"#.01\":{\"ext\":\"BCBS OF FL\",\"in\":4},\"#.18\":{\"ext\":\"BCBS OF FL\",\"in\":87},"
-                        + "\"#.2\":{\"ext\":\"PRIMARY\",\"in\":1},\"#3\":{\"ext\":\"JAN 01, 2025\",\"in\":3250101},"
-                        + "\"#4.03\":{\"ext\":\"SPOUSE\",\"in\":\"01\"},"
-                        + "\"#7.02\":{\"ext\":\"R50797108\",\"in\":\"R50797108\"},"
-                        + "\"#8\":{\"ext\":\"JAN 12, 1992\",\"in\":2920112}},\"file\":2.312,\"ien\":\"1,69,\"}]}")
-                .build(),
+            RpcInvocationResult.builder().vista("777").response(responseString).build(),
             RpcInvocationResult.builder()
                 .vista("666")
                 .error(Optional.of("Big Oof!"))
