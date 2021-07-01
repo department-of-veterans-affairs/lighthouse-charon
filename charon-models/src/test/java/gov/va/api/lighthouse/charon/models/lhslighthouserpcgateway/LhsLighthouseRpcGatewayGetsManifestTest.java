@@ -73,7 +73,6 @@ public class LhsLighthouseRpcGatewayGetsManifestTest {
 
   @Test
   void lazyInitialization() {
-    // Request
     var sample =
         LhsLighthouseRpcGatewayGetsManifest.Request.builder()
             .file("1")

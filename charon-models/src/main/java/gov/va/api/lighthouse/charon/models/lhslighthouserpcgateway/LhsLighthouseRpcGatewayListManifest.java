@@ -37,7 +37,6 @@ public class LhsLighthouseRpcGatewayListManifest
   }
 
   @Override
-  @SneakyThrows
   public LhsLighthouseRpcGatewayResponse fromResults(List<RpcInvocationResult> results) {
     return LhsLighthouseRpcGatewayResponse.builder()
         .resultsByStation(

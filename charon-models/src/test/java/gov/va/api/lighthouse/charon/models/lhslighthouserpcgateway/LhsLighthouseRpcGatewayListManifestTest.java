@@ -73,7 +73,6 @@ public class LhsLighthouseRpcGatewayListManifestTest {
 
   @Test
   void lazyInitialization() {
-    // Request
     var sample = LhsLighthouseRpcGatewayListManifest.Request.builder().file("1").build();
     assertThat(sample.iens()).isEmpty();
     assertThat(sample.fields()).isEmpty();
