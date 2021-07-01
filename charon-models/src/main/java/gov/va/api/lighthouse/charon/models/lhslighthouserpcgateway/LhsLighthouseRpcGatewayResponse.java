@@ -40,6 +40,14 @@ public class LhsLighthouseRpcGatewayResponse implements TypeSafeRpcResponse {
     // ToDo add metadata
 
     private List<FilemanEntry> results;
+
+    /** Lazy Initialization. */
+    public List<FilemanEntry> results() {
+      if (results == null) {
+        return List.of();
+      }
+      return results;
+    }
   }
 
   @Data
@@ -55,6 +63,14 @@ public class LhsLighthouseRpcGatewayResponse implements TypeSafeRpcResponse {
     private String file;
 
     private String ien;
+
+    /** Lazy Initialization. */
+    public Map<String, Values> resultsByStation() {
+      if (fields == null) {
+        fields = Map.of();
+      }
+      return fields;
+    }
   }
 
   @Data
