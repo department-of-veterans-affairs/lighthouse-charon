@@ -40,5 +40,10 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>gov.va.api.health</groupId>
+      <artifactId>service-auto-config</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
   </dependencies>
 </project>

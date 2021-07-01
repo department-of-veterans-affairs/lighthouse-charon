@@ -1,0 +1,29 @@
+@startuml
+
+map "Patient (#2)" as Patient {
+  InsuranceType => .3121
+}
+
+map "Insurance Type (#2.312)" as InsuranceType {
+  InsuranceType => .01
+  GroupPlan => .18
+}
+
+map "Insurance Company (#36)" as InsuranceCompany {
+}
+
+map "Group Insurance Plan (#355.3)" as GroupInsurancePlan {
+  InsuranceCompany => .01
+}
+
+map "Plan Coverage Limitations (#355.32)" as PlanCoverageLimitations {
+  Plan => .01
+}
+
+Patient::InsuranceType --> InsuranceType : <<multiple>>
+InsuranceType::InsuranceType -right-> InsuranceCompany : <<multiple>>
+InsuranceType::GroupPlan --> GroupInsurancePlan
+GroupInsurancePlan::InsuranceCompany --> InsuranceCompany
+PlanCoverageLimitations::Plan --> GroupInsurancePlan
+
+@enduml
