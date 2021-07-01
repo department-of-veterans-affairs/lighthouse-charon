@@ -15,7 +15,7 @@ public class LhsLighthouseRpcGatewayResponse implements TypeSafeRpcResponse {
   private Map<String, Results> resultsByStation;
 
   /** Lazy Initialization. */
-  Map<String, Results> resultsByStation() {
+  public Map<String, Results> resultsByStation() {
     if (resultsByStation == null) {
       resultsByStation = Map.of();
     }
