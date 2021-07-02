@@ -100,7 +100,7 @@ $(awk -F, -i <(awkFunctions) -v filename="${filename}" '
         filePrinted = "true" 
       }
       if ( $14$16 != "" && toupper($10) != "DO NOT USE") {
-        printf "public static final String %s = \"%s\";\n", upperCaseWithUnderscores($5), $4
+        printf "public static final String %s = \"#%s\";\n", upperCaseWithUnderscores($5), $4
       }
     }' ${CSV})
 }
