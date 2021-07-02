@@ -4,7 +4,7 @@ import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
-import gov.va.api.health.autoconfig.configuration.JacksonConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.va.api.lighthouse.charon.api.RpcDetails;
 import gov.va.api.lighthouse.charon.api.RpcInvocationResult;
 import gov.va.api.lighthouse.charon.models.TypeSafeRpc;
@@ -30,8 +30,7 @@ public class LhsLighthouseRpcGatewayGetsManifest
 
   @SneakyThrows
   private LhsLighthouseRpcGatewayResponse.Results deserialize(String value) {
-    return JacksonConfig.createMapper()
-        .readValue(value, LhsLighthouseRpcGatewayResponse.Results.class);
+    return new ObjectMapper().readValue(value, LhsLighthouseRpcGatewayResponse.Results.class);
   }
 
   @Override
@@ -88,7 +87,7 @@ public class LhsLighthouseRpcGatewayGetsManifest
     public enum GetsManifestFlags {
       RETURN_EXTERNAL_VALUES("E"),
       RETURN_INTERNAL_VALUES("I"),
-      DONT_RETURN_NULL("N"),
+      OMIT_NULL_VALUES("N"),
       USE_FIELD_NAMES("R"),
       INCLUDE_ZERO_NODES("Z"),
       USE_AUDIT_TRAIL("A#");
